@@ -1,10 +1,12 @@
-import { portfolio } from '../data/portfolio'
+import { usePortfolioStore } from '../store/portfolioStore'
 import { ProjectCard } from './ProjectCard'
 import { SectionHeading } from './SectionHeading'
 
 export function WorkSection() {
+  const portfolio = usePortfolioStore((state) => state.data)
+
   return (
-    <section id="work" className="bg-[#f3f1ec] py-20">
+    <section id="work" className="bg-[var(--background-alt)] py-20">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Selected work"
@@ -14,7 +16,7 @@ export function WorkSection() {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-3">
           {portfolio.projects.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} />
+            <ProjectCard key={`${project.title}-${index}`} project={project} index={index} />
           ))}
         </div>
       </div>
