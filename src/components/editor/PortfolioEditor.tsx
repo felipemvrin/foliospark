@@ -1,6 +1,8 @@
-import { useMemo } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { Download, Upload } from 'lucide-react'
 
 import { themePresets } from '../../data/themes'
+import { downloadPortfolio, isPortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
 import type { Education, Experience, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
@@ -25,6 +27,8 @@ function FieldLabel({ label, children }: { label: string; children: React.ReactN
 }
 
 export function PortfolioEditor() {
+  const importInputRef = useRef<HTMLInputElement>(null)
+  const [transferMessage, setTransferMessage] = useState('')
   const data = usePortfolioStore((state) => state.data)
   const resetData = usePortfolioStore((state) => state.resetData)
   const setData = usePortfolioStore((state) => state.setData)
@@ -158,6 +162,34 @@ export function PortfolioEditor() {
     }))
   }
 
+  const exportData = () => {
+    downloadPortfolio(data)
+    setTransferMessage('Portfolio exported.')
+  }
+
+  const importData = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+
+    if (!file) {
+      return
+    }
+
+    try {
+      const importedData: unknown = JSON.parse(await file.text())
+
+      if (!isPortfolio(importedData)) {
+        throw new Error('Invalid portfolio')
+      }
+
+      setData(importedData)
+      setTransferMessage('Portfolio imported.')
+    } catch {
+      setTransferMessage('Could not import that file. Use a FolioSpark JSON export.')
+    } finally {
+      event.target.value = ''
+    }
+  }
+
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -177,14 +209,32 @@ export function PortfolioEditor() {
         </div>
       </div>
 
-      <div className="mb-8 flex justify-end">
-        <button
-          type="button"
-          onClick={resetData}
-          className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.62rem] uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:opacity-90"
-        >
-          Reset sample data
-        </button>
+      <div className="mb-8 flex flex-col items-start justify-between gap-4 border-y border-[var(--border)] py-4 sm:flex-row sm:items-center">
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={exportData} className={actionButtonClassName}>
+            <Download className="mr-2 inline-block h-3.5 w-3.5" />
+            Export JSON
+          </button>
+          <button type="button" onClick={() => importInputRef.current?.click()} className={actionButtonClassName}>
+            <Upload className="mr-2 inline-block h-3.5 w-3.5" />
+            Import JSON
+          </button>
+          <input ref={importInputRef} type="file" accept="application/json,.json" onChange={importData} className="hidden" />
+        </div>
+        <div className="flex flex-wrap items-center gap-4">
+          {transferMessage && (
+            <p role="status" className="text-xs text-[var(--muted)]">
+              {transferMessage}
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={resetData}
+            className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.62rem] uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:opacity-90"
+          >
+            Reset sample data
+          </button>
+        </div>
       </div>
 
       <div className="space-y-8">
