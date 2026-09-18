@@ -11,9 +11,10 @@ export interface SeoMetadata {
   image: string
   themeColor: string
   title: string
+  url: string
 }
 
-export function getSeoMetadata(profile: Profile, themeId: ThemePresetName): SeoMetadata {
+export function getSeoMetadata(profile: Profile, themeId: ThemePresetName, siteUrl = ''): SeoMetadata {
   const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0]
   const titleParts = [profile.name.trim(), profile.role.trim()].filter(Boolean)
 
@@ -22,5 +23,6 @@ export function getSeoMetadata(profile: Profile, themeId: ThemePresetName): SeoM
     description: firstNonEmpty(profile.bio, profile.headline, profile.role, profile.name, 'Your professional story, in motion.'),
     image: profile.photo.trim(),
     themeColor: theme.colors.background,
+    url: siteUrl,
   }
 }

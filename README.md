@@ -82,6 +82,8 @@ In the repository settings, set **Pages → Build and deployment → Source** to
 https://felipemvrin.github.io/foliospark/
 ```
 
+For a custom domain, set `APP_SITE_URL` in the deployment environment before building. The generated canonical URL and social metadata will use that value.
+
 ## Roadmap
 
 - Public publishing flow and custom portfolio URLs
@@ -89,6 +91,7 @@ https://felipemvrin.github.io/foliospark/
 - GitHub API integration
 - Behance API ingestion when a secure server proxy is available
 - Hosted portfolio deployment
+- Custom domain and canonical URL configuration
 
 ## Screenshots
 
