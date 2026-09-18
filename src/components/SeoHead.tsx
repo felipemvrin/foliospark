@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { themePresets } from '../data/themes'
+import { getSeoMetadata } from '../lib/seo'
 import { usePortfolioStore } from '../store/portfolioStore'
 import { useThemeStore } from '../store/themeStore'
 
@@ -19,19 +19,17 @@ function setMeta(attribute: 'name' | 'property', key: string, content: string) {
 export function SeoHead() {
   const profile = usePortfolioStore((state) => state.data.profile)
   const themeId = useThemeStore((state) => state.preset)
-  const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0]
 
   useEffect(() => {
-    const title = `${profile.name} — ${profile.role}`
-    const description = profile.bio || profile.headline
+    const { description, image, themeColor, title } = getSeoMetadata(profile, themeId)
 
     document.title = title
     setMeta('name', 'description', description)
-    setMeta('name', 'theme-color', theme.colors.background)
+    setMeta('name', 'theme-color', themeColor)
     setMeta('property', 'og:title', title)
     setMeta('property', 'og:description', description)
-    setMeta('property', 'og:image', profile.photo)
-  }, [profile, theme])
+    setMeta('property', 'og:image', image)
+  }, [profile, themeId])
 
   return null
 }

@@ -1,4 +1,4 @@
-import type { ThemePreset } from '../types/theme'
+import type { ThemePreset } from '../types/theme.js'
 
 export const themePresets: ThemePreset[] = [
   {
