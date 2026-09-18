@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 
 import { usePortfolioStore } from '../store/portfolioStore'
 import { SectionHeading } from './SectionHeading'
@@ -18,7 +19,7 @@ export function BehanceSection() {
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {portfolio.behanceProjects.map((project, index) => (
             <motion.article
-              key={project.title}
+              key={`${project.title}-${index}`}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -26,17 +27,35 @@ export function BehanceSection() {
               className="overflow-hidden rounded-[1.9rem] border border-[var(--border-strong)]"
               style={{ background: 'var(--accent-soft)' }}
             >
-              <img src={project.cover} alt={project.title} className="h-72 w-full object-cover" />
+              {project.url ? (
+                <a href={project.url} target="_blank" rel="noreferrer" className="block">
+                  <img src={project.cover} alt={project.title} className="h-72 w-full object-cover" />
+                </a>
+              ) : (
+                <img src={project.cover} alt={project.title} className="h-72 w-full object-cover" />
+              )}
               <div className="space-y-5 p-6">
                 <div className="flex items-center justify-between gap-4">
                   <p className="text-[0.62rem] uppercase tracking-[0.28em] opacity-70">{project.category}</p>
                   <span className="text-sm opacity-70">{project.publishedAt}</span>
                 </div>
-                <h3 className="text-3xl font-medium">{project.title}</h3>
+                {project.url ? (
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-3xl font-medium transition hover:opacity-80"
+                  >
+                    <span>{project.title}</span>
+                    <ArrowUpRight className="h-5 w-5" />
+                  </a>
+                ) : (
+                  <h3 className="text-3xl font-medium">{project.title}</h3>
+                )}
                 <p className="text-sm leading-7 opacity-80">{project.description}</p>
                 <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-[var(--foreground)]">
+                  {project.tags.map((tag, tagIndex) => (
+                    <span key={`${tag}-${tagIndex}`} className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-[var(--foreground)]">
                       {tag}
                     </span>
                   ))}
