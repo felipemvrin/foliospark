@@ -1,11 +1,11 @@
 import { useMemo, useRef, useState } from 'react'
-import { Download, Upload } from 'lucide-react'
+import { Download, Trash2, Upload } from 'lucide-react'
 
 import { themePresets } from '../../data/themes'
 import { downloadPortfolio, isPortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
-import type { Education, Experience, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
+import type { Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
 
 const panelClassName = 'rounded-[1.8rem] border border-[var(--border)] bg-[var(--surface)] p-5'
 const nestedPanelClassName = 'rounded-[1.5rem] border border-[var(--border)] bg-[var(--background-alt)] p-4'
@@ -55,6 +55,15 @@ export function PortfolioEditor() {
     }))
   }
 
+  const updateMetric = (index: number, updates: Partial<PortfolioMetric>) => {
+    setData((current) => ({
+      ...current,
+      metrics: current.metrics.map((entry, itemIndex) =>
+        itemIndex === index ? { ...entry, ...updates } : entry,
+      ),
+    }))
+  }
+
   const updateExperience = (index: number, updates: Partial<Experience>) => {
     setData((current) => ({
       ...current,
@@ -77,6 +86,13 @@ export function PortfolioEditor() {
           technologies: ['Strategy', 'Design'],
         },
       ],
+    }))
+  }
+
+  const removeExperience = (index: number) => {
+    setData((current) => ({
+      ...current,
+      experience: current.experience.filter((_, itemIndex) => itemIndex !== index),
     }))
   }
 
@@ -104,6 +120,13 @@ export function PortfolioEditor() {
     }))
   }
 
+  const removeEducation = (index: number) => {
+    setData((current) => ({
+      ...current,
+      education: current.education.filter((_, itemIndex) => itemIndex !== index),
+    }))
+  }
+
   const updateSkills = (index: number, updates: Partial<SkillGroup>) => {
     setData((current) => ({
       ...current,
@@ -117,6 +140,13 @@ export function PortfolioEditor() {
     setData((current) => ({
       ...current,
       skills: [...current.skills, { category: 'New Category', items: ['Skill A', 'Skill B'] }],
+    }))
+  }
+
+  const removeSkillGroup = (index: number) => {
+    setData((current) => ({
+      ...current,
+      skills: current.skills.filter((_, itemIndex) => itemIndex !== index),
     }))
   }
 
@@ -146,6 +176,13 @@ export function PortfolioEditor() {
     }))
   }
 
+  const removeProject = (index: number) => {
+    setData((current) => ({
+      ...current,
+      projects: current.projects.filter((_, itemIndex) => itemIndex !== index),
+    }))
+  }
+
   const updateSocial = (index: number, updates: Partial<SocialLink>) => {
     setData((current) => ({
       ...current,
@@ -159,6 +196,13 @@ export function PortfolioEditor() {
     setData((current) => ({
       ...current,
       socialLinks: [...current.socialLinks, { platform: 'website', label: 'Website', url: 'https://example.com' }],
+    }))
+  }
+
+  const removeSocial = (index: number) => {
+    setData((current) => ({
+      ...current,
+      socialLinks: current.socialLinks.filter((_, itemIndex) => itemIndex !== index),
     }))
   }
 
@@ -255,6 +299,20 @@ export function PortfolioEditor() {
                 className={inputClassName}
               />
             </FieldLabel>
+            <FieldLabel label="Headline">
+              <input
+                value={data.profile.headline}
+                onChange={(event) => updateProfile('headline', event.target.value)}
+                className={inputClassName}
+              />
+            </FieldLabel>
+            <FieldLabel label="Photo URL">
+              <input
+                value={data.profile.photo}
+                onChange={(event) => updateProfile('photo', event.target.value)}
+                className={inputClassName}
+              />
+            </FieldLabel>
             <FieldLabel label="Location">
               <input
                 value={data.profile.location}
@@ -283,6 +341,40 @@ export function PortfolioEditor() {
                 className={inputClassName}
               />
             </FieldLabel>
+            <div className="md:col-span-2">
+              <FieldLabel label="Bio">
+                <textarea
+                  value={data.profile.bio}
+                  onChange={(event) => updateProfile('bio', event.target.value)}
+                  rows={3}
+                  className={textareaClassName}
+                />
+              </FieldLabel>
+            </div>
+          </div>
+        </div>
+
+        <div className={panelClassName}>
+          <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Metrics</p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {data.metrics.map((metric, index) => (
+              <div key={`${metric.label}-${index}`} className={nestedPanelCompactClassName}>
+                <FieldLabel label="Value">
+                  <input
+                    value={metric.value}
+                    onChange={(event) => updateMetric(index, { value: event.target.value })}
+                    className={inputClassName}
+                  />
+                </FieldLabel>
+                <FieldLabel label="Label">
+                  <input
+                    value={metric.label}
+                    onChange={(event) => updateMetric(index, { label: event.target.value })}
+                    className={inputClassName}
+                  />
+                </FieldLabel>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -310,6 +402,17 @@ export function PortfolioEditor() {
           <div className="space-y-6">
             {data.experience.map((item, index) => (
               <div key={`${item.company}-${index}`} className={nestedPanelClassName}>
+                <div className="mb-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => removeExperience(index)}
+                    className={actionButtonClassName}
+                    aria-label={`Remove ${item.company} experience`}
+                  >
+                    <Trash2 className="mr-2 inline-block h-3.5 w-3.5" />
+                    Remove
+                  </button>
+                </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <FieldLabel label="Company">
                     <input
@@ -367,6 +470,17 @@ export function PortfolioEditor() {
           <div className="space-y-5">
             {data.education.map((item, index) => (
               <div key={`${item.institution}-${index}`} className="rounded-[1.3rem] border border-[var(--border)] bg-[var(--background-alt)] p-4">
+                <div className="mb-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => removeEducation(index)}
+                    className={actionButtonClassName}
+                    aria-label={`Remove ${item.institution} education`}
+                  >
+                    <Trash2 className="mr-2 inline-block h-3.5 w-3.5" />
+                    Remove
+                  </button>
+                </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <FieldLabel label="Institution">
                     <input
@@ -419,6 +533,17 @@ export function PortfolioEditor() {
           <div className="grid gap-4 md:grid-cols-2">
             {data.skills.map((group, index) => (
               <div key={`${group.category}-${index}`} className={nestedPanelCompactClassName}>
+                <div className="mb-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => removeSkillGroup(index)}
+                    className={actionButtonClassName}
+                    aria-label={`Remove ${group.category} skill group`}
+                  >
+                    <Trash2 className="mr-2 inline-block h-3.5 w-3.5" />
+                    Remove
+                  </button>
+                </div>
                 <FieldLabel label="Category">
                   <input
                     value={group.category}
@@ -453,6 +578,17 @@ export function PortfolioEditor() {
           <div className="space-y-5">
             {data.projects.map((project, index) => (
               <div key={`${project.title}-${index}`} className={nestedPanelClassName}>
+                <div className="mb-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => removeProject(index)}
+                    className={actionButtonClassName}
+                    aria-label={`Remove ${project.title} project`}
+                  >
+                    <Trash2 className="mr-2 inline-block h-3.5 w-3.5" />
+                    Remove
+                  </button>
+                </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <FieldLabel label="Title">
                     <input
@@ -517,6 +653,17 @@ export function PortfolioEditor() {
           <div className="grid gap-4 md:grid-cols-2">
             {data.socialLinks.map((link, index) => (
               <div key={`${link.platform}-${index}`} className="rounded-[1.3rem] border border-[var(--border)] bg-[var(--background-alt)] p-4">
+                <div className="mb-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => removeSocial(index)}
+                    className={actionButtonClassName}
+                    aria-label={`Remove ${link.label} link`}
+                  >
+                    <Trash2 className="mr-2 inline-block h-3.5 w-3.5" />
+                    Remove
+                  </button>
+                </div>
                 <FieldLabel label="Label">
                   <input
                     value={link.label}

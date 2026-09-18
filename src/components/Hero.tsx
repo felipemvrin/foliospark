@@ -43,7 +43,7 @@ export function Hero() {
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
             className="max-w-xl text-lg leading-8 text-[var(--muted)]"
           >
-            Your professional story, in motion.
+            {portfolio.profile.headline}
           </motion.p>
 
           <motion.div

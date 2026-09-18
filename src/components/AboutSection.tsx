@@ -11,7 +11,7 @@ export function AboutSection() {
       <SectionHeading
         eyebrow="About"
         title="An identity that moves with the work."
-        description="FolioSpark blends narrative, systems thinking, and motion into a portfolio experience designed for modern creative professionals."
+          description={portfolio.profile.bio}
       />
 
       <div className="mt-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
