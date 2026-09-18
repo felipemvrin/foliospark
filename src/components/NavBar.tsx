@@ -42,9 +42,12 @@ export function NavBar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <button className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-neutral-900 transition hover:border-neutral-900">
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-neutral-900 transition hover:border-neutral-900"
+          >
             Book a call <ArrowUpRight className="h-3.5 w-3.5" />
-          </button>
+          </a>
         </div>
 
         <button

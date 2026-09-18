@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 
 import { portfolio } from '../data/portfolio'
 import { SectionHeading } from './SectionHeading'
@@ -38,6 +39,12 @@ export function BehanceSection() {
                     </span>
                   ))}
                 </div>
+                <a
+                  href={project.url}
+                  className="inline-flex items-center gap-2 text-sm font-medium text-white transition hover:gap-3"
+                >
+                  View project <ArrowUpRight className="h-4 w-4" />
+                </a>
               </div>
             </motion.article>
           ))}

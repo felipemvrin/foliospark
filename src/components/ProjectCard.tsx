@@ -9,6 +9,9 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
+  const primaryUrl = project.website ?? project.behance
+  const ctaUrl = primaryUrl ?? project.github
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -36,10 +39,10 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             <h3 className="mt-3 text-2xl font-medium text-neutral-900">{project.title}</h3>
           </div>
           <div className="flex items-center gap-2 text-neutral-500">
-            {project.website ? (
+            {primaryUrl ? (
               <a
-                href={project.website}
-                aria-label={`Visit ${project.title}`}
+                href={primaryUrl}
+                aria-label={project.website ? `Visit ${project.title}` : `View ${project.title} on Behance`}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 transition hover:border-neutral-900 hover:text-neutral-900"
               >
                 <Globe className="h-4 w-4" />
@@ -70,12 +73,14 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           ))}
         </div>
 
-        <a
-          href={project.website ?? project.github ?? '#'}
-          className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 transition hover:gap-3"
-        >
-          View project <ArrowUpRight className="h-4 w-4" />
-        </a>
+        {ctaUrl ? (
+          <a
+            href={ctaUrl}
+            className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 transition hover:gap-3"
+          >
+            View project <ArrowUpRight className="h-4 w-4" />
+          </a>
+        ) : null}
       </div>
     </motion.article>
   )
