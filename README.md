@@ -67,7 +67,7 @@ With the development server running, open `/?view=public`:
 http://localhost:5173/?view=public
 ```
 
-This view hides the editor and theme controls so the portfolio can be reviewed as a public-facing page.
+This view hides the editor and theme controls and the generated link includes the current portfolio data and theme so it can be shared as a public-facing snapshot.
 
 ## Roadmap
 

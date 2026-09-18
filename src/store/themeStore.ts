@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import { themePresets } from '../data/themes'
+import { getPublicPreviewThemeStorage } from '../lib/publicPreview'
 import type { ThemePresetName } from '../types/theme'
 
 interface ThemeState {
@@ -14,7 +15,7 @@ const themeStorePersistOptions =
     ? { name: 'foliospark-theme' }
     : {
         name: 'foliospark-theme',
-        storage: createJSONStorage(() => window.localStorage),
+        storage: createJSONStorage(() => getPublicPreviewThemeStorage() ?? window.localStorage),
       }
 
 export const useThemeStore = create<ThemeState>()(

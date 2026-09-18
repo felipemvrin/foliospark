@@ -1,11 +1,10 @@
-import { useState } from 'react'
-
 import { AboutSection } from './components/AboutSection'
 import { BehanceSection } from './components/BehanceSection'
 import { ContactSection } from './components/ContactSection'
 import { ExperienceSection } from './components/ExperienceSection'
 import { GitHubSection } from './components/GitHubSection'
 import { Hero } from './components/Hero'
+import { isPublicPreview } from './lib/publicPreview'
 import { NavBar } from './components/NavBar'
 import { PortfolioEditor } from './components/editor/PortfolioEditor'
 import { ThemePanel } from './components/editor/ThemePanel'
@@ -15,7 +14,7 @@ import { ThemeWrapper } from './components/ThemeWrapper'
 import { WorkSection } from './components/WorkSection'
 
 function App() {
-  const [isPublicView] = useState(() => new URLSearchParams(window.location.search).get('view') === 'public')
+  const isPublicView = isPublicPreview(window.location.search)
 
   return (
     <ThemeWrapper>

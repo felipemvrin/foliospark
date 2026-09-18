@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { Download, Trash2, Upload } from 'lucide-react'
 
 import { themePresets } from '../../data/themes'
+import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { downloadPortfolio, isPortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
@@ -37,6 +38,7 @@ export function PortfolioEditor() {
     () => themePresets.find((item) => item.id === theme) ?? themePresets[0],
     [theme],
   )
+  const publicPreviewHref = useMemo(() => getPublicPreviewHref(data, theme), [data, theme])
 
   const updateProfile = (field: keyof Profile, value: string) => {
     setData((current) => ({
@@ -256,7 +258,7 @@ export function PortfolioEditor() {
       <div className="mb-8 flex flex-col items-start justify-between gap-4 border-y border-[var(--border)] py-4 sm:flex-row sm:items-center">
         <div className="flex flex-wrap gap-2">
           <a
-            href="?view=public"
+            href={publicPreviewHref}
             target="_blank"
             rel="noreferrer"
             className={actionButtonClassName}
