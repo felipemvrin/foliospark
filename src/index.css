@@ -10,6 +10,8 @@
   --surface-strong: #111111;
   --accent: #d4a373;
   --accent-soft: rgba(212, 163, 115, 0.12);
+  --on-strong: #f7f5f1;
+  --on-accent: #171717;
   --shadow-soft: 0 24px 80px rgba(17, 17, 17, 0.06);
   --font-body: 'Inter', 'Segoe UI', sans-serif;
   --font-display: 'Arial', 'Helvetica Neue', sans-serif;
@@ -63,4 +65,3 @@ a {
     scroll-behavior: auto !important;
   }
 }
-

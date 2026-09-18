@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion'
 
-import { portfolio } from '../data/portfolio'
+import { usePortfolioStore } from '../store/portfolioStore'
 import { SectionHeading } from './SectionHeading'
 
 export function SkillsSection() {
+  const portfolio = usePortfolioStore((state) => state.data)
+
   return (
-    <section className="bg-[#f3f1ec] py-20">
+    <section className="bg-[var(--background-alt)] py-20">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Skills"
@@ -21,12 +23,12 @@ export function SkillsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.08 }}
-              className="rounded-[1.8rem] border border-neutral-200 bg-white p-5"
+              className="rounded-[1.8rem] border border-[var(--border)] bg-[var(--surface)] p-5"
             >
-              <p className="text-[0.66rem] uppercase tracking-[0.28em] text-neutral-500">{group.category}</p>
-              <ul className="mt-5 space-y-3 text-sm leading-7 text-neutral-700">
+              <p className="text-[0.66rem] uppercase tracking-[0.28em] text-[var(--muted)]">{group.category}</p>
+              <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--muted)]">
                 {group.items.map((item) => (
-                  <li key={item} className="border-b border-neutral-200 pb-2 last:border-b-0 last:pb-0">
+                  <li key={item} className="border-b border-[var(--border)] pb-2 last:border-b-0 last:pb-0">
                     {item}
                   </li>
                 ))}

@@ -30,10 +30,10 @@ function App() {
           </div>
           <PortfolioEditor />
         </main>
-        <footer className="border-t border-neutral-200 bg-[var(--background)]">
-          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-neutral-600 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+        <footer className="border-t border-[var(--border)] bg-[var(--background)]">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-[var(--muted)] sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
             <p>FolioSpark © 2026</p>
-            <p className="uppercase tracking-[0.2em] text-neutral-500">Your professional story, in motion.</p>
+            <p className="uppercase tracking-[0.2em] text-[var(--muted)]">Your professional story, in motion.</p>
           </div>
         </footer>
       </div>

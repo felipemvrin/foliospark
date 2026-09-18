@@ -6,11 +6,11 @@ export function ThemePanel() {
   const setPreset = useThemeStore((state) => state.setPreset)
 
   return (
-    <section className="rounded-[1.8rem] border border-neutral-200 bg-white p-5">
+    <section className="rounded-[1.8rem] border border-[var(--border)] bg-[var(--surface)] p-5">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[0.62rem] uppercase tracking-[0.28em] text-neutral-500">Theme system</p>
-          <h3 className="mt-3 text-2xl font-medium text-neutral-900">Visual presets</h3>
+          <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Theme system</p>
+          <h3 className="mt-3 text-2xl font-medium text-[var(--foreground)]">Visual presets</h3>
         </div>
       </div>
 
@@ -23,10 +23,12 @@ export function ThemePanel() {
               key={theme.id}
               type="button"
               onClick={() => setPreset(theme.id)}
-              className={[
-                'rounded-[1.4rem] border p-3 text-left transition',
-                isActive ? 'border-neutral-900 bg-neutral-950 text-white' : 'border-neutral-200 bg-neutral-50 text-neutral-900',
-              ].join(' ')}
+              className="rounded-[1.4rem] border p-3 text-left transition hover:opacity-95"
+              style={{
+                background: isActive ? 'var(--surface-strong)' : 'var(--background-alt)',
+                borderColor: isActive ? 'var(--surface-strong)' : 'var(--border)',
+                color: isActive ? 'var(--on-strong)' : 'var(--foreground)',
+              }}
             >
               <div className="flex items-center gap-2">
                 <span
@@ -38,9 +40,7 @@ export function ThemePanel() {
                 />
                 <span className="text-sm font-medium">{theme.name}</span>
               </div>
-              <p className={['mt-4 text-xs leading-6', isActive ? 'text-neutral-300' : 'text-neutral-600'].join(' ')}>
-                {theme.description}
-              </p>
+              <p className="mt-4 text-xs leading-6 opacity-75">{theme.description}</p>
             </button>
           )
         })}

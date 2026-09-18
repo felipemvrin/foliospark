@@ -1,10 +1,12 @@
-import { portfolio } from '../data/portfolio'
+import { usePortfolioStore } from '../store/portfolioStore'
 import { ProjectCard } from './ProjectCard'
 import { SectionHeading } from './SectionHeading'
 
 export function WorkSection() {
+  const portfolio = usePortfolioStore((state) => state.data)
+
   return (
-    <section id="work" className="bg-[#f3f1ec] py-20">
+    <section id="work" className="bg-[var(--background-alt)] py-20">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Selected work"
