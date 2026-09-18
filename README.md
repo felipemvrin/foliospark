@@ -13,7 +13,12 @@ This project is built as a modern React + TypeScript + Vite application with a d
 - GitHub and Behance-ready content models
 - Responsive design tuned for desktop and mobile
 - Reduced-motion support for accessibility
-- Cleaner architecture for future editor, CMS, and theme expansion
+- Local portfolio editor with persistence and JSON import/export
+- Theme presets with live preview and dynamic SEO metadata
+- Public preview mode for sharing the portfolio without editor controls
+- Optional GitHub repository sync with local fallback data
+- Editable Behance project collection with persistent visual content
+- Cleaner architecture for future CMS and publishing expansion
 
 ## Tech Stack
 
@@ -56,13 +61,23 @@ Open the local Vite URL shown in the terminal to view the app.
 npm run build
 ```
 
+## Public Preview
+
+With the development server running, open `/?view=public`:
+
+```text
+http://localhost:5173/?view=public
+```
+
+This view hides the editor and theme controls and the generated link includes the current portfolio data and theme so it can be shared as a public-facing snapshot.
+
 ## Roadmap
 
-- Enhanced editor and data persistence
-- Theme switching and design presets
+- Public publishing flow and custom portfolio URLs
+- SEO metadata and social sharing controls
 - GitHub API integration
-- Behance content ingestion
-- SEO metadata expansion and publishing flows
+- Behance API ingestion when a secure server proxy is available
+- Hosted portfolio deployment
 
 ## Screenshots
 
