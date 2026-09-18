@@ -9,13 +9,16 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
+  const projectUrl = project.website ?? project.github
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.08 }}
-      className="group relative overflow-hidden rounded-[1.75rem] border border-neutral-200 bg-white shadow-[0_18px_60px_rgba(17,17,17,0.06)]"
+      className="group relative overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[var(--surface)]"
+      style={{ boxShadow: 'var(--shadow-soft)' }}
     >
       <div className="relative overflow-hidden">
         <img
@@ -32,15 +35,15 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       <div className="space-y-5 p-6 sm:p-7">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-[0.68rem] uppercase tracking-[0.28em] text-neutral-500">{project.year}</p>
-            <h3 className="mt-3 text-2xl font-medium text-neutral-900">{project.title}</h3>
+            <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[var(--muted)]">{project.year}</p>
+            <h3 className="mt-3 text-2xl font-medium text-[var(--foreground)]">{project.title}</h3>
           </div>
-          <div className="flex items-center gap-2 text-neutral-500">
+          <div className="flex items-center gap-2 text-[var(--muted)]">
             {project.website ? (
               <a
                 href={project.website}
                 aria-label={`Visit ${project.title}`}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 transition hover:border-neutral-900 hover:text-neutral-900"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] transition hover:text-[var(--foreground)]"
               >
                 <Globe className="h-4 w-4" />
               </a>
@@ -49,7 +52,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
               <a
                 href={project.github}
                 aria-label={`${project.title} on GitHub`}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 transition hover:border-neutral-900 hover:text-neutral-900"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] transition hover:text-[var(--foreground)]"
               >
                 <GitBranch className="h-4 w-4" />
               </a>
@@ -57,25 +60,27 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           </div>
         </div>
 
-        <p className="text-sm leading-7 text-neutral-600">{project.description}</p>
+        <p className="text-sm leading-7 text-[var(--muted)]">{project.description}</p>
 
         <div className="flex flex-wrap gap-2">
-          {project.technologies.map((technology) => (
+          {project.technologies.map((technology, technologyIndex) => (
             <span
-              key={technology}
-              className="rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-[0.18em] text-neutral-600"
+              key={`${technology}-${technologyIndex}`}
+              className="rounded-full border border-[var(--border)] bg-[var(--background-alt)] px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-[0.18em] text-[var(--muted)]"
             >
               {technology}
             </span>
           ))}
         </div>
 
-        <a
-          href={project.website ?? project.github ?? '#'}
-          className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 transition hover:gap-3"
-        >
-          View project <ArrowUpRight className="h-4 w-4" />
-        </a>
+        {projectUrl ? (
+          <a
+            href={projectUrl}
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)] transition hover:gap-3"
+          >
+            View project <ArrowUpRight className="h-4 w-4" />
+          </a>
+        ) : null}
       </div>
     </motion.article>
   )

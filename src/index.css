@@ -2,12 +2,17 @@
 
 :root {
   --background: #f7f5f1;
+  --background-alt: #f3f1ec;
   --foreground: #171717;
   --muted: #6b7280;
   --border: rgba(24, 24, 27, 0.14);
   --surface: #ffffff;
   --surface-strong: #111111;
   --accent: #d4a373;
+  --accent-soft: rgba(212, 163, 115, 0.12);
+  --on-strong: #f7f5f1;
+  --border-strong: rgba(247, 245, 241, 0.16);
+  --on-accent: #171717;
   --shadow-soft: 0 24px 80px rgba(17, 17, 17, 0.06);
   --font-body: 'Inter', 'Segoe UI', sans-serif;
   --font-display: 'Arial', 'Helvetica Neue', sans-serif;
@@ -61,4 +66,3 @@ a {
     scroll-behavior: auto !important;
   }
 }
-
