@@ -42,7 +42,7 @@ export function AboutSection() {
             {portfolio.skills.slice(0, 4).map((group) => (
               <div
                 key={group.category}
-                className="rounded-2xl border border-[var(--border)] p-4"
+                className="rounded-2xl border border-[var(--border-strong)] p-4"
                 style={{ background: 'var(--accent-soft)' }}
               >
                 <p className="text-[0.68rem] uppercase tracking-[0.22em] opacity-70">{group.category}</p>

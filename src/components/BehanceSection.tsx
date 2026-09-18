@@ -23,7 +23,7 @@ export function BehanceSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.55, ease: 'easeOut', delay: index * 0.08 }}
-              className="overflow-hidden rounded-[1.9rem] border border-[var(--border)]"
+              className="overflow-hidden rounded-[1.9rem] border border-[var(--border-strong)]"
               style={{ background: 'var(--accent-soft)' }}
             >
               <img src={project.cover} alt={project.title} className="h-72 w-full object-cover" />

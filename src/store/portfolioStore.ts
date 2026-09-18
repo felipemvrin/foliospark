@@ -6,6 +6,10 @@ import type { Portfolio } from '../types/portfolio'
 
 type PortfolioUpdater = Portfolio | ((current: Portfolio) => Portfolio)
 
+function createDefaultPortfolio() {
+  return JSON.parse(JSON.stringify(defaultPortfolio)) as Portfolio
+}
+
 interface PortfolioState {
   data: Portfolio
   resetData: () => void
@@ -15,8 +19,8 @@ interface PortfolioState {
 export const usePortfolioStore = create<PortfolioState>()(
   persist(
     (set) => ({
-      data: defaultPortfolio,
-      resetData: () => set({ data: defaultPortfolio }),
+      data: createDefaultPortfolio(),
+      resetData: () => set({ data: createDefaultPortfolio() }),
       setData: (updater) =>
         set((state) => ({
           data: typeof updater === 'function' ? (updater as (current: Portfolio) => Portfolio)(state.data) : updater,
