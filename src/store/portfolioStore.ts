@@ -24,7 +24,7 @@ export const usePortfolioStore = create<PortfolioState>()(
     }),
     {
       name: 'foliospark-portfolio',
-      storage: createJSONStorage(() => window.localStorage),
+      storage: typeof window === 'undefined' ? undefined : createJSONStorage(() => window.localStorage),
     },
   ),
 )

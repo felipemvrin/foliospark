@@ -17,7 +17,7 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: 'foliospark-theme',
-      storage: createJSONStorage(() => window.localStorage),
+      storage: typeof window === 'undefined' ? undefined : createJSONStorage(() => window.localStorage),
     },
   ),
 )

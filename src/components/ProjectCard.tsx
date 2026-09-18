@@ -9,6 +9,8 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
+  const projectUrl = project.website ?? project.github
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -71,12 +73,14 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           ))}
         </div>
 
-        <a
-          href={project.website ?? project.github ?? '#'}
-          className="inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)] transition hover:gap-3"
-        >
-          View project <ArrowUpRight className="h-4 w-4" />
-        </a>
+        {projectUrl ? (
+          <a
+            href={projectUrl}
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)] transition hover:gap-3"
+          >
+            View project <ArrowUpRight className="h-4 w-4" />
+          </a>
+        ) : null}
       </div>
     </motion.article>
   )
