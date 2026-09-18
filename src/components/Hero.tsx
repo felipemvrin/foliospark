@@ -72,8 +72,8 @@ export function Hero() {
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.25 }}
             className="flex flex-wrap items-center gap-3 pt-3 text-[0.68rem] uppercase tracking-[0.22em] text-[var(--muted)]"
           >
-            {portfolio.metrics.map((metric) => (
-              <div key={metric.label} className="border-l border-[var(--border)] px-3 first:border-l-0 first:pl-0">
+            {portfolio.metrics.map((metric, index) => (
+              <div key={`${metric.label}-${index}`} className="border-l border-[var(--border)] px-3 first:border-l-0 first:pl-0">
                 <span className="block text-lg font-medium tracking-[-0.06em] text-[var(--foreground)]">{metric.value}</span>
                 <span>{metric.label}</span>
               </div>

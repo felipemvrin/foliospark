@@ -24,8 +24,8 @@ export function AboutSection() {
         >
           <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]">Profile</p>
           <div className="mt-6 space-y-6 text-base leading-8 text-[var(--muted)]">
-            {portfolio.about.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+            {portfolio.about.map((paragraph, paragraphIndex) => (
+              <p key={`${paragraph}-${paragraphIndex}`}>{paragraph}</p>
             ))}
           </div>
         </motion.div>
@@ -39,16 +39,16 @@ export function AboutSection() {
         >
           <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] opacity-70">Overview</p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {portfolio.skills.slice(0, 4).map((group) => (
+            {portfolio.skills.slice(0, 4).map((group, groupIndex) => (
               <div
-                key={group.category}
+                key={`${group.category}-${groupIndex}`}
                 className="rounded-2xl border border-[var(--border-strong)] p-4"
                 style={{ background: 'var(--accent-soft)' }}
               >
                 <p className="text-[0.68rem] uppercase tracking-[0.22em] opacity-70">{group.category}</p>
                 <ul className="mt-3 space-y-2 text-sm">
-                  {group.items.map((item) => (
-                    <li key={item}>— {item}</li>
+                  {group.items.map((item, itemIndex) => (
+                    <li key={`${item}-${itemIndex}`}>— {item}</li>
                   ))}
                 </ul>
               </div>

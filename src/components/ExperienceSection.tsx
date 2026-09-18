@@ -17,7 +17,7 @@ export function ExperienceSection() {
       <div className="mt-12 space-y-6">
         {portfolio.experience.map((item, index) => (
           <motion.article
-            key={`${item.company}-${item.period}`}
+            key={`${item.company}-${item.period}-${index}`}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -33,8 +33,8 @@ export function ExperienceSection() {
               <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{item.description}</p>
             </div>
             <div className="flex flex-wrap gap-2 md:justify-end">
-              {item.technologies.map((tech) => (
-                <span key={tech} className="rounded-full border border-[var(--border)] bg-[var(--background-alt)] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-[var(--muted)]">
+              {item.technologies.map((tech, techIndex) => (
+                <span key={`${tech}-${techIndex}`} className="rounded-full border border-[var(--border)] bg-[var(--background-alt)] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-[var(--muted)]">
                   {tech}
                 </span>
               ))}

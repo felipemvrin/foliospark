@@ -16,7 +16,7 @@ export function WorkSection() {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-3">
           {portfolio.projects.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} />
+            <ProjectCard key={`${project.title}-${index}`} project={project} index={index} />
           ))}
         </div>
       </div>

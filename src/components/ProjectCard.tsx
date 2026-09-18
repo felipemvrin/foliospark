@@ -63,9 +63,9 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         <p className="text-sm leading-7 text-[var(--muted)]">{project.description}</p>
 
         <div className="flex flex-wrap gap-2">
-          {project.technologies.map((technology) => (
+          {project.technologies.map((technology, technologyIndex) => (
             <span
-              key={technology}
+              key={`${technology}-${technologyIndex}`}
               className="rounded-full border border-[var(--border)] bg-[var(--background-alt)] px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-[0.18em] text-[var(--muted)]"
             >
               {technology}
