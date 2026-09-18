@@ -17,6 +17,7 @@ function escapeHtmlAttribute(value: string) {
 const defaultSeoMetadata = getSeoMetadata(portfolio.profile, 'Minimal')
 
 export default defineConfig({
+  base: process.env.GITHUB_ACTIONS ? '/foliospark/' : '/',
   plugins: [
     react(),
     tailwindcss(),

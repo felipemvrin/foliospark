@@ -18,6 +18,7 @@ This project is built as a modern React + TypeScript + Vite application with a d
 - Public preview mode for sharing the portfolio without editor controls
 - Optional GitHub repository sync with local fallback data
 - Editable Behance project collection with persistent visual content
+- Automated GitHub Pages deployment from `main`
 - Cleaner architecture for future CMS and publishing expansion
 
 ## Tech Stack
@@ -70,6 +71,16 @@ http://localhost:5173/?view=public
 ```
 
 This view hides the editor and theme controls and the generated link includes the current portfolio data and theme so it can be shared as a public-facing snapshot.
+
+## Deployment
+
+Pushes to `main` build and deploy the static site through GitHub Pages using the workflow in `.github/workflows/deploy.yml`.
+
+In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions**. The default project URL is:
+
+```text
+https://felipemvrin.github.io/foliospark/
+```
 
 ## Roadmap
 
