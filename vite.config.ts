@@ -15,9 +15,11 @@ function escapeHtmlAttribute(value: string) {
 }
 
 const defaultSeoMetadata = getSeoMetadata(portfolio.profile, 'Minimal')
+const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+const pagesBasePath = process.env.GITHUB_ACTIONS && repositoryName ? `/${repositoryName}/` : '/'
 
 export default defineConfig({
-  base: process.env.GITHUB_ACTIONS ? '/foliospark/' : '/',
+  base: pagesBasePath,
   plugins: [
     react(),
     tailwindcss(),
