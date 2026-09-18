@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { themePresets } from '../data/themes'
 import { useThemeStore } from '../store/themeStore'
 
-function getReadableTextColor(color: string) {
+function parseColorChannels(color: string) {
   const normalized = color.replace('#', '')
   const expanded =
     normalized.length === 3
@@ -14,41 +14,57 @@ function getReadableTextColor(color: string) {
       : normalized
 
   if (expanded.length !== 6) {
-    return '#171717'
+    return null
   }
 
-  const red = Number.parseInt(expanded.slice(0, 2), 16)
-  const green = Number.parseInt(expanded.slice(2, 4), 16)
-  const blue = Number.parseInt(expanded.slice(4, 6), 16)
+  return {
+    blue: Number.parseInt(expanded.slice(4, 6), 16),
+    green: Number.parseInt(expanded.slice(2, 4), 16),
+    red: Number.parseInt(expanded.slice(0, 2), 16),
+  }
+}
 
+function getRelativeLuminance(color: string) {
+  const channels = parseColorChannels(color)
+
+  if (!channels) {
+    return 0
+  }
+
+  const { blue, green, red } = channels
   const toLinear = (channel: number) => {
     const normalized = channel / 255
 
     return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4
   }
 
-  const luminance = 0.2126 * toLinear(red) + 0.7152 * toLinear(green) + 0.0722 * toLinear(blue)
+  return 0.2126 * toLinear(red) + 0.7152 * toLinear(green) + 0.0722 * toLinear(blue)
+}
 
-  return luminance > 0.6 ? '#171717' : '#f7f5f1'
+function getContrastRatio(background: string, foreground: string) {
+  const backgroundLuminance = getRelativeLuminance(background)
+  const foregroundLuminance = getRelativeLuminance(foreground)
+  const lighter = Math.max(backgroundLuminance, foregroundLuminance)
+  const darker = Math.min(backgroundLuminance, foregroundLuminance)
+
+  return (lighter + 0.05) / (darker + 0.05)
+}
+
+function getReadableTextColor(color: string) {
+  const darkText = '#171717'
+  const lightText = '#f7f5f1'
+
+  return getContrastRatio(color, darkText) >= getContrastRatio(color, lightText) ? darkText : lightText
 }
 
 function withAlpha(color: string, alpha: number) {
-  const normalized = color.replace('#', '')
-  const expanded =
-    normalized.length === 3
-      ? normalized
-          .split('')
-          .map((value) => `${value}${value}`)
-          .join('')
-      : normalized
+  const channels = parseColorChannels(color)
 
-  if (expanded.length !== 6) {
+  if (!channels) {
     return `rgba(23, 23, 23, ${alpha})`
   }
 
-  const red = Number.parseInt(expanded.slice(0, 2), 16)
-  const green = Number.parseInt(expanded.slice(2, 4), 16)
-  const blue = Number.parseInt(expanded.slice(4, 6), 16)
+  const { blue, green, red } = channels
 
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`
 }
