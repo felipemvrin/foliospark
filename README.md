@@ -15,6 +15,7 @@ This project is built as a modern React + TypeScript + Vite application with a d
 - Reduced-motion support for accessibility
 - Local portfolio editor with persistence and JSON import/export
 - Theme presets with live preview and dynamic SEO metadata
+- Public preview mode for sharing the portfolio without editor controls
 - Cleaner architecture for future CMS and publishing expansion
 
 ## Tech Stack
@@ -57,6 +58,16 @@ Open the local Vite URL shown in the terminal to view the app.
 ```bash
 npm run build
 ```
+
+## Public Preview
+
+With the development server running, open `/?view=public`:
+
+```text
+http://localhost:5173/?view=public
+```
+
+This view hides the editor and theme controls so the portfolio can be reviewed as a public-facing page.
 
 ## Roadmap
 

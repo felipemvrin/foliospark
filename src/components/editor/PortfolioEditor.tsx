@@ -255,6 +255,14 @@ export function PortfolioEditor() {
 
       <div className="mb-8 flex flex-col items-start justify-between gap-4 border-y border-[var(--border)] py-4 sm:flex-row sm:items-center">
         <div className="flex flex-wrap gap-2">
+          <a
+            href="?view=public"
+            target="_blank"
+            rel="noreferrer"
+            className={actionButtonClassName}
+          >
+            Open public preview
+          </a>
           <button type="button" onClick={exportData} className={actionButtonClassName}>
             <Download className="mr-2 inline-block h-3.5 w-3.5" />
             Export JSON

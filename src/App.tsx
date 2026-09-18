@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { AboutSection } from './components/AboutSection'
 import { BehanceSection } from './components/BehanceSection'
 import { ContactSection } from './components/ContactSection'
@@ -13,6 +15,8 @@ import { ThemeWrapper } from './components/ThemeWrapper'
 import { WorkSection } from './components/WorkSection'
 
 function App() {
+  const [isPublicView] = useState(() => new URLSearchParams(window.location.search).get('view') === 'public')
+
   return (
     <ThemeWrapper>
       <SeoHead />
@@ -27,10 +31,14 @@ function App() {
           <ExperienceSection />
           <SkillsSection />
           <ContactSection />
-          <div className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 lg:px-8">
-            <ThemePanel />
-          </div>
-          <PortfolioEditor />
+          {!isPublicView && (
+            <>
+              <div className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 lg:px-8">
+                <ThemePanel />
+              </div>
+              <PortfolioEditor />
+            </>
+          )}
         </main>
         <footer className="border-t border-[var(--border)] bg-[var(--background)]">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-[var(--muted)] sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
