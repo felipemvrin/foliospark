@@ -8,12 +8,14 @@ import { NavBar } from './components/NavBar'
 import { PortfolioEditor } from './components/editor/PortfolioEditor'
 import { ThemePanel } from './components/editor/ThemePanel'
 import { SkillsSection } from './components/SkillsSection'
+import { SeoHead } from './components/SeoHead'
 import { ThemeWrapper } from './components/ThemeWrapper'
 import { WorkSection } from './components/WorkSection'
 
 function App() {
   return (
     <ThemeWrapper>
+      <SeoHead />
       <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
         <NavBar />
         <main>
