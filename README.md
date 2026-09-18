@@ -13,7 +13,9 @@ This project is built as a modern React + TypeScript + Vite application with a d
 - GitHub and Behance-ready content models
 - Responsive design tuned for desktop and mobile
 - Reduced-motion support for accessibility
-- Cleaner architecture for future editor, CMS, and theme expansion
+- Local portfolio editor with persistence and JSON import/export
+- Theme presets with live preview and dynamic SEO metadata
+- Cleaner architecture for future CMS and publishing expansion
 
 ## Tech Stack
 
@@ -58,11 +60,11 @@ npm run build
 
 ## Roadmap
 
-- Enhanced editor and data persistence
-- Theme switching and design presets
+- Public publishing flow and custom portfolio URLs
+- SEO metadata and social sharing controls
 - GitHub API integration
 - Behance content ingestion
-- SEO metadata expansion and publishing flows
+- Hosted portfolio deployment
 
 ## Screenshots
 
