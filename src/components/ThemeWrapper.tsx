@@ -20,7 +20,14 @@ function getReadableTextColor(color: string) {
   const red = Number.parseInt(expanded.slice(0, 2), 16)
   const green = Number.parseInt(expanded.slice(2, 4), 16)
   const blue = Number.parseInt(expanded.slice(4, 6), 16)
-  const luminance = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255
+
+  const toLinear = (channel: number) => {
+    const normalized = channel / 255
+
+    return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4
+  }
+
+  const luminance = 0.2126 * toLinear(red) + 0.7152 * toLinear(green) + 0.0722 * toLinear(blue)
 
   return luminance > 0.6 ? '#171717' : '#f7f5f1'
 }
