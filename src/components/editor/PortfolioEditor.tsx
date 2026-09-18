@@ -6,7 +6,7 @@ import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { downloadPortfolio, isPortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
-import type { Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
+import type { BehanceProject, Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
 
 const panelClassName = 'rounded-[1.8rem] border border-[var(--border)] bg-[var(--surface)] p-5'
 const nestedPanelClassName = 'rounded-[1.5rem] border border-[var(--border)] bg-[var(--background-alt)] p-4'
@@ -182,6 +182,40 @@ export function PortfolioEditor() {
     setData((current) => ({
       ...current,
       projects: current.projects.filter((_, itemIndex) => itemIndex !== index),
+    }))
+  }
+
+  const updateBehanceProject = (index: number, updates: Partial<BehanceProject>) => {
+    setData((current) => ({
+      ...current,
+      behanceProjects: current.behanceProjects.map((entry, itemIndex) =>
+        itemIndex === index ? { ...entry, ...updates } : entry,
+      ),
+    }))
+  }
+
+  const addBehanceProject = () => {
+    setData((current) => ({
+      ...current,
+      behanceProjects: [
+        ...current.behanceProjects,
+        {
+          title: 'New Visual Story',
+          description: 'Describe the visual story and its creative direction.',
+          cover: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80',
+          url: 'https://behance.net',
+          category: 'Visual Design',
+          publishedAt: '2026',
+          tags: ['Brand', 'Motion'],
+        },
+      ],
+    }))
+  }
+
+  const removeBehanceProject = (index: number) => {
+    setData((current) => ({
+      ...current,
+      behanceProjects: current.behanceProjects.filter((_, itemIndex) => itemIndex !== index),
     }))
   }
 
@@ -687,6 +721,55 @@ export function PortfolioEditor() {
                     onChange={(event) => updateSocial(index, { url: event.target.value })}
                     className={textareaClassName}
                   />
+                </FieldLabel>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={panelClassName}>
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Behance projects</p>
+            <button type="button" onClick={addBehanceProject} className={actionButtonClassName}>
+              Add project
+            </button>
+          </div>
+          <div className="space-y-5">
+            {data.behanceProjects.map((project, index) => (
+              <div key={`${project.title}-${index}`} className={nestedPanelClassName}>
+                <div className="mb-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => removeBehanceProject(index)}
+                    className={actionButtonClassName}
+                    aria-label={`Remove ${project.title} Behance project`}
+                  >
+                    <Trash2 className="mr-2 inline-block h-3.5 w-3.5" />
+                    Remove
+                  </button>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <FieldLabel label="Title">
+                    <input value={project.title} onChange={(event) => updateBehanceProject(index, { title: event.target.value })} className={inputClassName} />
+                  </FieldLabel>
+                  <FieldLabel label="Category">
+                    <input value={project.category} onChange={(event) => updateBehanceProject(index, { category: event.target.value })} className={inputClassName} />
+                  </FieldLabel>
+                  <FieldLabel label="Published">
+                    <input value={project.publishedAt} onChange={(event) => updateBehanceProject(index, { publishedAt: event.target.value })} className={inputClassName} />
+                  </FieldLabel>
+                  <FieldLabel label="Tags">
+                    <input value={project.tags.join(', ')} onChange={(event) => updateBehanceProject(index, { tags: event.target.value.split(',').map((value) => value.trim()).filter(Boolean) })} className={inputClassName} />
+                  </FieldLabel>
+                  <FieldLabel label="Cover URL">
+                    <input value={project.cover} onChange={(event) => updateBehanceProject(index, { cover: event.target.value })} className={inputClassName} />
+                  </FieldLabel>
+                  <FieldLabel label="Project URL">
+                    <input value={project.url} onChange={(event) => updateBehanceProject(index, { url: event.target.value })} className={inputClassName} />
+                  </FieldLabel>
+                </div>
+                <FieldLabel label="Description">
+                  <textarea value={project.description} onChange={(event) => updateBehanceProject(index, { description: event.target.value })} rows={3} className={textareaClassName} />
                 </FieldLabel>
               </div>
             ))}

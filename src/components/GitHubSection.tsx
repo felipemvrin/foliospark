@@ -1,22 +1,55 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, GitBranch, Star } from 'lucide-react'
 
 import { usePortfolioStore } from '../store/portfolioStore'
+import { fetchGitHubProjects } from '../lib/github'
+import type { GitHubProject } from '../types/portfolio'
 import { SectionHeading } from './SectionHeading'
 
 export function GitHubSection() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const githubLink = portfolio.socialLinks.find((link) => link.platform === 'github')
+  const githubUrl = githubLink?.url
+  const [remoteResult, setRemoteResult] = useState<{ url: string; projects: GitHubProject[] } | null>(null)
+  const hasRemoteProjects = remoteResult?.url === githubUrl
+  const projects = hasRemoteProjects ? remoteResult?.projects ?? portfolio.githubProjects : portfolio.githubProjects
+  const source = hasRemoteProjects ? 'github' : 'sample'
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    if (!githubUrl) {
+      return () => controller.abort()
+    }
+
+    fetchGitHubProjects(githubUrl, controller.signal)
+      .then((remoteProjects) => {
+        if (remoteProjects?.length) {
+          setRemoteResult({ url: githubUrl, projects: remoteProjects })
+        }
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setRemoteResult(null)
+        }
+      })
+
+    return () => controller.abort()
+  }, [githubUrl])
 
   return (
     <section id="github" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <SectionHeading
         eyebrow="GitHub"
         title="Code with structure, rhythm, and intent."
-        description="A technical layer for product-minded work — modular, readable, and ready to expand into a richer GitHub-integrated portfolio."
+        description={source === 'github'
+          ? 'Selected public repositories, refreshed from GitHub.'
+          : 'A technical layer for product-minded work — connect a GitHub profile to load public repositories here.'}
       />
 
       <div className="mt-12 grid gap-6 lg:grid-cols-2">
-        {portfolio.githubProjects.map((project, index) => (
+        {projects.map((project, index) => (
           <motion.article
             key={project.repository}
             initial={{ opacity: 0, y: 24 }}
