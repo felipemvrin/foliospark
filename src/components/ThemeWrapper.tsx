@@ -25,6 +25,27 @@ function getReadableTextColor(color: string) {
   return luminance > 0.6 ? '#171717' : '#f7f5f1'
 }
 
+function withAlpha(color: string, alpha: number) {
+  const normalized = color.replace('#', '')
+  const expanded =
+    normalized.length === 3
+      ? normalized
+          .split('')
+          .map((value) => `${value}${value}`)
+          .join('')
+      : normalized
+
+  if (expanded.length !== 6) {
+    return `rgba(23, 23, 23, ${alpha})`
+  }
+
+  const red = Number.parseInt(expanded.slice(0, 2), 16)
+  const green = Number.parseInt(expanded.slice(2, 4), 16)
+  const blue = Number.parseInt(expanded.slice(4, 6), 16)
+
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`
+}
+
 export function ThemeWrapper({ children }: { children: React.ReactNode }) {
   const preset = useThemeStore((state) => state.preset)
 
@@ -47,6 +68,7 @@ export function ThemeWrapper({ children }: { children: React.ReactNode }) {
     document.documentElement.style.setProperty('--accent', selectedTheme.colors.accent)
     document.documentElement.style.setProperty('--accent-soft', selectedTheme.colors.accentSoft)
     document.documentElement.style.setProperty('--on-strong', onStrong)
+    document.documentElement.style.setProperty('--border-strong', withAlpha(onStrong, 0.16))
     document.documentElement.style.setProperty('--on-accent', onAccent)
   }, [selectedTheme])
 
