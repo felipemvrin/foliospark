@@ -27,15 +27,21 @@ export function ContactSection() {
         <div className="mt-10 grid gap-5 border-t border-[var(--border-strong)] pt-8 md:grid-cols-3">
           <div className="flex items-center gap-3">
           <Mail className="h-4 w-4 opacity-70" />
-          <a href={`mailto:${portfolio.profile.email}`} className="text-sm">{portfolio.profile.email}</a>
+          <a href={`mailto:${portfolio.profile.email}`} className="text-sm">
+            {portfolio.profile.email}
+          </a>
           </div>
           <div className="flex items-center gap-3">
           <Phone className="h-4 w-4 opacity-70" />
-          <a href={`tel:${portfolio.profile.phone}`} className="text-sm">{portfolio.profile.phone}</a>
+          <a href={`tel:${portfolio.profile.phone}`} className="text-sm">
+            {portfolio.profile.phone}
+          </a>
           </div>
           <div className="flex items-center gap-3">
           <MapPin className="h-4 w-4 opacity-70" />
-          <span className="text-sm">{portfolio.profile.location}</span>
+          <span className="text-sm">
+            {portfolio.profile.location}
+          </span>
           </div>
         </div>
       </div>

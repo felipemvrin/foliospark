@@ -16,6 +16,14 @@ interface PortfolioState {
   setData: (updater: PortfolioUpdater) => void
 }
 
+const portfolioStorePersistOptions =
+  typeof window === 'undefined'
+    ? { name: 'foliospark-portfolio' }
+    : {
+        name: 'foliospark-portfolio',
+        storage: createJSONStorage(() => window.localStorage),
+      }
+
 export const usePortfolioStore = create<PortfolioState>()(
   persist(
     (set) => ({
@@ -26,9 +34,6 @@ export const usePortfolioStore = create<PortfolioState>()(
           data: typeof updater === 'function' ? (updater as (current: Portfolio) => Portfolio)(state.data) : updater,
         })),
     }),
-    {
-      name: 'foliospark-portfolio',
-      storage: typeof window === 'undefined' ? undefined : createJSONStorage(() => window.localStorage),
-    },
+    portfolioStorePersistOptions,
   ),
 )

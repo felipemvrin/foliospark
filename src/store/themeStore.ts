@@ -9,15 +9,20 @@ interface ThemeState {
   setPreset: (preset: ThemePresetName) => void
 }
 
+const themeStorePersistOptions =
+  typeof window === 'undefined'
+    ? { name: 'foliospark-theme' }
+    : {
+        name: 'foliospark-theme',
+        storage: createJSONStorage(() => window.localStorage),
+      }
+
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
       preset: themePresets[0].id,
       setPreset: (preset) => set({ preset: preset }),
     }),
-    {
-      name: 'foliospark-theme',
-      storage: typeof window === 'undefined' ? undefined : createJSONStorage(() => window.localStorage),
-    },
+    themeStorePersistOptions,
   ),
 )
