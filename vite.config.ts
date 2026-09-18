@@ -14,7 +14,6 @@ function escapeHtmlAttribute(value: string) {
     .replaceAll('>', '&gt;')
 }
 
-const defaultSeoMetadata = getSeoMetadata(portfolio.profile, 'Minimal')
 const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
 const repositoryOwner = process.env.GITHUB_REPOSITORY?.split('/')[0]
 const pagesBasePath = process.env.GITHUB_ACTIONS && repositoryName ? `/${repositoryName}/` : '/'
@@ -22,6 +21,7 @@ const defaultSiteUrl = process.env.APP_SITE_URL
   ?? (process.env.GITHUB_ACTIONS && repositoryOwner && repositoryName
     ? `https://${repositoryOwner}.github.io/${repositoryName}/`
     : 'http://localhost:5173/')
+const defaultSeoMetadata = getSeoMetadata(portfolio.profile, 'Minimal', defaultSiteUrl)
 
 export default defineConfig({
   base: pagesBasePath,
@@ -36,7 +36,7 @@ export default defineConfig({
           .replaceAll('%APP_DESCRIPTION%', escapeHtmlAttribute(defaultSeoMetadata.description))
           .replaceAll('%APP_THEME_COLOR%', escapeHtmlAttribute(defaultSeoMetadata.themeColor))
           .replaceAll('%APP_OG_IMAGE%', escapeHtmlAttribute(defaultSeoMetadata.image))
-          .replaceAll('%APP_URL%', escapeHtmlAttribute(defaultSiteUrl))
+          .replaceAll('%APP_URL%', escapeHtmlAttribute(defaultSeoMetadata.url))
       },
     },
   ],

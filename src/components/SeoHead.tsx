@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { isPublicPreview } from '../lib/publicPreview'
 import { getSeoMetadata } from '../lib/seo'
 import { usePortfolioStore } from '../store/portfolioStore'
 import { useThemeStore } from '../store/themeStore'
@@ -33,8 +34,22 @@ export function SeoHead() {
   const themeId = useThemeStore((state) => state.preset)
 
   useEffect(() => {
-    const { description, image, themeColor, title } = getSeoMetadata(profile, themeId)
-    const canonicalUrl = `${window.location.origin}${window.location.pathname}`
+    const fallbackCanonicalUrl = new URL(window.location.href)
+    fallbackCanonicalUrl.hash = ''
+
+    const currentCanonicalUrl = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href
+    const configuredCanonicalUrl = currentCanonicalUrl ? new URL(currentCanonicalUrl) : fallbackCanonicalUrl
+
+    if (isPublicPreview(window.location.search)) {
+      configuredCanonicalUrl.search = window.location.search
+    }
+
+    const { description, image, themeColor, title, url } = getSeoMetadata(
+      profile,
+      themeId,
+      configuredCanonicalUrl.toString(),
+    )
+    const canonicalUrl = url || fallbackCanonicalUrl.toString()
 
     document.title = title
     setCanonicalUrl(canonicalUrl)
