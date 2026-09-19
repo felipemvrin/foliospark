@@ -1,7 +1,48 @@
 const allowedExternalProtocols = new Set(['http:', 'https:'])
+const mailtoProtocol = 'mailto:'
+
+function getSafeEmailAddress(value: string) {
+  const email = value.trim()
+
+  if (!email || /[\r\n]/.test(email)) {
+    return null
+  }
+
+  try {
+    const url = new URL(`${mailtoProtocol}${email}`)
+
+    if (url.protocol !== mailtoProtocol || url.search || url.hash) {
+      return null
+    }
+
+    if (!url.pathname) {
+      return null
+    }
+
+    return url.pathname
+  } catch {
+    return null
+  }
+}
+
+export function getSafePhoneHref(value: string) {
+  const phone = value.trim()
+
+  if (!phone || !/^[\d\s()+-]+$/.test(phone)) {
+    return null
+  }
+
+  const normalizedPhone = phone.replace(/[^\d+]/g, '').replace(/(?!^)\+/g, '')
+
+  if (!normalizedPhone || !/\d/.test(normalizedPhone)) {
+    return null
+  }
+
+  return `tel:${normalizedPhone}`
+}
 
 export function getMailtoHref(value: string, subject?: string, body?: string) {
-  const email = value.trim()
+  const email = getSafeEmailAddress(value)
 
   if (!email) {
     return null

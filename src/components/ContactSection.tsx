@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { ArrowUpRight, ExternalLink, Mail, MapPin, Phone, Send } from 'lucide-react'
 
-import { getMailtoHref, getSafeExternalHref } from '../lib/links'
+import { getMailtoHref, getSafeExternalHref, getSafePhoneHref } from '../lib/links'
 import { usePortfolioStore } from '../store/portfolioStore'
 
 export function ContactSection() {
@@ -10,6 +10,8 @@ export function ContactSection() {
   const [formMessage, setFormMessage] = useState('')
   const email = portfolio.profile.email.trim()
   const emailHref = getMailtoHref(portfolio.profile.email)
+  const phone = portfolio.profile.phone.trim()
+  const phoneHref = getSafePhoneHref(portfolio.profile.phone)
   const socialLinks = portfolio.socialLinks.reduce<Array<{ href: string; key: string; label: string }>>((links, link, index) => {
     const href = getSafeExternalHref(link.url)
 
@@ -105,9 +107,13 @@ export function ContactSection() {
           </div>
           <div className="flex items-center gap-3">
             <Phone className="h-4 w-4 opacity-70" />
-            <a href={`tel:${portfolio.profile.phone}`} className="text-sm">
-              {portfolio.profile.phone}
-            </a>
+            {phoneHref ? (
+              <a href={phoneHref} className="text-sm">
+                {phone}
+              </a>
+            ) : (
+              <span className="text-sm opacity-70">Add a phone number</span>
+            )}
           </div>
           <div className="flex items-center gap-3">
             <MapPin className="h-4 w-4 opacity-70" />
