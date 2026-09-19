@@ -43,4 +43,39 @@ describe('public preview urls', () => {
     expect(url.hash).toBe('#aster-vale-studio')
     expect(url.searchParams.get('slug')).toBe('aster-vale-studio')
   })
+
+  it('prefers the explicit custom slug over the profile slug fallback', () => {
+    const href = getPublicPreviewHref(
+      {
+        profile: {
+          name: 'Aster Vale',
+          role: 'Design Engineer',
+          headline: '',
+          bio: '',
+          location: '',
+          email: '',
+          phone: '',
+          website: '',
+          photo: '',
+          slug: 'profile-fallback',
+        },
+        metrics: [],
+        about: [],
+        experience: [],
+        education: [],
+        skills: [],
+        projects: [],
+        githubProjects: [],
+        behanceProjects: [],
+        socialLinks: [],
+      },
+      'Minimal',
+      'Launch / 2026',
+    )
+
+    const url = new URL(href)
+
+    expect(url.hash).toBe('#launch-2026')
+    expect(url.searchParams.get('slug')).toBe('launch-2026')
+  })
 })
