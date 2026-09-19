@@ -27,10 +27,33 @@ function FieldLabel({ label, children }: { label: string; children: React.ReactN
   )
 }
 
+async function copyTextToClipboard(value: string) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(value)
+    return
+  }
+
+  const input = document.createElement('textarea')
+  input.value = value
+  input.setAttribute('readonly', '')
+  input.style.position = 'fixed'
+  input.style.opacity = '0'
+  document.body.append(input)
+  input.select()
+
+  try {
+    if (!document.execCommand('copy')) {
+      throw new Error('Copy failed')
+    }
+  } finally {
+    input.remove()
+  }
+}
+
 export function PortfolioEditor() {
   const importInputRef = useRef<HTMLInputElement>(null)
   const [transferMessage, setTransferMessage] = useState('')
-  const [shareMessage, setShareMessage] = useState('')
+  const [shareMessage, setShareMessage] = useState<{ href: string; id: number; text: string } | null>(null)
   const data = usePortfolioStore((state) => state.data)
   const resetData = usePortfolioStore((state) => state.resetData)
   const setData = usePortfolioStore((state) => state.setData)
@@ -273,10 +296,18 @@ export function PortfolioEditor() {
 
   const copyPublicLink = async () => {
     try {
-      await navigator.clipboard.writeText(new URL(publicPreviewHref, window.location.href).href)
-      setShareMessage('Public link copied.')
+      await copyTextToClipboard(new URL(publicPreviewHref, window.location.href).href)
+      setShareMessage((current) => ({
+        href: publicPreviewHref,
+        id: (current?.id ?? 0) + 1,
+        text: 'Public link copied.',
+      }))
     } catch {
-      setShareMessage('Copy is unavailable. Use Open public preview instead.')
+      setShareMessage((current) => ({
+        href: publicPreviewHref,
+        id: (current?.id ?? 0) + 1,
+        text: 'Copy is unavailable. Use Open public preview instead.',
+      }))
     }
   }
 
@@ -324,7 +355,9 @@ export function PortfolioEditor() {
           <input ref={importInputRef} type="file" accept="application/json,.json" onChange={importData} className="hidden" />
         </div>
         <div className="flex flex-wrap items-center gap-4">
-          {shareMessage ? <p role="status" className="text-xs text-[var(--muted)]">{shareMessage}</p> : null}
+          {shareMessage?.href === publicPreviewHref ? (
+            <p role="status" className="text-xs text-[var(--muted)]">{shareMessage.text}</p>
+          ) : null}
           {transferMessage && (
             <p role="status" className="text-xs text-[var(--muted)]">
               {transferMessage}
