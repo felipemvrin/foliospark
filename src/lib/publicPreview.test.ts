@@ -100,4 +100,46 @@ describe('public preview urls', () => {
 
     expect(metadata.url).toBe('https://www.astervale.studio/')
   })
+
+  it('falls back to the runtime canonical url when profile site url is invalid', () => {
+    const metadata = getSeoMetadata(
+      {
+        name: 'Aster Vale',
+        role: 'Design Engineer',
+        headline: '',
+        bio: 'Creative systems for ambitious teams.',
+        location: '',
+        email: '',
+        phone: '',
+        website: 'astervale.studio',
+        siteUrl: 'https://exa mple.com',
+        photo: '',
+      },
+      'Minimal',
+      'https://preview.example.com/portfolio',
+    )
+
+    expect(metadata.url).toBe('https://preview.example.com/portfolio')
+  })
+
+  it('rejects non-http protocols for canonical metadata urls', () => {
+    const metadata = getSeoMetadata(
+      {
+        name: 'Aster Vale',
+        role: 'Design Engineer',
+        headline: '',
+        bio: 'Creative systems for ambitious teams.',
+        location: '',
+        email: '',
+        phone: '',
+        website: 'astervale.studio',
+        siteUrl: 'javascript:alert(1)',
+        photo: '',
+      },
+      'Minimal',
+      'ftp://preview.example.com/portfolio',
+    )
+
+    expect(metadata.url).toBe('')
+  })
 })
