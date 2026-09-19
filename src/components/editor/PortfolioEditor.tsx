@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import { Download, Trash2, Upload } from 'lucide-react'
+import { Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
 import { themePresets } from '../../data/themes'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
@@ -30,6 +30,7 @@ function FieldLabel({ label, children }: { label: string; children: React.ReactN
 export function PortfolioEditor() {
   const importInputRef = useRef<HTMLInputElement>(null)
   const [transferMessage, setTransferMessage] = useState('')
+  const [shareMessage, setShareMessage] = useState('')
   const data = usePortfolioStore((state) => state.data)
   const resetData = usePortfolioStore((state) => state.resetData)
   const setData = usePortfolioStore((state) => state.setData)
@@ -270,6 +271,15 @@ export function PortfolioEditor() {
     }
   }
 
+  const copyPublicLink = async () => {
+    try {
+      await navigator.clipboard.writeText(new URL(publicPreviewHref, window.location.href).href)
+      setShareMessage('Public link copied.')
+    } catch {
+      setShareMessage('Copy is unavailable. Use Open public preview instead.')
+    }
+  }
+
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -299,6 +309,10 @@ export function PortfolioEditor() {
           >
             Open public preview
           </a>
+          <button type="button" onClick={copyPublicLink} className={actionButtonClassName}>
+            <Clipboard className="mr-2 inline-block h-3.5 w-3.5" />
+            Copy public link
+          </button>
           <button type="button" onClick={exportData} className={actionButtonClassName}>
             <Download className="mr-2 inline-block h-3.5 w-3.5" />
             Export JSON
@@ -310,6 +324,7 @@ export function PortfolioEditor() {
           <input ref={importInputRef} type="file" accept="application/json,.json" onChange={importData} className="hidden" />
         </div>
         <div className="flex flex-wrap items-center gap-4">
+          {shareMessage ? <p role="status" className="text-xs text-[var(--muted)]">{shareMessage}</p> : null}
           {transferMessage && (
             <p role="status" className="text-xs text-[var(--muted)]">
               {transferMessage}
