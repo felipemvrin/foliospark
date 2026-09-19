@@ -62,7 +62,7 @@ export function PortfolioEditor() {
     () => themePresets.find((item) => item.id === theme) ?? themePresets[0],
     [theme],
   )
-  const publicPreviewHref = useMemo(() => getPublicPreviewHref(data, theme), [data, theme])
+  const publicPreviewHref = useMemo(() => getPublicPreviewHref(data, theme, data.profile.slug), [data, theme])
 
   const updateProfile = (field: keyof Profile, value: string) => {
     setData((current) => ({
@@ -431,6 +431,14 @@ export function PortfolioEditor() {
                 value={data.profile.website}
                 onChange={(event) => updateProfile('website', event.target.value)}
                 className={inputClassName}
+              />
+            </FieldLabel>
+            <FieldLabel label="Public URL slug">
+              <input
+                value={data.profile.slug ?? ''}
+                onChange={(event) => updateProfile('slug', event.target.value)}
+                className={inputClassName}
+                placeholder="aster-vale"
               />
             </FieldLabel>
             <div className="md:col-span-2">
