@@ -6,6 +6,18 @@ import { isPortfolio } from './portfolioTransfer'
 const publicViewParam = 'public'
 const portfolioQueryParam = 'data'
 const themeQueryParam = 'theme'
+const slugQueryParam = 'slug'
+
+export function normalizePublicSlug(value: string) {
+  const normalized = (value ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/https?:\/\/?/gi, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+  return normalized || 'portfolio'
+}
 
 function encodeJsonPayload(value: unknown) {
   const bytes = new TextEncoder().encode(JSON.stringify(value))
@@ -65,14 +77,25 @@ export function isPublicPreview(search: string) {
   return new URLSearchParams(search).get('view') === publicViewParam
 }
 
-export function getPublicPreviewHref(data: Portfolio, theme: ThemePresetName) {
-  const url = new URL(window.location.href)
+export function getPublicPreviewHref(
+  data: Portfolio,
+  theme: ThemePresetName,
+  customSlug?: string,
+  baseUrl = typeof window !== 'undefined' ? window.location.href : 'https://example.com',
+) {
+  const url = new URL(baseUrl)
 
+  // Public preview links reserve the fragment for the canonical vanity slug.
   url.hash = ''
   url.search = ''
+
+  const canonicalSlug = normalizePublicSlug(customSlug || data.profile.slug || data.profile.name || 'portfolio')
+
   url.searchParams.set('view', publicViewParam)
   url.searchParams.set(themeQueryParam, theme)
   url.searchParams.set(portfolioQueryParam, encodeJsonPayload(data))
+  url.searchParams.set(slugQueryParam, canonicalSlug)
+  url.hash = canonicalSlug
 
   return url.toString()
 }
