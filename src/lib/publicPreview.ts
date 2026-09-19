@@ -88,14 +88,13 @@ export function getPublicPreviewHref(
   url.hash = ''
   url.search = ''
 
-  const resolvedSlug = normalizePublicSlug(customSlug || data.profile.slug || data.profile.name || 'portfolio')
-  const serializedSlug = encodeURIComponent(resolvedSlug)
+  const canonicalSlug = normalizePublicSlug(customSlug || data.profile.slug || data.profile.name || 'portfolio')
 
   url.searchParams.set('view', publicViewParam)
   url.searchParams.set(themeQueryParam, theme)
   url.searchParams.set(portfolioQueryParam, encodeJsonPayload(data))
-  url.searchParams.set(slugQueryParam, serializedSlug)
-  url.hash = serializedSlug
+  url.searchParams.set(slugQueryParam, canonicalSlug)
+  url.hash = canonicalSlug
 
   return url.toString()
 }
