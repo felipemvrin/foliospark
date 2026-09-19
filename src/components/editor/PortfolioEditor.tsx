@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import { Download, Trash2, Upload } from 'lucide-react'
+import { Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
 import { themePresets } from '../../data/themes'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
@@ -27,9 +27,33 @@ function FieldLabel({ label, children }: { label: string; children: React.ReactN
   )
 }
 
+async function copyTextToClipboard(value: string) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(value)
+    return
+  }
+
+  const input = document.createElement('textarea')
+  input.value = value
+  input.setAttribute('readonly', '')
+  input.style.position = 'fixed'
+  input.style.opacity = '0'
+  document.body.append(input)
+  input.select()
+
+  try {
+    if (!document.execCommand('copy')) {
+      throw new Error('Copy failed')
+    }
+  } finally {
+    input.remove()
+  }
+}
+
 export function PortfolioEditor() {
   const importInputRef = useRef<HTMLInputElement>(null)
   const [transferMessage, setTransferMessage] = useState('')
+  const [shareMessage, setShareMessage] = useState<{ href: string; id: number; text: string } | null>(null)
   const data = usePortfolioStore((state) => state.data)
   const resetData = usePortfolioStore((state) => state.resetData)
   const setData = usePortfolioStore((state) => state.setData)
@@ -270,6 +294,23 @@ export function PortfolioEditor() {
     }
   }
 
+  const copyPublicLink = async () => {
+    try {
+      await copyTextToClipboard(new URL(publicPreviewHref, window.location.href).href)
+      setShareMessage((current) => ({
+        href: publicPreviewHref,
+        id: (current?.id ?? 0) + 1,
+        text: 'Public link copied.',
+      }))
+    } catch {
+      setShareMessage((current) => ({
+        href: publicPreviewHref,
+        id: (current?.id ?? 0) + 1,
+        text: 'Copy is unavailable. Use Open public preview instead.',
+      }))
+    }
+  }
+
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -299,6 +340,10 @@ export function PortfolioEditor() {
           >
             Open public preview
           </a>
+          <button type="button" onClick={copyPublicLink} className={actionButtonClassName}>
+            <Clipboard className="mr-2 inline-block h-3.5 w-3.5" />
+            Copy public link
+          </button>
           <button type="button" onClick={exportData} className={actionButtonClassName}>
             <Download className="mr-2 inline-block h-3.5 w-3.5" />
             Export JSON
@@ -310,6 +355,9 @@ export function PortfolioEditor() {
           <input ref={importInputRef} type="file" accept="application/json,.json" onChange={importData} className="hidden" />
         </div>
         <div className="flex flex-wrap items-center gap-4">
+          {shareMessage?.href === publicPreviewHref ? (
+            <p role="status" className="text-xs text-[var(--muted)]">{shareMessage.text}</p>
+          ) : null}
           {transferMessage && (
             <p role="status" className="text-xs text-[var(--muted)]">
               {transferMessage}
