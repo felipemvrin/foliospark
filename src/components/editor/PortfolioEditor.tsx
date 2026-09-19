@@ -433,6 +433,14 @@ export function PortfolioEditor() {
                 className={inputClassName}
               />
             </FieldLabel>
+            <FieldLabel label="Site URL">
+              <input
+                value={data.profile.siteUrl ?? ''}
+                onChange={(event) => updateProfile('siteUrl', event.target.value)}
+                className={inputClassName}
+                placeholder="https://www.astervale.studio"
+              />
+            </FieldLabel>
             <FieldLabel label="Public URL slug">
               <input
                 value={data.profile.slug ?? ''}

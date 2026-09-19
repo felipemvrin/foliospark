@@ -11,6 +11,7 @@ export const portfolio: Portfolio = {
     email: 'hello@astervale.studio',
     phone: '+81 90 1234 5678',
     website: 'astervale.studio',
+    siteUrl: 'https://www.astervale.studio',
     slug: 'aster-vale',
     photo:
       'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80',

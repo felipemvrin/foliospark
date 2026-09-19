@@ -58,7 +58,7 @@ export interface SeoMetadata {
 export function getSeoMetadata(profile: Profile, themeId: ThemePresetName, siteUrl = ''): SeoMetadata {
   const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0]
   const titleParts = [profile.name.trim(), profile.role.trim()].filter(Boolean)
-  const normalizedSiteUrl = normalizeSiteUrl(siteUrl)
+  const normalizedSiteUrl = normalizeSiteUrl(firstNonEmpty(profile.siteUrl ?? '', siteUrl))
 
   return {
     title: titleParts.join(' — ') || 'FolioSpark',
