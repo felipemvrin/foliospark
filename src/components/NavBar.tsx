@@ -1,6 +1,7 @@
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
+import { getMailtoHref } from '../lib/links'
 import { usePortfolioStore } from '../store/portfolioStore'
 
 const navItems = [
@@ -14,6 +15,7 @@ const navItems = [
 export function NavBar() {
   const [open, setOpen] = useState(false)
   const email = usePortfolioStore((state) => state.data.profile.email)
+  const emailHref = getMailtoHref(email)
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -45,12 +47,18 @@ export function NavBar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <a
-            href={`mailto:${email}`}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:opacity-90"
-          >
-            Book a call <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
+          {emailHref ? (
+            <a
+              href={emailHref}
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:opacity-90"
+            >
+              Book a call <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+          ) : (
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] opacity-60">
+              Book a call <ArrowUpRight className="h-3.5 w-3.5" />
+            </span>
+          )}
         </div>
 
         <button

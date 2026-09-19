@@ -1,9 +1,27 @@
 import { ArrowUpRight, ExternalLink, Mail, MapPin, Phone } from 'lucide-react'
 
+import { getMailtoHref, getSafeExternalHref } from '../lib/links'
 import { usePortfolioStore } from '../store/portfolioStore'
 
 export function ContactSection() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const email = portfolio.profile.email.trim()
+  const emailHref = getMailtoHref(portfolio.profile.email)
+  const socialLinks = portfolio.socialLinks.reduce<Array<{ href: string; key: string; label: string }>>((links, link, index) => {
+    const href = getSafeExternalHref(link.url)
+
+    if (!href) {
+      return links
+    }
+
+    links.push({
+      href,
+      key: `${link.platform}-${index}`,
+      label: link.label.trim() || link.platform,
+    })
+
+    return links
+  }, [])
 
   return (
     <section id="contact" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
@@ -16,48 +34,60 @@ export function ContactSection() {
             </h2>
           </div>
 
-          <a
-            href={`mailto:${portfolio.profile.email}`}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] transition hover:opacity-90"
-          >
-            Email the studio <ArrowUpRight className="h-4 w-4" />
-          </a>
+          {emailHref ? (
+            <a
+              href={emailHref}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] transition hover:opacity-90"
+            >
+              Email the studio <ArrowUpRight className="h-4 w-4" />
+            </a>
+          ) : (
+            <span className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] opacity-60">
+              Email the studio <ArrowUpRight className="h-4 w-4" />
+            </span>
+          )}
         </div>
 
         <div className="mt-10 grid gap-5 border-t border-[var(--border-strong)] pt-8 md:grid-cols-3">
           <div className="flex items-center gap-3">
-          <Mail className="h-4 w-4 opacity-70" />
-          <a href={`mailto:${portfolio.profile.email}`} className="text-sm">
-            {portfolio.profile.email}
-          </a>
+            <Mail className="h-4 w-4 opacity-70" />
+            {emailHref ? (
+              <a href={emailHref} className="text-sm">
+                {email}
+              </a>
+            ) : (
+              <span className="text-sm opacity-70">Add an email address</span>
+            )}
           </div>
           <div className="flex items-center gap-3">
-          <Phone className="h-4 w-4 opacity-70" />
-          <a href={`tel:${portfolio.profile.phone}`} className="text-sm">
-            {portfolio.profile.phone}
-          </a>
-          </div>
-          <div className="flex items-center gap-3">
-          <MapPin className="h-4 w-4 opacity-70" />
-          <span className="text-sm">
-            {portfolio.profile.location}
-          </span>
-          </div>
-        </div>
-        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-[var(--border-strong)] pt-6">
-          {portfolio.socialLinks.map((link, index) => (
-            <a
-              key={`${link.platform}-${index}`}
-              href={link.url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-sm opacity-80 transition hover:opacity-100"
-            >
-              {link.label}
-              <ExternalLink className="h-3.5 w-3.5" />
+            <Phone className="h-4 w-4 opacity-70" />
+            <a href={`tel:${portfolio.profile.phone}`} className="text-sm">
+              {portfolio.profile.phone}
             </a>
-          ))}
+          </div>
+          <div className="flex items-center gap-3">
+            <MapPin className="h-4 w-4 opacity-70" />
+            <span className="text-sm">
+              {portfolio.profile.location}
+            </span>
+          </div>
         </div>
+        {socialLinks.length > 0 ? (
+          <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-[var(--border-strong)] pt-6">
+            {socialLinks.map((link) => (
+              <a
+                key={link.key}
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm opacity-80 transition hover:opacity-100"
+              >
+                {link.label}
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   )
