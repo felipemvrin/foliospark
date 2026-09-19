@@ -85,6 +85,7 @@ export function getPublicPreviewHref(
 ) {
   const url = new URL(baseUrl)
 
+  // Public preview links reserve the fragment for the canonical vanity slug.
   url.hash = ''
   url.search = ''
 
