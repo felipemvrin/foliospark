@@ -41,6 +41,6 @@ describe('public preview urls', () => {
 
     expect(url.searchParams.get('view')).toBe('public')
     expect(url.hash).toBe('#aster-vale-studio')
-    expect(url.searchParams.get('slug')).toBeNull()
+    expect(url.searchParams.get('slug')).toBe('aster-vale-studio')
   })
 })
