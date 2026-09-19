@@ -6,7 +6,6 @@ import { isPortfolio } from './portfolioTransfer'
 const publicViewParam = 'public'
 const portfolioQueryParam = 'data'
 const themeQueryParam = 'theme'
-const slugQueryParam = 'slug'
 
 export function normalizePublicSlug(value: string) {
   const normalized = (value ?? '')
@@ -93,7 +92,7 @@ export function getPublicPreviewHref(
   url.searchParams.set('view', publicViewParam)
   url.searchParams.set(themeQueryParam, theme)
   url.searchParams.set(portfolioQueryParam, encodeJsonPayload(data))
-  url.searchParams.set(slugQueryParam, resolvedSlug)
+  url.hash = resolvedSlug
 
   return url.toString()
 }

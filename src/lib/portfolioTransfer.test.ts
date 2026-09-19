@@ -1,0 +1,36 @@
+import { describe, expect, it } from 'vitest'
+
+import { isPortfolio } from './portfolioTransfer'
+
+const basePortfolio = {
+  profile: {
+    name: 'Aster Vale',
+    role: 'Design Engineer',
+    headline: 'Crafting digital identities with motion, systems, and story.',
+    bio: 'I build expressive product experiences.',
+    location: 'Tokyo / Remote',
+    email: 'hello@astervale.studio',
+    phone: '+81 90 1234 5678',
+    website: 'astervale.studio',
+    photo: 'https://example.com/photo.jpg',
+  },
+  metrics: [],
+  about: [],
+  experience: [],
+  education: [],
+  skills: [],
+  projects: [],
+  githubProjects: [],
+  behanceProjects: [],
+  socialLinks: [],
+}
+
+describe('isPortfolio', () => {
+  it('accepts an optional profile slug when it is a string', () => {
+    expect(isPortfolio({ ...basePortfolio, profile: { ...basePortfolio.profile, slug: 'aster-vale' } })).toBe(true)
+  })
+
+  it('rejects a profile slug when it is not a string', () => {
+    expect(isPortfolio({ ...basePortfolio, profile: { ...basePortfolio.profile, slug: 123 } })).toBe(false)
+  })
+})
