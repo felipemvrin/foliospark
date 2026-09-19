@@ -1,4 +1,4 @@
-import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowUpRight, ExternalLink, Mail, MapPin, Phone } from 'lucide-react'
 
 import { usePortfolioStore } from '../store/portfolioStore'
 
@@ -43,6 +43,20 @@ export function ContactSection() {
             {portfolio.profile.location}
           </span>
           </div>
+        </div>
+        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-[var(--border-strong)] pt-6">
+          {portfolio.socialLinks.map((link, index) => (
+            <a
+              key={`${link.platform}-${index}`}
+              href={link.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 text-sm opacity-80 transition hover:opacity-100"
+            >
+              {link.label}
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          ))}
         </div>
       </div>
     </section>
