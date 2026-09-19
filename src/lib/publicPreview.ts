@@ -89,12 +89,13 @@ export function getPublicPreviewHref(
   url.search = ''
 
   const resolvedSlug = normalizePublicSlug(customSlug || data.profile.slug || data.profile.name || 'portfolio')
+  const serializedSlug = encodeURIComponent(resolvedSlug)
 
   url.searchParams.set('view', publicViewParam)
   url.searchParams.set(themeQueryParam, theme)
   url.searchParams.set(portfolioQueryParam, encodeJsonPayload(data))
-  url.searchParams.set(slugQueryParam, resolvedSlug)
-  url.hash = resolvedSlug
+  url.searchParams.set(slugQueryParam, serializedSlug)
+  url.hash = serializedSlug
 
   return url.toString()
 }
