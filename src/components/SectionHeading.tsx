@@ -21,14 +21,14 @@ export function SectionHeading({
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className={align === 'center' ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}
     >
-      <p className="mb-5 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-neutral-500">
+      <p className="mb-5 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]">
         {eyebrow}
       </p>
-      <h2 className="font-display text-4xl leading-none text-neutral-900 sm:text-5xl lg:text-6xl">
+      <h2 className="font-display text-4xl leading-none text-[var(--foreground)] sm:text-5xl lg:text-6xl">
         {title}
       </h2>
       {description ? (
-        <p className="mt-5 text-base leading-7 text-neutral-600 sm:text-lg">
+        <p className="mt-5 text-base leading-7 text-[var(--muted)] sm:text-lg">
           {description}
         </p>
       ) : null}
