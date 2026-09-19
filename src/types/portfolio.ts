@@ -21,6 +21,7 @@ export interface Profile {
   email: string
   phone: string
   website: string
+  siteUrl?: string
   slug?: string
   photo: string
 }

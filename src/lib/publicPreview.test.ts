@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { getPublicPreviewHref, normalizePublicSlug } from './publicPreview'
+import { getSeoMetadata } from './seo'
 
 describe('public preview urls', () => {
   it('normalizes a custom slug for public links', () => {
@@ -77,5 +78,68 @@ describe('public preview urls', () => {
 
     expect(url.hash).toBe('#launch-2026')
     expect(url.searchParams.get('slug')).toBe('launch-2026')
+  })
+
+  it('prefers a configured public site url for canonical metadata', () => {
+    const metadata = getSeoMetadata(
+      {
+        name: 'Aster Vale',
+        role: 'Design Engineer',
+        headline: '',
+        bio: 'Creative systems for ambitious teams.',
+        location: '',
+        email: '',
+        phone: '',
+        website: 'astervale.studio',
+        siteUrl: 'https://www.astervale.studio',
+        photo: '',
+      },
+      'Minimal',
+      'https://preview.example.com/portfolio',
+    )
+
+    expect(metadata.url).toBe('https://www.astervale.studio/')
+  })
+
+  it('falls back to the runtime canonical url when profile site url is invalid', () => {
+    const metadata = getSeoMetadata(
+      {
+        name: 'Aster Vale',
+        role: 'Design Engineer',
+        headline: '',
+        bio: 'Creative systems for ambitious teams.',
+        location: '',
+        email: '',
+        phone: '',
+        website: 'astervale.studio',
+        siteUrl: 'https://exa mple.com',
+        photo: '',
+      },
+      'Minimal',
+      'https://preview.example.com/portfolio',
+    )
+
+    expect(metadata.url).toBe('https://preview.example.com/portfolio')
+  })
+
+  it('rejects non-http protocols for canonical metadata urls', () => {
+    const metadata = getSeoMetadata(
+      {
+        name: 'Aster Vale',
+        role: 'Design Engineer',
+        headline: '',
+        bio: 'Creative systems for ambitious teams.',
+        location: '',
+        email: '',
+        phone: '',
+        website: 'astervale.studio',
+        siteUrl: 'javascript:alert(1)',
+        photo: '',
+      },
+      'Minimal',
+      'ftp://preview.example.com/portfolio',
+    )
+
+    expect(metadata.url).toBe('')
   })
 })

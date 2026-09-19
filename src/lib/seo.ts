@@ -17,12 +17,30 @@ function normalizeSiteUrl(value: string) {
 
   try {
     const url = new URL(candidate)
+    const protocol = url.protocol.toLowerCase()
+
+    if (protocol !== 'http:' && protocol !== 'https:') {
+      return ''
+    }
+
     url.hash = ''
 
     return url.href
   } catch {
     return ''
   }
+}
+
+function resolveCanonicalUrl(...candidates: string[]) {
+  for (const candidate of candidates) {
+    const normalized = normalizeSiteUrl(candidate)
+
+    if (normalized) {
+      return normalized
+    }
+  }
+
+  return ''
 }
 
 function resolveImageUrl(value: string, siteUrl: string) {
@@ -58,7 +76,7 @@ export interface SeoMetadata {
 export function getSeoMetadata(profile: Profile, themeId: ThemePresetName, siteUrl = ''): SeoMetadata {
   const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0]
   const titleParts = [profile.name.trim(), profile.role.trim()].filter(Boolean)
-  const normalizedSiteUrl = normalizeSiteUrl(siteUrl)
+  const normalizedSiteUrl = resolveCanonicalUrl(profile.siteUrl ?? '', siteUrl)
 
   return {
     title: titleParts.join(' — ') || 'FolioSpark',
