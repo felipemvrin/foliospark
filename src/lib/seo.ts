@@ -43,6 +43,26 @@ function resolveCanonicalUrl(...candidates: string[]) {
   return ''
 }
 
+export function getCanonicalSiteUrl(profileSiteUrl = '', fallbackSiteUrl = '') {
+  return resolveCanonicalUrl(profileSiteUrl, fallbackSiteUrl)
+}
+
+export function getSiteBasePath(siteUrl: string) {
+  const normalized = normalizeSiteUrl(siteUrl)
+
+  if (!normalized) {
+    return '/'
+  }
+
+  const pathname = new URL(normalized).pathname || '/'
+
+  return pathname.endsWith('/') ? pathname : `${pathname}/`
+}
+
+export function shouldGenerateRobotsTxt(siteUrl: string) {
+  return getSiteBasePath(siteUrl) === '/'
+}
+
 function resolveImageUrl(value: string, siteUrl: string) {
   const trimmedValue = value.trim()
 
@@ -76,7 +96,7 @@ export interface SeoMetadata {
 export function getSeoMetadata(profile: Profile, themeId: ThemePresetName, siteUrl = ''): SeoMetadata {
   const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0]
   const titleParts = [profile.name.trim(), profile.role.trim()].filter(Boolean)
-  const normalizedSiteUrl = resolveCanonicalUrl(profile.siteUrl ?? '', siteUrl)
+  const normalizedSiteUrl = getCanonicalSiteUrl(profile.siteUrl ?? '', siteUrl)
 
   return {
     title: titleParts.join(' — ') || 'FolioSpark',
@@ -85,4 +105,33 @@ export function getSeoMetadata(profile: Profile, themeId: ThemePresetName, siteU
     themeColor: theme.colors.background,
     url: normalizedSiteUrl,
   }
+}
+
+export function buildSitemapXml(siteUrl: string) {
+  const normalized = normalizeSiteUrl(siteUrl)
+
+  if (!normalized) {
+    return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'
+  }
+
+  const base = normalized.endsWith('/') ? normalized : `${normalized}/`
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${base}</loc>
+  </url>
+</urlset>`
+}
+
+export function buildRobotsTxt(siteUrl: string) {
+  const normalized = normalizeSiteUrl(siteUrl)
+
+  if (!normalized) {
+    return ['User-agent: *', 'Allow: /'].join('\n')
+  }
+
+  const base = normalized.endsWith('/') ? normalized : `${normalized}/`
+
+  return ['User-agent: *', 'Allow: /', `Sitemap: ${base}sitemap.xml`].join('\n')
 }
