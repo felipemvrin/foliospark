@@ -86,3 +86,32 @@ export function getSeoMetadata(profile: Profile, themeId: ThemePresetName, siteU
     url: normalizedSiteUrl,
   }
 }
+
+export function buildSitemapXml(siteUrl: string) {
+  const normalized = normalizeSiteUrl(siteUrl)
+
+  if (!normalized) {
+    return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'
+  }
+
+  const base = normalized.endsWith('/') ? normalized : `${normalized}/`
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${base}</loc>
+  </url>
+</urlset>`
+}
+
+export function buildRobotsTxt(siteUrl: string) {
+  const normalized = normalizeSiteUrl(siteUrl)
+
+  if (!normalized) {
+    return ['User-agent: *', 'Allow: /'].join('\n')
+  }
+
+  const base = normalized.endsWith('/') ? normalized : `${normalized}/`
+
+  return ['User-agent: *', 'Allow: /', `Sitemap: ${base}sitemap.xml`].join('\n')
+}

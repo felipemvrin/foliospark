@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 import { portfolio } from './src/data/portfolio.js'
-import { getSeoMetadata } from './src/lib/seo.js'
+import { buildRobotsTxt, buildSitemapXml, getSeoMetadata } from './src/lib/seo.js'
 
 function escapeHtmlAttribute(value: string) {
   return value
@@ -37,6 +37,20 @@ export default defineConfig({
           .replaceAll('%APP_THEME_COLOR%', escapeHtmlAttribute(defaultSeoMetadata.themeColor))
           .replaceAll('%APP_OG_IMAGE%', escapeHtmlAttribute(defaultSeoMetadata.image))
           .replaceAll('%APP_URL%', escapeHtmlAttribute(defaultSeoMetadata.url))
+      },
+    },
+    {
+      name: 'foliospark-static-seo-files',
+      generateBundle() {
+        if (!defaultSiteUrl) {
+          return
+        }
+
+        const sitemap = buildSitemapXml(defaultSiteUrl)
+        const robots = buildRobotsTxt(defaultSiteUrl)
+
+        this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap })
+        this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots })
       },
     },
   ],
