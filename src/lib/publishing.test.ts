@@ -48,4 +48,25 @@ describe('publishing readiness', () => {
     expect(readiness.status).toBe('warning')
     expect(readiness.checks.find((check) => check.id === 'contact')?.status).toBe('warning')
   })
+
+  it('warns when no custom public URL slug can be generated', () => {
+    const readiness = getPublishingReadiness(createEmptyPortfolio())
+    const publicUrlCheck = readiness.checks.find((check) => check.id === 'url')
+
+    expect(publicUrlCheck?.status).toBe('warning')
+    expect(publicUrlCheck?.detail).toContain('Add a name or custom slug')
+  })
+
+  it('warns when provided identity cannot produce a stable public slug', () => {
+    const readiness = getPublishingReadiness({
+      ...portfolio,
+      profile: {
+        ...portfolio.profile,
+        name: '!!!',
+        slug: '',
+      },
+    })
+
+    expect(readiness.checks.find((check) => check.id === 'url')?.status).toBe('warning')
+  })
 })

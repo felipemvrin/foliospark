@@ -23,6 +23,10 @@ function hasText(value: string | undefined) {
 }
 
 export function getPublishingReadiness(data: Portfolio): PublishingReadiness {
+  const publicSlugSource = data.profile.slug || data.profile.name
+  const normalizedPublicSlug = normalizePublicSlug(publicSlugSource)
+  const hasCustomPublicSlug = normalizedPublicSlug !== 'portfolio'
+
   const checks: PublishingCheck[] = [
     {
       id: 'identity',
@@ -63,12 +67,10 @@ export function getPublishingReadiness(data: Portfolio): PublishingReadiness {
     {
       id: 'url',
       label: 'Public URL',
-      detail: normalizePublicSlug(data.profile.slug || data.profile.name)
+      detail: hasCustomPublicSlug
         ? 'Your public preview has a stable, shareable slug.'
         : 'Add a name or custom slug to generate a public URL.',
-      status: normalizePublicSlug(data.profile.slug || data.profile.name) !== 'portfolio' || hasText(data.profile.name)
-        ? 'ready'
-        : 'warning',
+      status: hasCustomPublicSlug ? 'ready' : 'warning',
     },
   ]
 
