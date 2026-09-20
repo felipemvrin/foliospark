@@ -20,6 +20,7 @@ export function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
+          whileHover={{ y: -4 }}
           className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
         >
           <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]">Profile</p>
@@ -35,6 +36,7 @@ export function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.08 }}
+          whileHover={{ y: -4 }}
           className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface-strong)] p-6 text-[var(--on-strong)] sm:p-8"
         >
           <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] opacity-70">Overview</p>

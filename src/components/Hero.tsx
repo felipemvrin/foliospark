@@ -6,11 +6,16 @@ import { usePortfolioStore } from '../store/portfolioStore'
 export function Hero() {
   const portfolio = usePortfolioStore((state) => state.data)
 
+  const headlineWords = ['CREATE.', 'CURATE.', 'SHARE.']
+
   return (
     <section id="top" className="relative overflow-hidden border-b border-[var(--border)] bg-[var(--background)]">
-      <div
-        className="absolute inset-0"
-        style={{ background: 'radial-gradient(circle at top, var(--accent-soft), transparent 54%)' }}
+      <motion.div
+        aria-hidden="true"
+        animate={{ x: [0, 12, 0], y: [0, -14, 0], opacity: [0.7, 1, 0.7] }}
+        transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
+        className="pointer-events-none absolute inset-x-0 top-[-18%] h-[540px] opacity-80"
+        style={{ background: 'radial-gradient(circle at 30% 35%, var(--accent-soft), transparent 34%)' }}
       />
       <div className="absolute inset-x-0 top-0 h-px bg-[var(--border)]" />
 
@@ -31,9 +36,17 @@ export function Hero() {
               FolioSpark
             </p>
             <h1 className="max-w-4xl font-display text-[3.1rem] leading-[0.88] tracking-[-0.08em] text-[var(--foreground)] sm:text-[4.7rem] lg:text-[7.2rem]">
-              CREATE.
-              <span className="block text-[var(--accent)]">CURATE.</span>
-              <span className="block">SHARE.</span>
+              {headlineWords.map((word, index) => (
+                <motion.span
+                  key={word}
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.18 + index * 0.12, ease: 'easeOut' }}
+                  className={index === 1 ? 'block text-[var(--accent)]' : 'block'}
+                >
+                  {word}
+                </motion.span>
+              ))}
             </h1>
           </motion.div>
 
@@ -52,18 +65,22 @@ export function Hero() {
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
             className="flex flex-col gap-4 sm:flex-row"
           >
-            <a
+            <motion.a
               href="#work"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] transition hover:opacity-90"
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] shadow-[0_12px_26px_rgba(212,163,115,0.28)] transition hover:shadow-[0_18px_40px_rgba(212,163,115,0.36)]"
             >
               Explore work <ArrowUpRight className="h-4 w-4" />
-            </a>
-            <a
+            </motion.a>
+            <motion.a
               href="#contact"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:opacity-90"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
               Start a project
-            </a>
+            </motion.a>
           </motion.div>
 
           <motion.div
@@ -73,10 +90,17 @@ export function Hero() {
             className="flex flex-wrap items-center gap-3 pt-3 text-[0.68rem] uppercase tracking-[0.22em] text-[var(--muted)]"
           >
             {portfolio.metrics.map((metric, index) => (
-              <div key={`${metric.label}-${index}`} className="border-l border-[var(--border)] px-3 first:border-l-0 first:pl-0">
+              <motion.div
+                key={`${metric.label}-${index}`}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.35 + index * 0.12, ease: 'easeOut' }}
+                whileHover={{ y: -4 }}
+                className="border-l border-[var(--border)] px-3 first:border-l-0 first:pl-0"
+              >
                 <span className="block text-lg font-medium tracking-[-0.06em] text-[var(--foreground)]">{metric.value}</span>
                 <span>{metric.label}</span>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>
@@ -87,6 +111,11 @@ export function Hero() {
           transition={{ duration: 0.75, ease: 'easeOut', delay: 0.12 }}
           className="relative"
         >
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 6.5, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
+            className="relative"
+          >
           <div
             className="relative rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-4"
             style={{ boxShadow: 'var(--shadow-soft)' }}
@@ -110,6 +139,7 @@ export function Hero() {
               </div>
             </div>
           </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
