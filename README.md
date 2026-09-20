@@ -16,6 +16,7 @@ This project is built as a modern React + TypeScript + Vite application with a d
 - Local portfolio editor with persistence and JSON import/export
 - Theme presets with live preview and dynamic SEO metadata
 - Public preview mode for sharing the portfolio without editor controls
+- Publishing readiness checks for identity, story, work, contact, and public URL quality
 - Optional GitHub repository sync with local fallback data
 - Editable Behance project collection with persistent visual content
 - Automated GitHub Pages deployment from `main`
@@ -86,12 +87,10 @@ For a custom domain, set `APP_SITE_URL` in the deployment environment before bui
 
 ## Roadmap
 
-- Public publishing flow and custom portfolio URLs
-- SEO metadata and social sharing controls
-- GitHub API integration
-- Behance API ingestion when a secure server proxy is available
-- Hosted portfolio deployment
-- Custom domain and canonical URL configuration
+- GitHub data refresh with explicit loading and error states
+- Behance data ingestion through a secure server proxy
+- Hosted portfolio publishing with durable public URLs
+- Optional analytics and visitor insights
 
 ## Screenshots
 
