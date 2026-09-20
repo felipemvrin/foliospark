@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight, GitBranch, Globe } from 'lucide-react'
 
+import { getSafeExternalHref } from '../lib/links'
 import type { Project } from '../types/portfolio'
 
 interface ProjectCardProps {
@@ -9,7 +10,9 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
-  const projectUrl = project.website ?? project.github
+  const websiteHref = project.website ? getSafeExternalHref(project.website) : null
+  const githubHref = project.github ? getSafeExternalHref(project.github) : null
+  const projectUrl = websiteHref ?? githubHref
 
   return (
     <motion.article
@@ -45,19 +48,23 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             <h3 className="mt-3 text-2xl font-medium text-[var(--foreground)]">{project.title}</h3>
           </div>
           <div className="flex items-center gap-2 text-[var(--muted)]">
-            {project.website ? (
+            {websiteHref ? (
               <a
-                href={project.website}
+                href={websiteHref}
                 aria-label={`Visit ${project.title}`}
+                target="_blank"
+                rel="noreferrer"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] transition hover:text-[var(--foreground)]"
               >
                 <Globe className="h-4 w-4" />
               </a>
             ) : null}
-            {project.github ? (
+            {githubHref ? (
               <a
-                href={project.github}
+                href={githubHref}
                 aria-label={`${project.title} on GitHub`}
+                target="_blank"
+                rel="noreferrer"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] transition hover:text-[var(--foreground)]"
               >
                 <GitBranch className="h-4 w-4" />
@@ -83,6 +90,8 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         {projectUrl ? (
           <a
             href={projectUrl}
+            target="_blank"
+            rel="noreferrer"
             className="inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)] transition hover:gap-3"
           >
             View project <ArrowUpRight className="h-4 w-4" />

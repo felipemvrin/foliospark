@@ -1,19 +1,24 @@
-import { motion } from 'framer-motion'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Sparkles } from 'lucide-react'
+import { useRef } from 'react'
 
 import { usePortfolioStore } from '../store/portfolioStore'
 
 export function Hero() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const sectionRef = useRef<HTMLElement | null>(null)
+  const isInView = useInView(sectionRef, { amount: 0.2 })
+  const reduceMotion = useReducedMotion()
 
   const headlineWords = ['CREATE.', 'CURATE.', 'SHARE.']
+  const shouldAnimateAmbient = !reduceMotion && isInView
 
   return (
-    <section id="top" className="relative overflow-hidden border-b border-[var(--border)] bg-[var(--background)]">
+    <section id="top" ref={sectionRef} className="relative overflow-hidden border-b border-[var(--border)] bg-[var(--background)]">
       <motion.div
         aria-hidden="true"
-        animate={{ x: [0, 12, 0], y: [0, -14, 0], opacity: [0.7, 1, 0.7] }}
-        transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
+        animate={shouldAnimateAmbient ? { x: [0, 12, 0], y: [0, -14, 0], opacity: [0.7, 1, 0.7] } : { x: 0, y: 0, opacity: 0.8 }}
+        transition={shouldAnimateAmbient ? { duration: 12, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' } : { duration: 0 }}
         className="pointer-events-none absolute inset-x-0 top-[-18%] h-[540px] opacity-80"
         style={{ background: 'radial-gradient(circle at 30% 35%, var(--accent-soft), transparent 34%)' }}
       />
@@ -112,8 +117,8 @@ export function Hero() {
           className="relative"
         >
           <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 6.5, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
+            animate={shouldAnimateAmbient ? { y: [0, -8, 0] } : { y: 0 }}
+            transition={shouldAnimateAmbient ? { duration: 6.5, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' } : { duration: 0 }}
             className="relative"
           >
           <div
