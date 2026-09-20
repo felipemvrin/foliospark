@@ -1,7 +1,8 @@
 import { useMemo, useRef, useState } from 'react'
-import { Clipboard, Download, Trash2, Upload } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
 import { themePresets } from '../../data/themes'
+import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { downloadPortfolio, isPortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
@@ -25,6 +26,27 @@ function FieldLabel({ label, children }: { label: string; children: React.ReactN
       {children}
     </label>
   )
+}
+
+function getCheckTone(status: PublishingCheckStatus) {
+  if (status === 'ready') {
+    return {
+      icon: CheckCircle2,
+      className: 'border-emerald-200/70 bg-emerald-50/60 text-emerald-800',
+    }
+  }
+
+  if (status === 'blocked') {
+    return {
+      icon: AlertTriangle,
+      className: 'border-rose-200/70 bg-rose-50/60 text-rose-800',
+    }
+  }
+
+  return {
+    icon: AlertTriangle,
+    className: 'border-amber-200/70 bg-amber-50/60 text-amber-800',
+  }
 }
 
 async function copyTextToClipboard(value: string) {
@@ -63,6 +85,7 @@ export function PortfolioEditor() {
     [theme],
   )
   const publicPreviewHref = useMemo(() => getPublicPreviewHref(data, theme, data.profile.slug), [data, theme])
+  const publishingReadiness = useMemo(() => getPublishingReadiness(data), [data])
 
   const updateProfile = (field: keyof Profile, value: string) => {
     setData((current) => ({
@@ -372,6 +395,44 @@ export function PortfolioEditor() {
           </button>
         </div>
       </div>
+
+      <section className={panelClassName} aria-labelledby="publishing-readiness-title">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Publishing</p>
+            <h3 id="publishing-readiness-title" className="mt-2 text-2xl font-medium text-[var(--foreground)]">
+              {publishingReadiness.status === 'ready' ? 'Ready to share' : 'Polish before sharing'}
+            </h3>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-[var(--muted)]">
+              {publishingReadiness.completed} of {publishingReadiness.total} publishing checks are complete.
+              {publishingReadiness.status === 'blocked'
+                ? ' Resolve the blocked items before sending this portfolio out.'
+                : publishingReadiness.status === 'warning'
+                  ? ' The remaining items are optional, but they improve the visitor experience.'
+                  : ' Your current content has the essentials for a confident public preview.'}
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-3 rounded-full border border-[var(--border)] bg-[var(--background-alt)] px-4 py-2 text-[0.62rem] uppercase tracking-[0.2em] text-[var(--muted)]">
+            <span className="h-2 w-2 rounded-full bg-[var(--accent)]" aria-hidden="true" />
+            {publishingReadiness.status === 'ready' ? 'Publishable' : 'Needs attention'}
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+          {publishingReadiness.checks.map((check) => {
+            const tone = getCheckTone(check.status)
+            const Icon = tone.icon
+
+            return (
+              <div key={check.id} className={`rounded-2xl border p-4 ${tone.className}`}>
+                <Icon className="h-4 w-4" aria-hidden="true" />
+                <p className="mt-3 text-[0.65rem] font-medium uppercase tracking-[0.16em]">{check.label}</p>
+                <p className="mt-2 text-xs leading-5 opacity-80">{check.detail}</p>
+              </div>
+            )
+          })}
+        </div>
+      </section>
 
       <div className="space-y-8">
         <div className={panelClassName}>
