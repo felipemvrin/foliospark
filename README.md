@@ -11,6 +11,7 @@ This project is built as a modern React + TypeScript + Vite application with a d
 - Editorial, motion-led landing experience
 - Data-driven portfolio structure for profile, projects, experience, education, and skills
 - GitHub and Behance-ready content models
+- GitHub repository refresh with loading, error, and saved-data fallback states
 - Responsive design tuned for desktop and mobile
 - Reduced-motion support for accessibility
 - Local portfolio editor with persistence and JSON import/export
@@ -87,7 +88,6 @@ For a custom domain, set `APP_SITE_URL` in the deployment environment before bui
 
 ## Roadmap
 
-- GitHub data refresh with explicit loading and error states
 - Behance data ingestion through a secure server proxy
 - Hosted portfolio publishing with durable public URLs
 - Optional analytics and visitor insights
