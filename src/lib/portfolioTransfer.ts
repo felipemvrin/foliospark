@@ -30,6 +30,7 @@ export function isPortfolio(value: unknown): value is Portfolio {
     !hasStringField(value.profile, 'email') ||
     !hasStringField(value.profile, 'phone') ||
     !hasStringField(value.profile, 'website') ||
+    !hasOptionalStringField(value.profile, 'siteUrl') ||
     !hasOptionalStringField(value.profile, 'slug') ||
     !hasStringField(value.profile, 'photo')
   ) {
