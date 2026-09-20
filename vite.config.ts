@@ -58,7 +58,7 @@ export default defineConfig({
 
         this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap })
 
-        if (shouldGenerateRobotsTxt(defaultSiteUrl)) {
+        if (shouldGenerateRobotsTxt(defaultSiteUrl) && shouldGenerateRobotsTxt(staticSiteUrl)) {
           this.emitFile({ type: 'asset', fileName: 'robots.txt', source: buildRobotsTxt(staticSiteUrl) })
         }
       },

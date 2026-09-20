@@ -158,6 +158,7 @@ describe('public preview urls', () => {
   it('only generates robots files for root-hosted deployments', () => {
     expect(shouldGenerateRobotsTxt('https://www.astervale.studio')).toBe(true)
     expect(shouldGenerateRobotsTxt('https://felipemvrin.github.io/foliospark/')).toBe(false)
+    expect(shouldGenerateRobotsTxt('https://www.astervale.studio/portfolio/')).toBe(false)
   })
 
   it('generates a sitemap with the configured production site url', () => {
