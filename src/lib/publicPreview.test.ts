@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { getPublicPreviewHref, normalizePublicSlug } from './publicPreview'
-import { buildRobotsTxt, buildSitemapXml, getSeoMetadata } from './seo'
+import { buildRobotsTxt, buildSitemapXml, getCanonicalSiteUrl, getSeoMetadata } from './seo'
 
 describe('public preview urls', () => {
   it('normalizes a custom slug for public links', () => {
@@ -141,6 +141,13 @@ describe('public preview urls', () => {
     )
 
     expect(metadata.url).toBe('')
+  })
+
+  it('reuses the canonical site url for static seo files', () => {
+    const siteUrl = getCanonicalSiteUrl('https://www.astervale.studio', 'https://preview.example.com/portfolio')
+
+    expect(buildSitemapXml(siteUrl)).toContain('<loc>https://www.astervale.studio/</loc>')
+    expect(buildRobotsTxt(siteUrl)).toContain('Sitemap: https://www.astervale.studio/sitemap.xml')
   })
 
   it('generates a sitemap with the configured production site url', () => {

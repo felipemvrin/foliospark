@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 import { portfolio } from './src/data/portfolio.js'
-import { buildRobotsTxt, buildSitemapXml, getSeoMetadata } from './src/lib/seo.js'
+import { buildRobotsTxt, buildSitemapXml, getCanonicalSiteUrl, getSeoMetadata } from './src/lib/seo.js'
 
 function escapeHtmlAttribute(value: string) {
   return value
@@ -22,6 +22,7 @@ const defaultSiteUrl = process.env.APP_SITE_URL
     ? `https://${repositoryOwner}.github.io/${repositoryName}/`
     : 'http://localhost:5173/')
 const defaultSeoMetadata = getSeoMetadata(portfolio.profile, 'Minimal', defaultSiteUrl)
+const staticSiteUrl = getCanonicalSiteUrl(portfolio.profile.siteUrl ?? '', defaultSiteUrl)
 
 export default defineConfig({
   base: pagesBasePath,
@@ -42,12 +43,12 @@ export default defineConfig({
     {
       name: 'foliospark-static-seo-files',
       generateBundle() {
-        if (!defaultSiteUrl) {
+        if (!staticSiteUrl) {
           return
         }
 
-        const sitemap = buildSitemapXml(defaultSiteUrl)
-        const robots = buildRobotsTxt(defaultSiteUrl)
+        const sitemap = buildSitemapXml(staticSiteUrl)
+        const robots = buildRobotsTxt(staticSiteUrl)
 
         this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap })
         this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots })

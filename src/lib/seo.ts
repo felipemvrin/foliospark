@@ -43,6 +43,10 @@ function resolveCanonicalUrl(...candidates: string[]) {
   return ''
 }
 
+export function getCanonicalSiteUrl(profileSiteUrl = '', fallbackSiteUrl = '') {
+  return resolveCanonicalUrl(profileSiteUrl, fallbackSiteUrl)
+}
+
 function resolveImageUrl(value: string, siteUrl: string) {
   const trimmedValue = value.trim()
 
@@ -76,7 +80,7 @@ export interface SeoMetadata {
 export function getSeoMetadata(profile: Profile, themeId: ThemePresetName, siteUrl = ''): SeoMetadata {
   const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0]
   const titleParts = [profile.name.trim(), profile.role.trim()].filter(Boolean)
-  const normalizedSiteUrl = resolveCanonicalUrl(profile.siteUrl ?? '', siteUrl)
+  const normalizedSiteUrl = getCanonicalSiteUrl(profile.siteUrl ?? '', siteUrl)
 
   return {
     title: titleParts.join(' — ') || 'FolioSpark',
