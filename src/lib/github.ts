@@ -21,6 +21,10 @@ function getUsername(url: string) {
   }
 }
 
+export function isGitHubProfileUrl(url: string) {
+  return getUsername(url) !== null
+}
+
 export async function fetchGitHubProjects(url: string, signal?: AbortSignal): Promise<GitHubProject[] | null> {
   const username = getUsername(url)
 

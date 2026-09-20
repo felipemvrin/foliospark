@@ -4,7 +4,7 @@ import { AlertTriangle, ArrowUpRight, GitBranch, RefreshCw, Star } from 'lucide-
 
 import { getSafeExternalHref } from '../lib/links'
 import { usePortfolioStore } from '../store/portfolioStore'
-import { fetchGitHubProjects } from '../lib/github'
+import { fetchGitHubProjects, isGitHubProfileUrl } from '../lib/github'
 import type { GitHubProject } from '../types/portfolio'
 import { SectionHeading } from './SectionHeading'
 
@@ -20,6 +20,7 @@ export function GitHubSection() {
   const githubUrl = githubLink?.url
   const [refreshToken, setRefreshToken] = useState(0)
   const [githubState, setGithubState] = useState<GitHubState>({ status: 'idle' })
+  const canRefreshRepositories = githubUrl ? isGitHubProfileUrl(githubUrl) : false
   const hasRemoteProjects = githubState.status === 'success' && githubState.url === githubUrl
   const projects = hasRemoteProjects ? githubState.projects : portfolio.githubProjects
   const source = hasRemoteProjects ? 'github' : 'sample'
@@ -27,14 +28,14 @@ export function GitHubSection() {
   useEffect(() => {
     const controller = new AbortController()
 
-    if (!githubUrl) {
+    if (!githubUrl || !canRefreshRepositories) {
       return () => controller.abort()
     }
 
     fetchGitHubProjects(githubUrl, controller.signal)
       .then((remoteProjects) => {
         if (remoteProjects === null) {
-          throw new Error('That GitHub profile URL is not valid.')
+          return
         }
 
         setGithubState({ status: 'success', url: githubUrl, projects: remoteProjects, syncedAt: new Date() })
@@ -50,15 +51,15 @@ export function GitHubSection() {
       })
 
     return () => controller.abort()
-  }, [githubUrl, refreshToken])
+  }, [canRefreshRepositories, githubUrl, refreshToken])
 
   const githubHref = githubUrl ? getSafeExternalHref(githubUrl) : null
-  const isLoading = Boolean(githubUrl) && (githubState.status === 'idle' || githubState.status === 'loading' || githubState.url !== githubUrl)
+  const isLoading = canRefreshRepositories && (githubState.status === 'idle' || githubState.status === 'loading' || githubState.url !== githubUrl)
   const errorMessage = githubState.status === 'error' && githubState.url === githubUrl ? githubState.message : null
   const syncedAt = githubState.status === 'success' && githubState.url === githubUrl ? githubState.syncedAt : null
 
   const refreshRepositories = () => {
-    if (!githubUrl || isLoading) {
+    if (!githubUrl || !canRefreshRepositories || isLoading) {
       return
     }
 
@@ -83,7 +84,7 @@ export function GitHubSection() {
         <button
           type="button"
           onClick={refreshRepositories}
-          disabled={!githubUrl || isLoading}
+          disabled={!canRefreshRepositories || isLoading}
           className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? 'animate-spin' : ''}`} aria-hidden="true" />

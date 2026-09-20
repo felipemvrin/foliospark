@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { fetchGitHubProjects } from './github'
+import { fetchGitHubProjects, isGitHubProfileUrl } from './github'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -8,11 +8,17 @@ afterEach(() => {
 })
 
 describe('GitHub project fetching', () => {
-  it('returns null for an invalid GitHub profile URL without requesting the API', async () => {
+  it('returns null for a non-profile URL without requesting the API', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch')
 
     await expect(fetchGitHubProjects('https://example.com/artist')).resolves.toBeNull()
+    await expect(fetchGitHubProjects('https://github.com')).resolves.toBeNull()
     expect(fetchSpy).not.toHaveBeenCalled()
+  })
+
+  it('recognizes refreshable GitHub profile URLs', () => {
+    expect(isGitHubProfileUrl('https://github.com/felipemvrin')).toBe(true)
+    expect(isGitHubProfileUrl('https://github.com')).toBe(false)
   })
 
   it('maps GitHub repositories to portfolio projects', async () => {
