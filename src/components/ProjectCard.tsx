@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight, GitBranch, Globe } from 'lucide-react'
 
-import { getSafeExternalHref } from '../lib/links'
+import { getPreferredSafeExternalHref, getSafeExternalHref } from '../lib/links'
 import type { Project } from '../types/portfolio'
 
 interface ProjectCardProps {
@@ -12,7 +12,7 @@ interface ProjectCardProps {
 export function ProjectCard({ project, index }: ProjectCardProps) {
   const websiteHref = project.website ? getSafeExternalHref(project.website) : null
   const githubHref = project.github ? getSafeExternalHref(project.github) : null
-  const projectUrl = websiteHref ?? githubHref
+  const projectUrl = getPreferredSafeExternalHref(project.website, project.github)
 
   return (
     <motion.article
