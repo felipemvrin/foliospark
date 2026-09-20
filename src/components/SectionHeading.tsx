@@ -21,6 +21,13 @@ export function SectionHeading({
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className={align === 'center' ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}
     >
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.55, ease: 'easeOut' }}
+        className="mb-5 h-px w-16 origin-left bg-[var(--accent)]"
+      />
       <p className="mb-5 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]">
         {eyebrow}
       </p>

@@ -38,6 +38,14 @@ body {
   color: var(--foreground);
 }
 
+::selection {
+  background: rgba(212, 163, 115, 0.22);
+}
+
+.soft-glow {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 24px 70px rgba(17, 17, 17, 0.08);
+}
+
 #root {
   min-height: 100vh;
 }

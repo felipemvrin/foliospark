@@ -84,3 +84,19 @@ export function getSafeExternalHref(value: string) {
     return null
   }
 }
+
+export function getPreferredSafeExternalHref(...values: Array<string | undefined>) {
+  for (const value of values) {
+    if (!value) {
+      continue
+    }
+
+    const href = getSafeExternalHref(value)
+
+    if (href) {
+      return href
+    }
+  }
+
+  return null
+}
