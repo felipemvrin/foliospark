@@ -67,6 +67,9 @@ describe('publishing readiness', () => {
       },
     })
 
-    expect(readiness.checks.find((check) => check.id === 'url')?.status).toBe('warning')
+    const publicUrlCheck = readiness.checks.find((check) => check.id === 'url')
+
+    expect(publicUrlCheck?.status).toBe('warning')
+    expect(publicUrlCheck?.detail).toContain('Add a name or custom slug')
   })
 })
