@@ -47,6 +47,22 @@ export function getCanonicalSiteUrl(profileSiteUrl = '', fallbackSiteUrl = '') {
   return resolveCanonicalUrl(profileSiteUrl, fallbackSiteUrl)
 }
 
+export function getSiteBasePath(siteUrl: string) {
+  const normalized = normalizeSiteUrl(siteUrl)
+
+  if (!normalized) {
+    return '/'
+  }
+
+  const pathname = new URL(normalized).pathname || '/'
+
+  return pathname.endsWith('/') ? pathname : `${pathname}/`
+}
+
+export function shouldGenerateRobotsTxt(siteUrl: string) {
+  return getSiteBasePath(siteUrl) === '/'
+}
+
 function resolveImageUrl(value: string, siteUrl: string) {
   const trimmedValue = value.trim()
 

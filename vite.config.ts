@@ -3,7 +3,14 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 import { portfolio } from './src/data/portfolio.js'
-import { buildRobotsTxt, buildSitemapXml, getCanonicalSiteUrl, getSeoMetadata } from './src/lib/seo.js'
+import {
+  buildRobotsTxt,
+  buildSitemapXml,
+  getCanonicalSiteUrl,
+  getSeoMetadata,
+  getSiteBasePath,
+  shouldGenerateRobotsTxt,
+} from './src/lib/seo.js'
 
 function escapeHtmlAttribute(value: string) {
   return value
@@ -16,11 +23,11 @@ function escapeHtmlAttribute(value: string) {
 
 const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
 const repositoryOwner = process.env.GITHUB_REPOSITORY?.split('/')[0]
-const pagesBasePath = process.env.GITHUB_ACTIONS && repositoryName ? `/${repositoryName}/` : '/'
 const defaultSiteUrl = process.env.APP_SITE_URL
   ?? (process.env.GITHUB_ACTIONS && repositoryOwner && repositoryName
     ? `https://${repositoryOwner}.github.io/${repositoryName}/`
     : 'http://localhost:5173/')
+const pagesBasePath = process.env.GITHUB_ACTIONS ? getSiteBasePath(defaultSiteUrl) : '/'
 const defaultSeoMetadata = getSeoMetadata(portfolio.profile, 'Minimal', defaultSiteUrl)
 const staticSiteUrl = getCanonicalSiteUrl(portfolio.profile.siteUrl ?? '', defaultSiteUrl)
 
@@ -48,10 +55,12 @@ export default defineConfig({
         }
 
         const sitemap = buildSitemapXml(staticSiteUrl)
-        const robots = buildRobotsTxt(staticSiteUrl)
 
         this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap })
-        this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots })
+
+        if (shouldGenerateRobotsTxt(defaultSiteUrl)) {
+          this.emitFile({ type: 'asset', fileName: 'robots.txt', source: buildRobotsTxt(staticSiteUrl) })
+        }
       },
     },
   ],

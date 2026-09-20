@@ -82,7 +82,7 @@ In the repository settings, set **Pages → Build and deployment → Source** to
 https://felipemvrin.github.io/foliospark/
 ```
 
-For a custom domain, set `APP_SITE_URL` in the deployment environment before building. The generated canonical URL and social metadata will use that value.
+For a custom domain, set `APP_SITE_URL` in the deployment environment before building. The generated canonical URL, asset base path, and root-level `robots.txt`/`sitemap.xml` output will use that value.
 
 ## Roadmap
 
