@@ -83,10 +83,25 @@ export interface PortfolioMetric {
   label: string
 }
 
+export interface ProcessStep {
+  title: string
+  description: string
+  detail: string
+}
+
+export interface Testimonial {
+  quote: string
+  name: string
+  role: string
+  company: string
+}
+
 export interface Portfolio {
   profile: Profile
   metrics: PortfolioMetric[]
   about: string[]
+  process: ProcessStep[]
+  testimonials: Testimonial[]
   experience: Experience[]
   education: Education[]
   skills: SkillGroup[]

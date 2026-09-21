@@ -41,6 +41,23 @@ export function isPortfolio(value: unknown): value is Portfolio {
     Array.isArray(value.metrics) &&
     value.metrics.every((entry) => isRecord(entry) && hasStringField(entry, 'value') && hasStringField(entry, 'label')) &&
     isStringArray(value.about) &&
+    Array.isArray(value.process) &&
+    value.process.every(
+      (entry) =>
+        isRecord(entry) &&
+        hasStringField(entry, 'title') &&
+        hasStringField(entry, 'description') &&
+        hasStringField(entry, 'detail'),
+    ) &&
+    Array.isArray(value.testimonials) &&
+    value.testimonials.every(
+      (entry) =>
+        isRecord(entry) &&
+        hasStringField(entry, 'quote') &&
+        hasStringField(entry, 'name') &&
+        hasStringField(entry, 'role') &&
+        hasStringField(entry, 'company'),
+    ) &&
     Array.isArray(value.experience) &&
     value.experience.every(
       (entry) =>
