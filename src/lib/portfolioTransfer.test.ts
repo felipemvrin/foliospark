@@ -91,4 +91,13 @@ describe('isPortfolio', () => {
       }),
     ).toBeNull()
   })
+
+  it('rejects unsafe external urls in imported portfolios', () => {
+    expect(
+      isPortfolio({
+        ...basePortfolio,
+        profile: { ...basePortfolio.profile, photo: 'javascript:alert(1)' },
+      }),
+    ).toBe(false)
+  })
 })

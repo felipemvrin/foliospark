@@ -11,7 +11,26 @@ export interface PublishedPortfolio {
 
 function getEndpoint() {
   const value = import.meta.env.VITE_PUBLISHING_API_URL?.trim()
-  return value ? value.replace(/\/$/, '') : null
+
+  if (!value) {
+    return null
+  }
+
+  try {
+    const url = new URL(value)
+
+    if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') {
+      return null
+    }
+
+    if (url.username || url.password || url.search || url.hash) {
+      return null
+    }
+
+    return url.toString().replace(/\/$/, '')
+  } catch {
+    return null
+  }
 }
 
 function isThemePreset(value: unknown): value is ThemePresetName {

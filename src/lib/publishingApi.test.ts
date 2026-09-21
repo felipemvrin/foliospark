@@ -18,6 +18,20 @@ describe('publishing API client', () => {
     )
   })
 
+  it('does not expose insecure publishing endpoints outside local development', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'http://api.example.com')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://folio.example.com')).toBeNull()
+  })
+
+  it('allows localhost publishing endpoints for local development', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'http://localhost:8787')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://folio.example.com')).toBe(
+      'https://folio.example.com/?view=published&slug=aster-vale-studio',
+    )
+  })
+
   it('preserves the deployment base path when building a durable public URL', () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
 

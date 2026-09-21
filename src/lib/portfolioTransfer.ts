@@ -1,4 +1,5 @@
 import type { Portfolio } from '../types/portfolio'
+import { getSafeExternalHref } from './links'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -14,6 +15,14 @@ function hasOptionalStringField(value: Record<string, unknown>, key: string) {
 
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string')
+}
+
+function isSafeUrlField(value: Record<string, unknown>, key: string, required = true) {
+  if (typeof value[key] !== 'string') {
+    return !required && value[key] === undefined
+  }
+
+  return !value[key] || Boolean(getSafeExternalHref(value[key]))
 }
 
 function withLegacyPortfolioDefaults(value: unknown): unknown {
@@ -47,7 +56,10 @@ export function isPortfolio(value: unknown): value is Portfolio {
     !hasStringField(value.profile, 'website') ||
     !hasOptionalStringField(value.profile, 'siteUrl') ||
     !hasOptionalStringField(value.profile, 'slug') ||
-    !hasStringField(value.profile, 'photo')
+    !hasStringField(value.profile, 'photo') ||
+    !isSafeUrlField(value.profile, 'website', false) ||
+    !isSafeUrlField(value.profile, 'siteUrl', false) ||
+    !isSafeUrlField(value.profile, 'photo', false)
   ) {
     return false
   }
@@ -116,9 +128,13 @@ export function isPortfolio(value: unknown): value is Portfolio {
         hasStringField(entry, 'description') &&
         hasStringField(entry, 'image') &&
         isStringArray(entry.technologies) &&
+        isSafeUrlField(entry, 'image') &&
         hasOptionalStringField(entry, 'website') &&
         hasOptionalStringField(entry, 'github') &&
-        hasOptionalStringField(entry, 'behance'),
+        hasOptionalStringField(entry, 'behance') &&
+        isSafeUrlField(entry, 'website', false) &&
+        isSafeUrlField(entry, 'github', false) &&
+        isSafeUrlField(entry, 'behance', false),
     ) &&
     Array.isArray(value.githubProjects) &&
     value.githubProjects.every(
@@ -132,7 +148,8 @@ export function isPortfolio(value: unknown): value is Portfolio {
         typeof entry.forks === 'number' &&
         Number.isFinite(entry.forks) &&
         hasStringField(entry, 'url') &&
-        hasStringField(entry, 'updatedAt'),
+        hasStringField(entry, 'updatedAt') &&
+        isSafeUrlField(entry, 'url'),
     ) &&
     Array.isArray(value.behanceProjects) &&
     value.behanceProjects.every(
@@ -144,7 +161,9 @@ export function isPortfolio(value: unknown): value is Portfolio {
         hasStringField(entry, 'url') &&
         hasStringField(entry, 'category') &&
         hasStringField(entry, 'publishedAt') &&
-        isStringArray(entry.tags),
+        isStringArray(entry.tags) &&
+        isSafeUrlField(entry, 'cover') &&
+        isSafeUrlField(entry, 'url'),
     ) &&
     Array.isArray(value.socialLinks) &&
     value.socialLinks.every(
@@ -152,7 +171,8 @@ export function isPortfolio(value: unknown): value is Portfolio {
         isRecord(entry) &&
         hasStringField(entry, 'platform') &&
         hasStringField(entry, 'label') &&
-        hasStringField(entry, 'url'),
+        hasStringField(entry, 'url') &&
+        isSafeUrlField(entry, 'url'),
     )
   )
 }
