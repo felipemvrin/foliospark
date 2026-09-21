@@ -80,6 +80,7 @@ export function PortfolioEditor() {
   const [shareMessage, setShareMessage] = useState<{ href: string; id: number; text: string } | null>(null)
   const [publishMessage, setPublishMessage] = useState('')
   const [isPublishing, setIsPublishing] = useState(false)
+  const [projectCaseStudyMetricDrafts, setProjectCaseStudyMetricDrafts] = useState<Record<number, string>>({})
   const data = usePortfolioStore((state) => state.data)
   const resetData = usePortfolioStore((state) => state.resetData)
   const setData = usePortfolioStore((state) => state.setData)
@@ -254,6 +255,19 @@ export function PortfolioEditor() {
       ...current,
       projects: current.projects.filter((_, itemIndex) => itemIndex !== index),
     }))
+    setProjectCaseStudyMetricDrafts((current) =>
+      Object.fromEntries(
+        Object.entries(current).flatMap(([draftIndex, value]) => {
+          const numericIndex = Number(draftIndex)
+
+          if (numericIndex === index) {
+            return []
+          }
+
+          return [[String(numericIndex > index ? numericIndex - 1 : numericIndex), value]]
+        }),
+      ),
+    )
   }
 
   const addProjectCaseStudy = (index: number) => {
@@ -269,6 +283,11 @@ export function PortfolioEditor() {
 
   const removeProjectCaseStudy = (index: number) => {
     updateProject(index, { caseStudy: undefined })
+    setProjectCaseStudyMetricDrafts((current) => {
+      const next = { ...current }
+      delete next[index]
+      return next
+    })
   }
 
   const updateBehanceProject = (index: number, updates: Partial<BehanceProject>) => {
@@ -920,8 +939,21 @@ export function PortfolioEditor() {
                       </FieldLabel>
                       <FieldLabel label="Metrics (one per line: value | label)">
                         <textarea
-                          value={formatCaseStudyMetrics(project.caseStudy.metrics)}
-                          onChange={(event) => updateProjectCaseStudy(index, { metrics: parseCaseStudyMetrics(event.target.value) })}
+                          value={projectCaseStudyMetricDrafts[index] ?? formatCaseStudyMetrics(project.caseStudy.metrics)}
+                          onChange={(event) =>
+                            setProjectCaseStudyMetricDrafts((current) => ({
+                              ...current,
+                              [index]: event.target.value,
+                            }))
+                          }
+                          onBlur={(event) => {
+                            updateProjectCaseStudy(index, { metrics: parseCaseStudyMetrics(event.target.value) })
+                            setProjectCaseStudyMetricDrafts((current) => {
+                              const next = { ...current }
+                              delete next[index]
+                              return next
+                            })
+                          }}
                           rows={4}
                           className={textareaClassName}
                         />
