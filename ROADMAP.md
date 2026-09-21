@@ -47,7 +47,7 @@ Status: In progress
 
 ## Priority order for next steps
 1. Complete global keyboard QA across public and editor flows
-2. Refresh display typography and add one controlled project-card interaction
+2. Refresh display typography
 3. Complete downloadable resume metadata and document export
 4. Advanced analytics and publishing dashboard
 
