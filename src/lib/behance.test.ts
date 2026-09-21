@@ -1,10 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { fetchBehanceProjects } from './behance'
+import { fetchBehanceProjects, getBehanceProxyUrl } from './behance'
 
 afterEach(() => {
   vi.restoreAllMocks()
   vi.unstubAllGlobals()
+  vi.unstubAllEnvs()
 })
 
 describe('Behance proxy fetching', () => {
@@ -53,5 +54,30 @@ describe('Behance proxy fetching', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 502 }))
 
     await expect(fetchBehanceProjects('https://proxy.example.com/behance')).rejects.toThrow('Behance proxy request failed with 502')
+  })
+
+  it('surfaces invalid proxy JSON responses', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => {
+        throw new SyntaxError('Unexpected token')
+      },
+    }))
+
+    await expect(fetchBehanceProjects('https://proxy.example.com/behance')).rejects.toThrow('Behance proxy returned invalid JSON')
+  })
+})
+
+describe('getBehanceProxyUrl', () => {
+  it('normalizes safe proxy URLs', () => {
+    vi.stubEnv('VITE_BEHANCE_PROXY_URL', 'proxy.example.com/behance')
+
+    expect(getBehanceProxyUrl()).toBe('https://proxy.example.com/behance')
+  })
+
+  it('rejects unsafe proxy URLs', () => {
+    vi.stubEnv('VITE_BEHANCE_PROXY_URL', 'javascript:alert(1)')
+
+    expect(getBehanceProxyUrl()).toBeNull()
   })
 })

@@ -1,4 +1,5 @@
 import type { BehanceProject } from '../types/portfolio'
+import { getSafeExternalHref } from './links'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -38,7 +39,12 @@ function normalizeProject(value: unknown): BehanceProject | null {
 
 export function getBehanceProxyUrl() {
   const value = import.meta.env.VITE_BEHANCE_PROXY_URL?.trim()
-  return value || null
+
+  if (!value) {
+    return null
+  }
+
+  return getSafeExternalHref(value)
 }
 
 export async function fetchBehanceProjects(endpoint: string, signal?: AbortSignal): Promise<BehanceProject[]> {
@@ -51,7 +57,13 @@ export async function fetchBehanceProjects(endpoint: string, signal?: AbortSigna
     throw new Error(`Behance proxy request failed with ${response.status}`)
   }
 
-  const payload: unknown = await response.json()
+  let payload: unknown
+
+  try {
+    payload = await response.json()
+  } catch {
+    throw new Error('Behance proxy returned invalid JSON')
+  }
   const rawProjects = isRecord(payload) && Array.isArray(payload.projects) ? payload.projects : payload
 
   if (!Array.isArray(rawProjects)) {
