@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { ArrowUpRight, GitBranch, Globe } from 'lucide-react'
+import { ArrowUpRight, ChevronDown, GitBranch, Globe } from 'lucide-react'
+import { useState } from 'react'
 
 import { trackAnalyticsEvent } from '../lib/analytics'
 import { getPreferredSafeExternalHref, getSafeExternalHref } from '../lib/links'
@@ -11,9 +12,10 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
+  const [isCaseStudyOpen, setIsCaseStudyOpen] = useState(false)
   const websiteHref = project.website ? getSafeExternalHref(project.website) : null
   const githubHref = project.github ? getSafeExternalHref(project.github) : null
-  const projectUrl = getPreferredSafeExternalHref(project.website, project.github)
+  const projectUrl = getPreferredSafeExternalHref(project.website, project.github, project.behance)
 
   return (
     <motion.article
@@ -41,16 +43,18 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         >
           {project.category}
         </motion.div>
-        <motion.div
-          initial={{ y: 18 }}
-          whileInView={{ y: 0 }}
-          whileHover={{ y: 0 }}
-          transition={{ duration: 0.25 }}
-          className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-full border border-white/25 bg-black/20 px-3 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm opacity-0 transition duration-300 group-focus-within:opacity-100 group-hover:opacity-100"
-        >
-          <span>Case study</span>
-          <ArrowUpRight className="h-3.5 w-3.5" />
-        </motion.div>
+        {project.caseStudy || projectUrl ? (
+          <motion.div
+            initial={{ y: 18 }}
+            whileInView={{ y: 0 }}
+            whileHover={{ y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-full border border-white/25 bg-black/20 px-3 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm opacity-0 transition duration-300 group-focus-within:opacity-100 group-hover:opacity-100"
+          >
+            <span>{project.caseStudy ? 'Read case study' : 'View project'}</span>
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </motion.div>
+        ) : null}
       </div>
 
       <div className="space-y-5 p-6 sm:p-7">
@@ -88,6 +92,47 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         </div>
 
         <p className="text-sm leading-7 text-[var(--muted)]">{project.description}</p>
+
+        {project.caseStudy ? (
+          <div className="border-y border-[var(--border)] py-4">
+            <button
+              type="button"
+              aria-expanded={isCaseStudyOpen}
+              onClick={() => setIsCaseStudyOpen((open) => !open)}
+              className="flex w-full items-center justify-between gap-4 text-left text-sm font-medium text-[var(--foreground)]"
+            >
+              <span>Read the case study</span>
+              <ChevronDown className={`h-4 w-4 transition ${isCaseStudyOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isCaseStudyOpen ? (
+              <div className="mt-5 space-y-5 text-sm leading-7 text-[var(--muted)]">
+                <div>
+                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">Challenge</p>
+                  <p className="mt-2">{project.caseStudy.challenge}</p>
+                </div>
+                <div>
+                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">Approach</p>
+                  <p className="mt-2">{project.caseStudy.approach}</p>
+                </div>
+                <div>
+                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">Outcome</p>
+                  <p className="mt-2">{project.caseStudy.outcome}</p>
+                </div>
+                {project.caseStudy.metrics.length > 0 ? (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {project.caseStudy.metrics.map((metric) => (
+                      <div key={`${metric.value}-${metric.label}`} className="rounded-xl bg-[var(--background-alt)] p-3">
+                        <p className="text-lg font-medium text-[var(--foreground)]">{metric.value}</p>
+                        <p className="mt-1 text-xs text-[var(--muted)]">{metric.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="flex flex-wrap gap-2">
           {project.technologies.map((technology, technologyIndex) => (

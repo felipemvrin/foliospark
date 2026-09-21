@@ -1,14 +1,16 @@
 import { useMemo, useRef, useState } from 'react'
 import { AlertTriangle, CheckCircle2, Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
+import { portfolio as defaultPortfolio } from '../../data/portfolio'
 import { themePresets } from '../../data/themes'
+import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
 import { downloadPortfolio, parsePortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
-import type { BehanceProject, Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
+import type { BehanceProject, CaseStudy, Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
 
 const panelClassName = 'rounded-[1.8rem] border border-[var(--border)] bg-[var(--surface)] p-5'
 const nestedPanelClassName = 'rounded-[1.5rem] border border-[var(--border)] bg-[var(--background-alt)] p-4'
@@ -19,6 +21,10 @@ const textareaClassName =
   'mt-2 w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[var(--foreground)] outline-none focus:border-[var(--accent)]'
 const actionButtonClassName =
   'rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:opacity-90'
+
+function createProjectDraftKey() {
+  return `project-${crypto.randomUUID()}`
+}
 
 function FieldLabel({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -75,13 +81,15 @@ async function copyTextToClipboard(value: string) {
 
 export function PortfolioEditor() {
   const importInputRef = useRef<HTMLInputElement>(null)
+  const data = usePortfolioStore((state) => state.data)
+  const resetData = usePortfolioStore((state) => state.resetData)
+  const setData = usePortfolioStore((state) => state.setData)
   const [transferMessage, setTransferMessage] = useState('')
   const [shareMessage, setShareMessage] = useState<{ href: string; id: number; text: string } | null>(null)
   const [publishMessage, setPublishMessage] = useState('')
   const [isPublishing, setIsPublishing] = useState(false)
-  const data = usePortfolioStore((state) => state.data)
-  const resetData = usePortfolioStore((state) => state.resetData)
-  const setData = usePortfolioStore((state) => state.setData)
+  const [projectDraftKeys, setProjectDraftKeys] = useState(() => data.projects.map(() => createProjectDraftKey()))
+  const [projectCaseStudyMetricDrafts, setProjectCaseStudyMetricDrafts] = useState<Record<string, string>>({})
   const theme = useThemeStore((state) => state.preset)
   const selectedTheme = useMemo(
     () => themePresets.find((item) => item.id === theme) ?? themePresets[0],
@@ -212,6 +220,25 @@ export function PortfolioEditor() {
     }))
   }
 
+  const updateProjectCaseStudy = (index: number, updates: Partial<CaseStudy>) => {
+    setData((current) => ({
+      ...current,
+      projects: current.projects.map((entry, itemIndex) => {
+        if (itemIndex !== index || !entry.caseStudy) {
+          return entry
+        }
+
+        return {
+          ...entry,
+          caseStudy: {
+            ...entry.caseStudy,
+            ...updates,
+          },
+        }
+      }),
+    }))
+  }
+
   const addProject = () => {
     setData((current) => ({
       ...current,
@@ -227,13 +254,53 @@ export function PortfolioEditor() {
         },
       ],
     }))
+    setProjectDraftKeys((current) => [...current, createProjectDraftKey()])
   }
 
   const removeProject = (index: number) => {
+    const draftKey = projectDraftKeys[index]
+
     setData((current) => ({
       ...current,
       projects: current.projects.filter((_, itemIndex) => itemIndex !== index),
     }))
+    setProjectDraftKeys((current) => current.filter((_, itemIndex) => itemIndex !== index))
+
+    if (!draftKey) {
+      return
+    }
+
+    setProjectCaseStudyMetricDrafts((current) => {
+      const next = { ...current }
+      delete next[draftKey]
+      return next
+    })
+  }
+
+  const addProjectCaseStudy = (index: number) => {
+    updateProject(index, {
+      caseStudy: {
+        challenge: 'Describe the core challenge.',
+        approach: 'Explain the approach and key decisions.',
+        outcome: 'Summarize the outcome and impact.',
+        metrics: [],
+      },
+    })
+  }
+
+  const removeProjectCaseStudy = (index: number) => {
+    const draftKey = projectDraftKeys[index]
+
+    updateProject(index, { caseStudy: undefined })
+
+    if (!draftKey) {
+      return
+    }
+    setProjectCaseStudyMetricDrafts((current) => {
+      const next = { ...current }
+      delete next[draftKey]
+      return next
+    })
   }
 
   const updateBehanceProject = (index: number, updates: Partial<BehanceProject>) => {
@@ -298,6 +365,12 @@ export function PortfolioEditor() {
     setTransferMessage('Portfolio exported.')
   }
 
+  const resetPortfolio = () => {
+    resetData()
+    setProjectDraftKeys(defaultPortfolio.projects.map(() => createProjectDraftKey()))
+    setProjectCaseStudyMetricDrafts({})
+  }
+
   const importData = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
 
@@ -314,6 +387,8 @@ export function PortfolioEditor() {
       }
 
       setData(portfolio)
+      setProjectDraftKeys(portfolio.projects.map(() => createProjectDraftKey()))
+      setProjectCaseStudyMetricDrafts({})
       setTransferMessage('Portfolio imported.')
     } catch {
       setTransferMessage('Could not import that file. Use a FolioSpark JSON export.')
@@ -421,7 +496,7 @@ export function PortfolioEditor() {
           {publishMessage ? <p role="status" className="text-xs text-[var(--muted)]">{publishMessage}</p> : null}
           <button
             type="button"
-            onClick={resetData}
+            onClick={resetPortfolio}
             className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.62rem] uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:opacity-90"
           >
             Reset sample data
@@ -778,66 +853,141 @@ export function PortfolioEditor() {
             </button>
           </div>
           <div className="space-y-5">
-            {data.projects.map((project, index) => (
-              <div key={`${project.title}-${index}`} className={nestedPanelClassName}>
-                <div className="mb-4 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => removeProject(index)}
-                    className={actionButtonClassName}
-                    aria-label={`Remove ${project.title} project`}
-                  >
-                    <Trash2 className="mr-2 inline-block h-3.5 w-3.5" />
-                    Remove
-                  </button>
+            {data.projects.map((project, index) => {
+              const projectDraftKey = projectDraftKeys[index]!
+
+              return (
+                <div key={projectDraftKey} className={nestedPanelClassName}>
+                  <div className="mb-4 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => removeProject(index)}
+                      className={actionButtonClassName}
+                      aria-label={`Remove ${project.title} project`}
+                    >
+                      <Trash2 className="mr-2 inline-block h-3.5 w-3.5" />
+                      Remove
+                    </button>
+                  </div>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <FieldLabel label="Title">
+                      <input
+                        value={project.title}
+                        onChange={(event) => updateProject(index, { title: event.target.value })}
+                        className={inputClassName}
+                      />
+                    </FieldLabel>
+                    <FieldLabel label="Category">
+                      <input
+                        value={project.category}
+                        onChange={(event) => updateProject(index, { category: event.target.value })}
+                        className={inputClassName}
+                      />
+                    </FieldLabel>
+                    <FieldLabel label="Year">
+                      <input
+                        value={project.year}
+                        onChange={(event) => updateProject(index, { year: event.target.value })}
+                        className={inputClassName}
+                      />
+                    </FieldLabel>
+                    <FieldLabel label="Technologies">
+                      <input
+                        value={project.technologies.join(', ')}
+                        onChange={(event) => updateProject(index, { technologies: event.target.value.split(',').map((value) => value.trim()).filter(Boolean) })}
+                        className={inputClassName}
+                      />
+                    </FieldLabel>
+                  </div>
+                  <FieldLabel label="Description">
+                    <textarea
+                      value={project.description}
+                      onChange={(event) => updateProject(index, { description: event.target.value })}
+                      rows={3}
+                      className={textareaClassName}
+                    />
+                  </FieldLabel>
+                  <FieldLabel label="Image URL">
+                    <input
+                      value={project.image}
+                      onChange={(event) => updateProject(index, { image: event.target.value })}
+                      className={textareaClassName}
+                    />
+                  </FieldLabel>
+                  <div className="mt-4 rounded-[1.3rem] border border-[var(--border)] bg-[var(--surface)] p-4">
+                    <div className="mb-4 flex items-center justify-between gap-4">
+                      <p className="text-[0.62rem] uppercase tracking-[0.24em] text-[var(--muted)]">Case study</p>
+                      {project.caseStudy ? (
+                        <button
+                          type="button"
+                          onClick={() => removeProjectCaseStudy(index)}
+                          className={actionButtonClassName}
+                        >
+                          Remove case study
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => addProjectCaseStudy(index)}
+                          className={actionButtonClassName}
+                        >
+                          Add case study
+                        </button>
+                      )}
+                    </div>
+                    {project.caseStudy ? (
+                      <div className="space-y-4">
+                        <FieldLabel label="Challenge">
+                          <textarea
+                            value={project.caseStudy.challenge}
+                            onChange={(event) => updateProjectCaseStudy(index, { challenge: event.target.value })}
+                            rows={3}
+                            className={textareaClassName}
+                          />
+                        </FieldLabel>
+                        <FieldLabel label="Approach">
+                          <textarea
+                            value={project.caseStudy.approach}
+                            onChange={(event) => updateProjectCaseStudy(index, { approach: event.target.value })}
+                            rows={3}
+                            className={textareaClassName}
+                          />
+                        </FieldLabel>
+                        <FieldLabel label="Outcome">
+                          <textarea
+                            value={project.caseStudy.outcome}
+                            onChange={(event) => updateProjectCaseStudy(index, { outcome: event.target.value })}
+                            rows={3}
+                            className={textareaClassName}
+                          />
+                        </FieldLabel>
+                        <FieldLabel label="Metrics (one per line: value | label)">
+                          <textarea
+                            value={projectCaseStudyMetricDrafts[projectDraftKey] ?? formatCaseStudyMetrics(project.caseStudy.metrics)}
+                            onChange={(event) =>
+                              setProjectCaseStudyMetricDrafts((current) => ({
+                                ...current,
+                                [projectDraftKey]: event.target.value,
+                              }))
+                            }
+                            onBlur={(event) => {
+                              updateProjectCaseStudy(index, { metrics: parseCaseStudyMetrics(event.target.value) })
+                              setProjectCaseStudyMetricDrafts((current) => {
+                                const next = { ...current }
+                                delete next[projectDraftKey]
+                                return next
+                              })
+                            }}
+                            rows={4}
+                            className={textareaClassName}
+                          />
+                        </FieldLabel>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <FieldLabel label="Title">
-                    <input
-                      value={project.title}
-                      onChange={(event) => updateProject(index, { title: event.target.value })}
-                      className={inputClassName}
-                    />
-                  </FieldLabel>
-                  <FieldLabel label="Category">
-                    <input
-                      value={project.category}
-                      onChange={(event) => updateProject(index, { category: event.target.value })}
-                      className={inputClassName}
-                    />
-                  </FieldLabel>
-                  <FieldLabel label="Year">
-                    <input
-                      value={project.year}
-                      onChange={(event) => updateProject(index, { year: event.target.value })}
-                      className={inputClassName}
-                    />
-                  </FieldLabel>
-                  <FieldLabel label="Technologies">
-                    <input
-                      value={project.technologies.join(', ')}
-                      onChange={(event) => updateProject(index, { technologies: event.target.value.split(',').map((value) => value.trim()).filter(Boolean) })}
-                      className={inputClassName}
-                    />
-                  </FieldLabel>
-                </div>
-                <FieldLabel label="Description">
-                  <textarea
-                    value={project.description}
-                    onChange={(event) => updateProject(index, { description: event.target.value })}
-                    rows={3}
-                    className={textareaClassName}
-                  />
-                </FieldLabel>
-                <FieldLabel label="Image URL">
-                  <input
-                    value={project.image}
-                    onChange={(event) => updateProject(index, { image: event.target.value })}
-                    className={textareaClassName}
-                  />
-                </FieldLabel>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 

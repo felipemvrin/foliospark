@@ -100,4 +100,47 @@ describe('isPortfolio', () => {
       }),
     ).toBe(false)
   })
+
+  it('accepts optional case studies with measurable outcomes', () => {
+    expect(
+      isPortfolio({
+        ...basePortfolio,
+        projects: [
+          {
+            title: 'Northstar Pulse',
+            category: 'Product Experience',
+            year: '2025',
+            description: 'A product story.',
+            image: 'https://example.com/image.jpg',
+            technologies: ['React'],
+            caseStudy: {
+              challenge: 'A complex story.',
+              approach: 'A focused system.',
+              outcome: 'A clearer result.',
+              metrics: [{ value: '32%', label: 'faster' }],
+            },
+          },
+        ],
+      }),
+    ).toBe(true)
+  })
+
+  it('rejects malformed case studies', () => {
+    expect(
+      isPortfolio({
+        ...basePortfolio,
+        projects: [
+          {
+            title: 'Northstar Pulse',
+            category: 'Product Experience',
+            year: '2025',
+            description: 'A product story.',
+            image: 'https://example.com/image.jpg',
+            technologies: ['React'],
+            caseStudy: { challenge: 'Missing the rest.' },
+          },
+        ],
+      }),
+    ).toBe(false)
+  })
 })

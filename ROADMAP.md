@@ -25,7 +25,7 @@ Status: In progress
 - Clearer service packaging and offer framing for conversion — completed in phase 24
 
 ### Medium priority
-- Case study deep dives with measurable story arcs
+- Case study deep dives with measurable story arcs — in progress in phase 27
 - Resume / CV section for recruiters and agency partners
 - Stronger editorial brand storytelling and narrative structure
 - More precise lead qualification flows
@@ -45,7 +45,7 @@ Status: In progress
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Case studies and deeper conversion storytelling
+1. Complete case study editor support and richer project detail views
 2. Resume / CV presentation mode
 3. Lead qualification and inquiry workflow improvements
 4. Advanced analytics and publishing dashboard
