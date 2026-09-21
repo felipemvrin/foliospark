@@ -93,10 +93,26 @@ Hosted publishing uses an optional `VITE_PUBLISHING_API_URL`. The API should exp
 
 Analytics uses an optional `VITE_ANALYTICS_ENDPOINT` that accepts `POST` events. It is disabled when unset, sends no cookies or personal profile data, and respects the browser's Do Not Track preference. The client sends `page_view` and `outbound_click` events with a coarse destination label.
 
+For production publishing, `VITE_PUBLISHING_API_URL` must use HTTPS and must not contain credentials, query parameters, or fragments. HTTP is accepted only for local `localhost`/`127.0.0.1` development. Keep authentication, authorization, rate limiting, CORS, and storage credentials in the publishing API; the frontend must never contain a secret token.
+
+For static hosting, configure these response headers at the CDN or hosting provider:
+
+```text
+Content-Security-Policy: default-src 'self'; img-src 'self' https: data:; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https:; font-src 'self' https: data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+Referrer-Policy: strict-origin-when-cross-origin
+X-Content-Type-Options: nosniff
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+```
+
+The CSP should be reviewed whenever a new external image, analytics, publishing, or font provider is added. If the deployment platform supports it, add `Strict-Transport-Security: max-age=31536000; includeSubDomains` after HTTPS is confirmed for every subdomain.
+
 To connect Behance through a server-side proxy, set `VITE_BEHANCE_PROXY_URL` before building. The browser only calls this proxy; Behance credentials should remain on the server. Without this variable, FolioSpark uses the projects saved in the local portfolio data.
 
 ## Roadmap
 
+- Security hardening: URL validation, bounded public preview payloads, secure publishing endpoint configuration, and deployment header guidance
+- Case study deep dives with measurable outcomes
+- Resume / CV presentation mode
 - Hosted analytics dashboard and retention reports
 
 ## Screenshots

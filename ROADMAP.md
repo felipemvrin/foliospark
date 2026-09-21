@@ -18,11 +18,11 @@ Status: Completed
 Status: In progress
 
 ### High priority
-- Stronger final call-to-action section for lead capture
-- Proof and credibility layer with outcomes, clients, and trust points
-- FAQ section to address decision friction
-- Security hardening around URL validation, imported data checks, and deploy-level protections
-- Clearer service packaging and offer framing for conversion
+- Stronger final call-to-action section for lead capture — completed in phase 25
+- Proof and credibility layer with outcomes, clients, and trust points — completed in phase 25
+- FAQ section to address decision friction — completed in phase 25
+- Security hardening around URL validation, imported data checks, and deploy-level protections — completed in phase 26
+- Clearer service packaging and offer framing for conversion — completed in phase 24
 
 ### Medium priority
 - Case study deep dives with measurable story arcs
@@ -45,12 +45,10 @@ Status: In progress
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Final CTA block with direct inquiry flow
-2. Proof layer and trust signals
-3. FAQ and objections handling
-4. Security hardening pass
-5. Case studies and deeper conversion storytelling
-6. Advanced analytics and publishing dashboard
+1. Case studies and deeper conversion storytelling
+2. Resume / CV presentation mode
+3. Lead qualification and inquiry workflow improvements
+4. Advanced analytics and publishing dashboard
 
 ## Notes
 This roadmap is intentionally sequenced to maximize business value before purely decorative enhancements. The aim is to keep the product premium, credible, and conversion-ready without sacrificing maintainability or production safety.

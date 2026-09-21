@@ -95,6 +95,12 @@ describe('public preview urls', () => {
     expect(storage.getItem('foliospark')).toBe('{"state":{"data":{"slug":"aster-vale"}},"version":0}')
   })
 
+  it('rejects oversized encoded preview payloads', () => {
+    const search = `?view=public&theme=Minimal&data=${'a'.repeat(200_001)}`
+
+    expect(getPublicPreviewPortfolioStorage(search)).toBeNull()
+  })
+
   it('hydrates legacy preview payloads that predate services', () => {
     const search = new URLSearchParams({
       view: 'public',

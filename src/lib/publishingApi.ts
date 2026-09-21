@@ -11,7 +11,30 @@ export interface PublishedPortfolio {
 
 function getEndpoint() {
   const value = import.meta.env.VITE_PUBLISHING_API_URL?.trim()
-  return value ? value.replace(/\/$/, '') : null
+
+  if (!value) {
+    return null
+  }
+
+  try {
+    const url = new URL(value)
+    const normalizedHostname = url.hostname.replace(/^\[|\]$/g, '')
+    const isLoopbackHost =
+      normalizedHostname === 'localhost' || normalizedHostname === '127.0.0.1' || normalizedHostname === '::1'
+    const isAllowedProtocol = url.protocol === 'https:' || (url.protocol === 'http:' && isLoopbackHost)
+
+    if (!isAllowedProtocol) {
+      return null
+    }
+
+    if (url.username || url.password || url.search || url.hash) {
+      return null
+    }
+
+    return url.toString().replace(/\/$/, '')
+  } catch {
+    return null
+  }
 }
 
 function isThemePreset(value: unknown): value is ThemePresetName {

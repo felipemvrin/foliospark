@@ -18,6 +18,34 @@ describe('publishing API client', () => {
     )
   })
 
+  it('does not expose insecure publishing endpoints outside local development', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'http://api.example.com')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://folio.example.com')).toBeNull()
+  })
+
+  it('allows localhost publishing endpoints for local development', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'http://localhost:8787')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://folio.example.com')).toBe(
+      'https://folio.example.com/?view=published&slug=aster-vale-studio',
+    )
+  })
+
+  it('allows IPv6 loopback publishing endpoints for local development', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'http://[::1]:8787')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://folio.example.com')).toBe(
+      'https://folio.example.com/?view=published&slug=aster-vale-studio',
+    )
+  })
+
+  it('rejects non-http protocols even on localhost publishing endpoints', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'ftp://localhost:8787')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://folio.example.com')).toBeNull()
+  })
+
   it('preserves the deployment base path when building a durable public URL', () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
 

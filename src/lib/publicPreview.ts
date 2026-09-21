@@ -7,6 +7,7 @@ const publicViewParam = 'public'
 const portfolioQueryParam = 'data'
 const themeQueryParam = 'theme'
 const slugQueryParam = 'slug'
+const maxPreviewPayloadLength = 200_000
 
 export function normalizePublicSlug(value: string) {
   const normalized = (value ?? '')
@@ -66,6 +67,10 @@ function getPublicPreviewSnapshot(search: string): PublicPreviewSnapshot | null 
   const theme = params.get(themeQueryParam)
 
   if (!encodedPortfolio || !theme) {
+    return null
+  }
+
+  if (encodedPortfolio.length > maxPreviewPayloadLength) {
     return null
   }
 
