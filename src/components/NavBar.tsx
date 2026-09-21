@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -66,9 +66,9 @@ export function NavBar() {
           {emailHref ? (
             <motion.a
               href={emailHref}
-              whileHover={{ y: -2, scale: 1.02 }}
+              whileHover={{ y: -2, scale: 1.02, rotate: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:shadow-[0_18px_35px_rgba(17,17,17,0.08)]"
+              className="button-shine inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:shadow-[0_18px_35px_rgba(17,17,17,0.08)]"
             >
               Book a call <ArrowUpRight className="h-3.5 w-3.5" />
             </motion.a>
@@ -89,22 +89,33 @@ export function NavBar() {
         </button>
       </nav>
 
-      {open ? (
-        <div className="border-t border-[var(--border)] bg-[var(--background-alt)] md:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="text-sm font-medium uppercase tracking-[0.2em] text-[var(--foreground)]"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      ) : null}
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="overflow-hidden border-t border-[var(--border)] bg-[var(--background-alt)] md:hidden"
+          >
+            <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5">
+              {navItems.map((item) => (
+                <motion.a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="text-sm font-medium uppercase tracking-[0.2em] text-[var(--foreground)]"
+                >
+                  {item.label}
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   )
 }

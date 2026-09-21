@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { ArrowUpRight, ExternalLink, Mail, MapPin, Phone, Send } from 'lucide-react'
@@ -60,12 +61,14 @@ export function ContactSection() {
           </div>
 
           {emailHref ? (
-            <a
+            <motion.a
               href={emailHref}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] transition hover:opacity-90"
+              whileHover={{ y: -2, scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+              className="button-shine inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] transition hover:opacity-90"
             >
               Email the studio <ArrowUpRight className="h-4 w-4" />
-            </a>
+            </motion.a>
           ) : (
             <span className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] opacity-60">
               Email the studio <ArrowUpRight className="h-4 w-4" />
@@ -76,20 +79,26 @@ export function ContactSection() {
         <form onSubmit={handleSubmit} className="mt-10 grid gap-4 border-t border-[var(--border-strong)] pt-8 md:grid-cols-2">
           <label className="text-sm opacity-80">
             <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">Name</span>
-            <input name="name" required className="w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)]" />
+            <input name="name" required className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none" />
           </label>
           <label className="text-sm opacity-80">
             <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">Email</span>
-            <input name="email" type="email" required className="w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)]" />
+            <input name="email" type="email" required className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none" />
           </label>
           <label className="text-sm opacity-80 md:col-span-2">
             <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">Project brief</span>
-            <textarea name="message" required rows={4} className="w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)]" />
+            <textarea name="message" required rows={4} className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none" />
           </label>
           <div className="flex flex-wrap items-center gap-4 md:col-span-2">
-            <button type="submit" disabled={!emailHref} className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-[var(--on-accent)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
+            <motion.button
+              type="submit"
+              disabled={!emailHref}
+              whileHover={emailHref ? { y: -2, scale: 1.01 } : undefined}
+              whileTap={emailHref ? { scale: 0.98 } : undefined}
+              className="button-shine inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-[var(--on-accent)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            >
               Send inquiry <Send className="h-4 w-4" />
-            </button>
+            </motion.button>
             {formMessage ? <p role="status" className="text-sm opacity-70">{formMessage}</p> : null}
           </div>
         </form>
@@ -125,16 +134,17 @@ export function ContactSection() {
         {socialLinks.length > 0 ? (
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-[var(--border-strong)] pt-6">
             {socialLinks.map((link) => (
-              <a
+              <motion.a
                 key={link.key}
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
+                whileHover={{ x: 3, y: -1 }}
                 className="inline-flex items-center gap-2 text-sm opacity-80 transition hover:opacity-100"
               >
                 {link.label}
                 <ExternalLink className="h-3.5 w-3.5" />
-              </a>
+              </motion.a>
             ))}
           </div>
         ) : null}

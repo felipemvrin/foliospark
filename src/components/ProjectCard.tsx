@@ -31,14 +31,25 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           alt={project.title}
           className="h-[320px] w-full object-cover transition duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/65 via-transparent to-transparent" />
         <motion.div
           initial={{ opacity: 0, x: -12 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
+          whileHover={{ scale: 1.04 }}
           className="absolute left-5 top-5 rounded-full border border-white/50 bg-white/10 px-3 py-1 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-white backdrop-blur-sm"
         >
           {project.category}
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          whileHover={{ y: 0 }}
+          transition={{ duration: 0.25 }}
+          className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-full border border-white/25 bg-black/20 px-3 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm opacity-0 transition duration-300 group-hover:opacity-100"
+        >
+          <span>Case study</span>
+          <ArrowUpRight className="h-3.5 w-3.5" />
         </motion.div>
       </div>
 

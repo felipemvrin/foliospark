@@ -22,8 +22,9 @@ export function SkillsSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.08 }}
-              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.08, type: 'spring', stiffness: 220, damping: 18 }}
+              whileHover={{ y: -8, scale: 1.01, rotateX: 2, rotateY: -2 }}
+              style={{ transformStyle: 'preserve-3d' }}
               className="rounded-[1.8rem] border border-[var(--border)] bg-[var(--surface)] p-5 transition-shadow hover:shadow-[0_18px_40px_rgba(17,17,17,0.06)]"
             >
               <p className="text-[0.66rem] uppercase tracking-[0.28em] text-[var(--muted)]">{group.category}</p>
