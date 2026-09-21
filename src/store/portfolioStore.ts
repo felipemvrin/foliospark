@@ -5,12 +5,16 @@ import { createReadonlyStorage, getPublicPreviewPortfolioStorage } from '../lib/
 import { parsePortfolio } from '../lib/portfolioTransfer'
 import { isPublishedView } from '../lib/publishingApi'
 import { portfolio as defaultPortfolio } from '../data/portfolio'
+import { createDefaultSiteSettings } from '../data/siteSettings'
 import type { Portfolio } from '../types/portfolio'
 
 type PortfolioUpdater = Portfolio | ((current: Portfolio) => Portfolio)
 
 function createDefaultPortfolio() {
-  return JSON.parse(JSON.stringify(defaultPortfolio)) as Portfolio
+  return {
+    ...JSON.parse(JSON.stringify(defaultPortfolio)),
+    siteSettings: createDefaultSiteSettings(),
+  } as Portfolio
 }
 
 interface PortfolioState {
@@ -37,7 +41,11 @@ const portfolioStorePersistOptions: PersistOptions<PortfolioState> =
         }),
         merge: (persistedState: unknown, currentState: PortfolioState) => {
           const state = isRecord(persistedState) ? persistedState : {}
-          const data = parsePortfolio(state.data) ?? currentState.data
+          const parsedData = parsePortfolio(state.data) ?? currentState.data
+          const data = {
+            ...parsedData,
+            siteSettings: parsedData.siteSettings ?? currentState.data.siteSettings ?? createDefaultSiteSettings(),
+          }
 
           return {
             ...currentState,

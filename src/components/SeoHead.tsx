@@ -29,8 +29,27 @@ function setCanonicalUrl(url: string) {
   element.href = url
 }
 
+function setFavicon(url: string | undefined) {
+  const existing = document.head.querySelector<HTMLLinkElement>('link[data-foliospark-favicon]')
+
+  if (!url) {
+    existing?.remove()
+    return
+  }
+
+  const element = existing ?? document.createElement('link')
+  element.rel = 'icon'
+  element.href = url
+  element.dataset.foliosparkFavicon = 'true'
+
+  if (!existing) {
+    document.head.appendChild(element)
+  }
+}
+
 export function SeoHead() {
   const profile = usePortfolioStore((state) => state.data.profile)
+  const siteSettings = usePortfolioStore((state) => state.data.siteSettings)
   const themeId = useThemeStore((state) => state.preset)
 
   useEffect(() => {
@@ -44,11 +63,13 @@ export function SeoHead() {
       configuredCanonicalUrl.search = window.location.search
     }
 
-    const { description, image, themeColor, title, url } = getSeoMetadata(
+    const { description: seoDescription, image, themeColor, title: seoTitle, url } = getSeoMetadata(
       profile,
       themeId,
       configuredCanonicalUrl.toString(),
     )
+    const title = siteSettings?.title.trim() || seoTitle
+    const description = siteSettings?.description.trim() || seoDescription
     const canonicalUrl = url || fallbackCanonicalUrl.toString()
 
     document.title = title
@@ -64,7 +85,8 @@ export function SeoHead() {
     setMeta('name', 'twitter:title', title)
     setMeta('name', 'twitter:description', description)
     setMeta('name', 'twitter:image', image)
-  }, [profile, themeId])
+    setFavicon(siteSettings?.faviconUrl?.trim())
+  }, [profile, siteSettings, themeId])
 
   return null
 }

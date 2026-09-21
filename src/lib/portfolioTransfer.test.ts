@@ -143,4 +143,12 @@ describe('isPortfolio', () => {
       }),
     ).toBe(false)
   })
+
+  it('accepts legacy portfolios without site settings', () => {
+    expect(parsePortfolio(basePortfolio)).toMatchObject(basePortfolio)
+  })
+
+  it('rejects malformed site settings', () => {
+    expect(parsePortfolio({ ...basePortfolio, siteSettings: { title: 'Only a title' } })).toBeNull()
+  })
 })
