@@ -41,10 +41,12 @@ export function FaqSection() {
         <div className="mt-10 space-y-4">
           {faqs.map((item, index) => {
             const isOpen = openIndex === index
+            const panelId = `faq-panel-${index}`
+            const buttonId = `faq-button-${index}`
 
             return (
               <motion.div
-                key={item.question}
+                key={`${item.question}-${index}`}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -56,6 +58,8 @@ export function FaqSection() {
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6"
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  id={buttonId}
                 >
                   <span className="text-base font-medium text-[var(--foreground)]">{item.question}</span>
                   <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)]">
@@ -66,6 +70,9 @@ export function FaqSection() {
                 <AnimatePresence initial={false}>
                   {isOpen ? (
                     <motion.div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={buttonId}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
