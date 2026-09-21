@@ -857,7 +857,7 @@ export function PortfolioEditor() {
               const projectDraftKey = projectDraftKeys[index] ?? `project-fallback-${index}`
 
               return (
-                <div key={`${project.title}-${index}`} className={nestedPanelClassName}>
+                <div key={projectDraftKey} className={nestedPanelClassName}>
                   <div className="mb-4 flex justify-end">
                     <button
                       type="button"
