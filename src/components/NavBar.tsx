@@ -2,14 +2,33 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
+import { getSafeExternalHref } from '../lib/links'
 import { usePortfolioStore } from '../store/portfolioStore'
+
+function getSafeNavigationHref(target: string) {
+  const trimmedTarget = target.trim()
+
+  if (!trimmedTarget) {
+    return null
+  }
+
+  if (trimmedTarget.startsWith('#')) {
+    return trimmedTarget
+  }
+
+  return getSafeExternalHref(trimmedTarget)
+}
 
 export function NavBar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const siteSettings = usePortfolioStore((state) => state.data.siteSettings)
-  const navItems = siteSettings?.navigation.items.filter((item) => item.visible) ?? []
+  const navItems = siteSettings?.navigation.items
+    .filter((item) => item.visible)
+    .map((item) => ({ ...item, href: getSafeNavigationHref(item.target) }))
+    .filter((item): item is typeof item & { href: string } => Boolean(item.href)) ?? []
   const navigation = siteSettings?.navigation
+  const ctaHref = getSafeNavigationHref(navigation?.ctaTarget ?? '') ?? '#contact'
 
   useEffect(() => {
     const hero = document.getElementById('top')
@@ -91,7 +110,7 @@ export function NavBar() {
           {navItems.map((item) => (
             <motion.a
               key={item.id}
-              href={item.target}
+              href={item.href}
               whileHover={{ y: -2 }}
               className="text-[0.7rem] font-medium uppercase tracking-[0.24em] text-[var(--muted)] transition hover:text-[var(--foreground)]"
             >
@@ -103,7 +122,7 @@ export function NavBar() {
         <div className="hidden items-center gap-3 md:flex">
           {navigation?.visible !== false ? (
             <motion.a
-              href={navigation?.ctaTarget || '#contact'}
+              href={ctaHref}
               whileHover={{ y: -2, scale: 1.02, rotate: -1 }}
               whileTap={{ scale: 0.98 }}
               className="button-shine inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:shadow-[0_18px_35px_rgba(17,17,17,0.08)]"
@@ -139,7 +158,7 @@ export function NavBar() {
               {navItems.map((item) => (
                 <motion.a
                   key={item.id}
-                  href={item.target}
+                  href={item.href}
                   onClick={() => setOpen(false)}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}

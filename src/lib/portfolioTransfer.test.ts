@@ -28,6 +28,27 @@ const basePortfolio = {
   socialLinks: [],
 }
 
+const baseSiteSettings = {
+  title: 'FolioSpark',
+  description: 'Portfolio builder',
+  logoText: 'FolioSpark',
+  logoMark: 'F',
+  navigation: {
+    visible: true,
+    ctaLabel: 'Start a project',
+    ctaTarget: '#contact',
+    items: [{ id: 'about', label: 'About', target: '#about', visible: true }],
+  },
+  footer: {
+    visible: true,
+    copyright: 'FolioSpark © 2026',
+    tagline: 'Your professional story, in motion.',
+    showLocation: true,
+    showSocialLinks: true,
+  },
+  sections: [{ id: 'about', visible: true }],
+}
+
 describe('isPortfolio', () => {
   it('accepts an optional profile slug when it is a string', () => {
     expect(isPortfolio({ ...basePortfolio, profile: { ...basePortfolio.profile, slug: 'aster-vale' } })).toBe(true)
@@ -150,5 +171,35 @@ describe('isPortfolio', () => {
 
   it('rejects malformed site settings', () => {
     expect(parsePortfolio({ ...basePortfolio, siteSettings: { title: 'Only a title' } })).toBeNull()
+  })
+
+  it('rejects unsafe navigation targets in site settings', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          navigation: {
+            ...baseSiteSettings.navigation,
+            items: [{ id: 'about', label: 'About', target: 'javascript:alert(1)', visible: true }],
+          },
+        },
+      }),
+    ).toBeNull()
+  })
+
+  it('rejects unsafe navigation call-to-action targets in site settings', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          navigation: {
+            ...baseSiteSettings.navigation,
+            ctaTarget: 'javascript:alert(1)',
+          },
+        },
+      }),
+    ).toBeNull()
   })
 })

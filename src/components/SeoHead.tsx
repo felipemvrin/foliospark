@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { getSafeExternalHref } from '../lib/links'
 import { isPublicPreview } from '../lib/publicPreview'
 import { getSeoMetadata } from '../lib/seo'
 import { usePortfolioStore } from '../store/portfolioStore'
@@ -85,7 +86,7 @@ export function SeoHead() {
     setMeta('name', 'twitter:title', title)
     setMeta('name', 'twitter:description', description)
     setMeta('name', 'twitter:image', image)
-    setFavicon(siteSettings?.faviconUrl?.trim())
+    setFavicon(getSafeExternalHref(siteSettings?.faviconUrl?.trim() ?? '') ?? undefined)
   }, [profile, siteSettings, themeId])
 
   return null

@@ -28,6 +28,24 @@ function isCaseStudy(value: unknown) {
   )
 }
 
+function isSafeNavigationTarget(value: string) {
+  const target = value.trim()
+
+  if (!target) {
+    return false
+  }
+
+  if (target.startsWith('#')) {
+    return true
+  }
+
+  return Boolean(getSafeExternalHref(target))
+}
+
+function isSafeNavigationTargetField(value: Record<string, unknown>, key: string) {
+  return typeof value[key] === 'string' && isSafeNavigationTarget(value[key])
+}
+
 function isSiteSettings(value: unknown): value is SiteSettings {
   return (
     isRecord(value) &&
@@ -41,6 +59,7 @@ function isSiteSettings(value: unknown): value is SiteSettings {
     typeof value.navigation.visible === 'boolean' &&
     hasStringField(value.navigation, 'ctaLabel') &&
     hasStringField(value.navigation, 'ctaTarget') &&
+    isSafeNavigationTargetField(value.navigation, 'ctaTarget') &&
     Array.isArray(value.navigation.items) &&
     value.navigation.items.every(
       (item) =>
@@ -48,6 +67,7 @@ function isSiteSettings(value: unknown): value is SiteSettings {
         hasStringField(item, 'id') &&
         hasStringField(item, 'label') &&
         hasStringField(item, 'target') &&
+        isSafeNavigationTargetField(item, 'target') &&
         typeof item.visible === 'boolean',
     ) &&
     isRecord(value.footer) &&
