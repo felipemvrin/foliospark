@@ -1,8 +1,12 @@
-export type AnalyticsEventName = 'page_view' | 'outbound_click'
+export type AnalyticsEventName = 'page_view' | 'outbound_click' | 'inquiry_started'
 
 export interface AnalyticsEvent {
   name: AnalyticsEventName
   properties: Record<string, string>
+}
+
+export function normalizeAnalyticsDimension(value: string, allowedValues: readonly string[], fallback = 'unspecified') {
+  return allowedValues.includes(value) ? value : fallback
 }
 
 let fallbackSessionId: string | null = null
