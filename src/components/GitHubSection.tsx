@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { AlertTriangle, ArrowUpRight, GitBranch, RefreshCw, Star } from 'lucide-react'
 
+import { trackAnalyticsEvent } from '../lib/analytics'
 import { getSafeExternalHref } from '../lib/links'
 import { usePortfolioStore } from '../store/portfolioStore'
 import { fetchGitHubProjects, isGitHubProfileUrl } from '../lib/github'
@@ -119,7 +120,7 @@ export function GitHubSection() {
                   <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">{project.language}</p>
                   <h3 className="mt-3 text-2xl font-medium text-[var(--foreground)]">{project.repository}</h3>
                 </div>
-                <a href={getSafeExternalHref(project.url) ?? '#'} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted)] transition hover:text-[var(--foreground)]" aria-label={`Open ${project.repository} on GitHub`}>
+                <a href={getSafeExternalHref(project.url) ?? '#'} target="_blank" rel="noopener noreferrer" onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'github_repository' } })} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted)] transition hover:text-[var(--foreground)]" aria-label={`Open ${project.repository} on GitHub`}>
                   <ArrowUpRight className="h-4 w-4" />
                 </a>
               </div>
@@ -137,7 +138,7 @@ export function GitHubSection() {
       )}
 
       {githubHref ? (
-        <a href={githubHref} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)] transition hover:gap-3">
+        <a href={githubHref} target="_blank" rel="noopener noreferrer" onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'github_profile' } })} className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)] transition hover:gap-3">
           Open GitHub profile <ArrowUpRight className="h-4 w-4" />
         </a>
       ) : null}

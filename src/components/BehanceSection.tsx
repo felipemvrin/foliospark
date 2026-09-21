@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { AlertTriangle, ArrowUpRight, RefreshCw } from 'lucide-react'
 
+import { trackAnalyticsEvent } from '../lib/analytics'
 import { getSafeExternalHref } from '../lib/links'
 import { fetchBehanceProjects, getBehanceProxyUrl } from '../lib/behance'
 import { usePortfolioStore } from '../store/portfolioStore'
@@ -111,7 +112,7 @@ export function BehanceSection() {
                 style={{ background: 'var(--accent-soft)' }}
               >
                 {safeProjectHref ? (
-                  <a href={safeProjectHref} target="_blank" rel="noopener noreferrer" className="block">
+                  <a href={safeProjectHref} target="_blank" rel="noopener noreferrer" onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'behance_project' } })} className="block">
                     <img src={project.cover} alt={project.title} className="h-72 w-full object-cover" />
                   </a>
                 ) : (
@@ -127,6 +128,7 @@ export function BehanceSection() {
                       href={safeProjectHref}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'behance_project' } })}
                       className="inline-flex items-center gap-2 text-3xl font-medium transition hover:opacity-80"
                     >
                       <span>{project.title}</span>

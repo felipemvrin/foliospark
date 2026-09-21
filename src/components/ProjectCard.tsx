@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight, GitBranch, Globe } from 'lucide-react'
 
+import { trackAnalyticsEvent } from '../lib/analytics'
 import { getPreferredSafeExternalHref, getSafeExternalHref } from '../lib/links'
 import type { Project } from '../types/portfolio'
 
@@ -54,6 +55,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 aria-label={`Visit ${project.title}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'project_website' } })}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] transition hover:text-[var(--foreground)]"
               >
                 <Globe className="h-4 w-4" />
@@ -65,6 +67,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 aria-label={`${project.title} on GitHub`}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'project_github' } })}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] transition hover:text-[var(--foreground)]"
               >
                 <GitBranch className="h-4 w-4" />
@@ -92,6 +95,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             href={projectUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'project_primary' } })}
             className="inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)] transition hover:gap-3"
           >
             View project <ArrowUpRight className="h-4 w-4" />
