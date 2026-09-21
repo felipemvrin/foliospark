@@ -121,3 +121,29 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+@media print {
+  body::before,
+  .resume-section ~ *,
+  header,
+  footer {
+    display: none !important;
+  }
+
+  .resume-section {
+    display: block !important;
+    min-height: auto !important;
+    padding: 2rem 0 !important;
+    background: white !important;
+    color: #171717 !important;
+  }
+
+  .resume-section * {
+    color: #171717 !important;
+    border-color: #d4d4d4 !important;
+  }
+
+  .resume-section .text-\[var\(--muted\)\] {
+    color: #525252 !important;
+  }
+}
