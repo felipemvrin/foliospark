@@ -2,7 +2,8 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import { themePresets } from '../data/themes'
-import { getPublicPreviewThemeStorage } from '../lib/publicPreview'
+import { createReadonlyStorage, getPublicPreviewThemeStorage } from '../lib/publicPreview'
+import { isPublishedView } from '../lib/publishingApi'
 import type { ThemePresetName } from '../types/theme'
 
 interface ThemeState {
@@ -15,7 +16,13 @@ const themeStorePersistOptions =
     ? { name: 'foliospark-theme' }
     : {
         name: 'foliospark-theme',
-        storage: createJSONStorage(() => getPublicPreviewThemeStorage() ?? window.localStorage),
+        storage: createJSONStorage(() => {
+          if (isPublishedView(window.location.search)) {
+            return createReadonlyStorage({ preset: themePresets[0].id })
+          }
+
+          return getPublicPreviewThemeStorage() ?? window.localStorage
+        }),
       }
 
 export const useThemeStore = create<ThemeState>()(

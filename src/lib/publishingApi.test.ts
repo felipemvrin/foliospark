@@ -18,6 +18,14 @@ describe('publishing API client', () => {
     )
   })
 
+  it('preserves the deployment base path when building a durable public URL', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://felipemvrin.github.io/foliospark/?theme=Mono#editor')).toBe(
+      'https://felipemvrin.github.io/foliospark/?view=published&slug=aster-vale-studio',
+    )
+  })
+
   it('fetches and validates a published portfolio', async () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com')
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
@@ -41,5 +49,13 @@ describe('publishing API client', () => {
       'https://api.example.com/portfolios/aster-vale',
       expect.objectContaining({ method: 'PUT', body: expect.stringContaining('"theme":"Minimal"') }),
     )
+  })
+
+  it('rejects publishing when no stable slug can be generated', async () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com')
+    vi.stubGlobal('fetch', vi.fn())
+
+    await expect(publishPortfolio('', portfolio, 'Minimal')).rejects.toThrow('Add a name or custom slug before publishing.')
+    expect(fetch).not.toHaveBeenCalled()
   })
 })

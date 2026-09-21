@@ -43,6 +43,14 @@ function getPublishedUrl(endpoint: string, slug: string) {
   return `${endpoint}/portfolios/${encodeURIComponent(normalizePublicSlug(slug))}`
 }
 
+function getRequiredPublishedSlugSource(slug: string) {
+  if (normalizePublicSlug(slug) === 'portfolio') {
+    throw new Error('Add a name or custom slug before publishing.')
+  }
+
+  return slug
+}
+
 export function getPublishingApiUrl() {
   return getEndpoint()
 }
@@ -51,14 +59,18 @@ export function isPublishedView(search: string) {
   return new URLSearchParams(search).get('view') === 'published'
 }
 
-export function getPublishedPortfolioHref(slug: string, baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://example.com') {
+export function getPublishedPortfolioHref(slug: string, baseUrl = typeof window !== 'undefined' ? window.location.href : 'https://example.com') {
   const endpoint = getEndpoint()
 
   if (!endpoint) {
     return null
   }
 
-  const url = new URL('/?view=published', baseUrl)
+  const url = new URL(baseUrl)
+
+  url.hash = ''
+  url.search = ''
+  url.searchParams.set('view', 'published')
   url.searchParams.set('slug', normalizePublicSlug(slug))
   return url.toString()
 }
@@ -94,10 +106,12 @@ export async function publishPortfolio(
     throw new Error('Publishing API is not configured')
   }
 
-  const response = await fetch(getPublishedUrl(endpoint, slug), {
+  const publishSlugSource = getRequiredPublishedSlugSource(slug)
+  const normalizedSlug = normalizePublicSlug(publishSlugSource)
+  const response = await fetch(getPublishedUrl(endpoint, publishSlugSource), {
     method: 'PUT',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ portfolio, theme, slug: normalizePublicSlug(slug) }),
+    body: JSON.stringify({ portfolio, theme, slug: normalizedSlug }),
     signal,
   })
 
@@ -105,5 +119,5 @@ export async function publishPortfolio(
     throw new Error(`Portfolio publish request failed with ${response.status}`)
   }
 
-  return parsePublishedPortfolio(await response.json(), slug)
+  return parsePublishedPortfolio(await response.json(), publishSlugSource)
 }
