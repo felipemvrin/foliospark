@@ -96,12 +96,21 @@ export interface Testimonial {
   company: string
 }
 
+export interface ServicePackage {
+  name: string
+  price: string
+  description: string
+  features: string[]
+  featured?: boolean
+}
+
 export interface Portfolio {
   profile: Profile
   metrics: PortfolioMetric[]
   about: string[]
   process: ProcessStep[]
   testimonials: Testimonial[]
+  services: ServicePackage[]
   experience: Experience[]
   education: Education[]
   skills: SkillGroup[]

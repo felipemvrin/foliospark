@@ -16,6 +16,21 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string')
 }
 
+function withLegacyPortfolioDefaults(value: unknown): unknown {
+  if (!isRecord(value)) {
+    return value
+  }
+
+  if ('services' in value && value.services !== undefined) {
+    return value
+  }
+
+  return {
+    ...value,
+    services: [],
+  }
+}
+
 export function isPortfolio(value: unknown): value is Portfolio {
   if (!isRecord(value) || !isRecord(value.profile)) {
     return false
@@ -57,6 +72,16 @@ export function isPortfolio(value: unknown): value is Portfolio {
         hasStringField(entry, 'name') &&
         hasStringField(entry, 'role') &&
         hasStringField(entry, 'company'),
+    ) &&
+    Array.isArray(value.services) &&
+    value.services.every(
+      (entry) =>
+        isRecord(entry) &&
+        hasStringField(entry, 'name') &&
+        hasStringField(entry, 'price') &&
+        hasStringField(entry, 'description') &&
+        isStringArray(entry.features) &&
+        (entry.featured === undefined || typeof entry.featured === 'boolean'),
     ) &&
     Array.isArray(value.experience) &&
     value.experience.every(
@@ -130,6 +155,11 @@ export function isPortfolio(value: unknown): value is Portfolio {
         hasStringField(entry, 'url'),
     )
   )
+}
+
+export function parsePortfolio(value: unknown): Portfolio | null {
+  const normalizedValue = withLegacyPortfolioDefaults(value)
+  return isPortfolio(normalizedValue) ? normalizedValue : null
 }
 
 export function downloadPortfolio(data: Portfolio) {

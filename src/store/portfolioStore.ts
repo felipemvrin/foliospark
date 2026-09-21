@@ -1,7 +1,8 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { createJSONStorage, persist, type PersistOptions } from 'zustand/middleware'
 
 import { createReadonlyStorage, getPublicPreviewPortfolioStorage } from '../lib/publicPreview'
+import { parsePortfolio } from '../lib/portfolioTransfer'
 import { isPublishedView } from '../lib/publishingApi'
 import { portfolio as defaultPortfolio } from '../data/portfolio'
 import type { Portfolio } from '../types/portfolio'
@@ -18,7 +19,11 @@ interface PortfolioState {
   setData: (updater: PortfolioUpdater) => void
 }
 
-const portfolioStorePersistOptions =
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
+const portfolioStorePersistOptions: PersistOptions<PortfolioState> =
   typeof window === 'undefined'
     ? { name: 'foliospark-portfolio' }
     : {
@@ -30,6 +35,16 @@ const portfolioStorePersistOptions =
 
           return getPublicPreviewPortfolioStorage() ?? window.localStorage
         }),
+        merge: (persistedState: unknown, currentState: PortfolioState) => {
+          const state = isRecord(persistedState) ? persistedState : {}
+          const data = parsePortfolio(state.data) ?? currentState.data
+
+          return {
+            ...currentState,
+            ...state,
+            data,
+          }
+        },
       }
 
 export const usePortfolioStore = create<PortfolioState>()(
@@ -38,7 +53,7 @@ export const usePortfolioStore = create<PortfolioState>()(
       data: createDefaultPortfolio(),
       resetData: () => set({ data: createDefaultPortfolio() }),
       setData: (updater) =>
-        set((state) => ({
+        set((state: PortfolioState) => ({
           data: typeof updater === 'function' ? (updater as (current: Portfolio) => Portfolio)(state.data) : updater,
         })),
     }),

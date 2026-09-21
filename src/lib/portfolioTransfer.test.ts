@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { isPortfolio } from './portfolioTransfer'
+import { isPortfolio, parsePortfolio } from './portfolioTransfer'
 
 const basePortfolio = {
   profile: {
@@ -18,6 +18,7 @@ const basePortfolio = {
   about: [],
   process: [],
   testimonials: [],
+  services: [],
   experience: [],
   education: [],
   skills: [],
@@ -52,5 +53,42 @@ describe('isPortfolio', () => {
         testimonials: [{ quote: 'Great work', name: 'Aster', role: 'Founder' }],
       }),
     ).toBe(false)
+  })
+
+  it('accepts service packages with the expected fields', () => {
+    expect(
+      isPortfolio({
+        ...basePortfolio,
+        services: [
+          {
+            name: 'Brand System',
+            price: '$2,400',
+            description: 'Premium positioning and visuals.',
+            features: ['Identity direction', 'Design system'],
+            featured: true,
+          },
+        ],
+      }),
+    ).toBe(true)
+  })
+
+  it('backfills missing services for legacy portfolios', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        services: undefined,
+      }),
+    ).toMatchObject({
+      services: [],
+    })
+  })
+
+  it('rejects invalid services shapes after normalization', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        services: 'not-an-array',
+      }),
+    ).toBeNull()
   })
 })

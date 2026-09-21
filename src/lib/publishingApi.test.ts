@@ -62,6 +62,24 @@ describe('publishing API client', () => {
     )
   })
 
+  it('accepts legacy published portfolios that predate services', async () => {
+    const { services: _services, ...legacyPortfolio } = portfolio
+
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com')
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ portfolio: legacyPortfolio, theme: 'Editorial', slug: 'aster-vale' }),
+    }))
+
+    await expect(fetchPublishedPortfolio('Aster Vale')).resolves.toMatchObject({
+      portfolio: {
+        services: [],
+      },
+      theme: 'Editorial',
+      slug: 'aster-vale',
+    })
+  })
+
   it('publishes a portfolio using PUT and rejects invalid responses', async () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com')
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ invalid: true }) }))

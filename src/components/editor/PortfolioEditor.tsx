@@ -5,7 +5,7 @@ import { themePresets } from '../../data/themes'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
-import { downloadPortfolio, isPortfolio } from '../../lib/portfolioTransfer'
+import { downloadPortfolio, parsePortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
 import type { BehanceProject, Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
@@ -307,12 +307,13 @@ export function PortfolioEditor() {
 
     try {
       const importedData: unknown = JSON.parse(await file.text())
+      const portfolio = parsePortfolio(importedData)
 
-      if (!isPortfolio(importedData)) {
+      if (!portfolio) {
         throw new Error('Invalid portfolio')
       }
 
-      setData(importedData)
+      setData(portfolio)
       setTransferMessage('Portfolio imported.')
     } catch {
       setTransferMessage('Could not import that file. Use a FolioSpark JSON export.')

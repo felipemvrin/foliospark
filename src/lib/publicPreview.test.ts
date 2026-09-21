@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { createReadonlyStorage, getPublicPreviewHref, normalizePublicSlug } from './publicPreview'
+import { createReadonlyStorage, getPublicPreviewHref, getPublicPreviewPortfolioStorage, normalizePublicSlug } from './publicPreview'
 import { buildRobotsTxt, buildSitemapXml, getCanonicalSiteUrl, getSeoMetadata, getSiteBasePath, shouldGenerateRobotsTxt } from './seo'
 
 describe('public preview urls', () => {
@@ -28,6 +28,7 @@ describe('public preview urls', () => {
         about: [],
         process: [],
         testimonials: [],
+        services: [],
         experience: [],
         education: [],
         skills: [],
@@ -66,6 +67,7 @@ describe('public preview urls', () => {
         about: [],
         process: [],
         testimonials: [],
+        services: [],
         experience: [],
         education: [],
         skills: [],
@@ -91,6 +93,45 @@ describe('public preview urls', () => {
     expect(storage.setItem('foliospark', 'next-state')).toBeUndefined()
     expect(storage.removeItem('foliospark')).toBeUndefined()
     expect(storage.getItem('foliospark')).toBe('{"state":{"data":{"slug":"aster-vale"}},"version":0}')
+  })
+
+  it('hydrates legacy preview payloads that predate services', () => {
+    const search = new URLSearchParams({
+      view: 'public',
+      theme: 'Minimal',
+      data: btoa(JSON.stringify({
+        profile: {
+          name: 'Aster Vale',
+          role: 'Design Engineer',
+          headline: '',
+          bio: '',
+          location: '',
+          email: '',
+          phone: '',
+          website: '',
+          photo: '',
+        },
+        metrics: [],
+        about: [],
+        process: [],
+        testimonials: [],
+        experience: [],
+        education: [],
+        skills: [],
+        projects: [],
+        githubProjects: [],
+        behanceProjects: [],
+        socialLinks: [],
+      })),
+    }).toString()
+
+    expect(JSON.parse(getPublicPreviewPortfolioStorage(`?${search}`)?.getItem('foliospark-portfolio') ?? '{}')).toMatchObject({
+      state: {
+        data: {
+          services: [],
+        },
+      },
+    })
   })
 
   it('prefers a configured public site url for canonical metadata', () => {
