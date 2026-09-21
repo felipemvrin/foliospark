@@ -34,6 +34,20 @@ describe('publishing API client', () => {
     )
   })
 
+  it('preserves the current app path when using the runtime location by default', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
+    vi.stubGlobal('window', {
+      location: {
+        href: 'https://felipemvrin.github.io/foliospark/?theme=Mono#editor',
+        origin: 'https://felipemvrin.github.io',
+      },
+    })
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio')).toBe(
+      'https://felipemvrin.github.io/foliospark/?view=published&slug=aster-vale-studio',
+    )
+  })
+
   it('fetches and validates a published portfolio', async () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com')
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
