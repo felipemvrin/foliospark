@@ -4,8 +4,12 @@ import type { FormEvent } from 'react'
 import { ArrowUpRight, ExternalLink, Mail, MapPin, Phone, Send } from 'lucide-react'
 
 import { getMailtoHref, getSafeExternalHref, getSafePhoneHref } from '../lib/links'
-import { trackAnalyticsEvent } from '../lib/analytics'
+import { normalizeAnalyticsDimension, trackAnalyticsEvent } from '../lib/analytics'
 import { usePortfolioStore } from '../store/portfolioStore'
+
+const projectTypeAnalyticsValues = ['Brand positioning', 'Portfolio experience', 'Product narrative', 'Something else'] as const
+const budgetAnalyticsValues = ['Under $2,500', '$2,500 – $5,000', '$5,000 – $10,000', '$10,000+'] as const
+const timelineAnalyticsValues = ['Exploring', 'Within 1 month', '1–3 months', '3+ months'] as const
 
 export function ContactSection() {
   const portfolio = usePortfolioStore((state) => state.data)
@@ -60,9 +64,9 @@ export function ContactSection() {
     void trackAnalyticsEvent({
       name: 'inquiry_started',
       properties: {
-        projectType: projectType || 'unspecified',
-        budget: budget || 'unspecified',
-        timeline: timeline || 'unspecified',
+        projectType: normalizeAnalyticsDimension(projectType, projectTypeAnalyticsValues),
+        budget: normalizeAnalyticsDimension(budget, budgetAnalyticsValues),
+        timeline: normalizeAnalyticsDimension(timeline, timelineAnalyticsValues),
       },
     })
     window.location.href = inquiryHref

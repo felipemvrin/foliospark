@@ -5,6 +5,10 @@ export interface AnalyticsEvent {
   properties: Record<string, string>
 }
 
+export function normalizeAnalyticsDimension(value: string, allowedValues: readonly string[], fallback = 'unspecified') {
+  return allowedValues.includes(value) ? value : fallback
+}
+
 let fallbackSessionId: string | null = null
 let fallbackSessionCounter = 0
 

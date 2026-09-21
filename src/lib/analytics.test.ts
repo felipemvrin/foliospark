@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { isAnalyticsEnabled, trackAnalyticsEvent } from './analytics'
+import { isAnalyticsEnabled, normalizeAnalyticsDimension, trackAnalyticsEvent } from './analytics'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -78,5 +78,13 @@ describe('privacy-first analytics', () => {
     const secondPayload = JSON.parse(fetchMock.mock.calls[1]?.[1]?.body as string) as { sessionId: string }
 
     expect(firstPayload.sessionId).toBe(secondPayload.sessionId)
+  })
+
+  it('normalizes analytics dimensions to allowed values', () => {
+    const allowedValues = ['allowed', 'other'] as const
+
+    expect(normalizeAnalyticsDimension('allowed', allowedValues)).toBe('allowed')
+    expect(normalizeAnalyticsDimension('custom-value', allowedValues)).toBe('unspecified')
+    expect(normalizeAnalyticsDimension('custom-value', allowedValues, 'other')).toBe('other')
   })
 })
