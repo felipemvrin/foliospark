@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 
 import { AboutSection } from './components/AboutSection'
 import { trackAnalyticsEvent } from './lib/analytics'
@@ -94,13 +94,24 @@ function App() {
 
 function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
   const behanceProjects = useBehanceProjects()
+  const handleSkipLinkClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    const mainContent = document.getElementById('main-content')
+
+    if (!mainContent) {
+      return
+    }
+
+    mainContent.focus()
+    event.currentTarget.blur()
+  }
 
   return (
     <ThemeWrapper>
       <SeoHead />
       <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
+        <a href="#main-content" className="skip-link" onClick={handleSkipLinkClick}>Skip to content</a>
         <NavBar />
-        <main>
+        <main id="main-content" tabIndex={-1}>
           <Hero />
           <AboutSection />
           <WorkSection />
