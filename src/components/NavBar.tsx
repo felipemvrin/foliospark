@@ -24,9 +24,13 @@ export function NavBar() {
 
   useEffect(() => {
     const hero = document.getElementById('top')
+    const updateScrolledState = () => setScrolled(window.scrollY > 18)
 
     if (!hero || !('IntersectionObserver' in window)) {
-      return
+      updateScrolledState()
+      window.addEventListener('scroll', updateScrolledState, { passive: true })
+
+      return () => window.removeEventListener('scroll', updateScrolledState)
     }
 
     const observer = new IntersectionObserver(
