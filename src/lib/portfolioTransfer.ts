@@ -17,6 +17,17 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string')
 }
 
+function isCaseStudy(value: unknown) {
+  return (
+    isRecord(value) &&
+    hasStringField(value, 'challenge') &&
+    hasStringField(value, 'approach') &&
+    hasStringField(value, 'outcome') &&
+    Array.isArray(value.metrics) &&
+    value.metrics.every((metric) => isRecord(metric) && hasStringField(metric, 'value') && hasStringField(metric, 'label'))
+  )
+}
+
 function isSafeUrlField(value: Record<string, unknown>, key: string, required = true) {
   if (typeof value[key] !== 'string') {
     return !required && value[key] === undefined
@@ -129,6 +140,7 @@ export function isPortfolio(value: unknown): value is Portfolio {
         hasStringField(entry, 'image') &&
         isStringArray(entry.technologies) &&
         isSafeUrlField(entry, 'image') &&
+        (entry.caseStudy === undefined || isCaseStudy(entry.caseStudy)) &&
         hasOptionalStringField(entry, 'website') &&
         hasOptionalStringField(entry, 'github') &&
         hasOptionalStringField(entry, 'behance') &&

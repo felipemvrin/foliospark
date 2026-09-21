@@ -150,6 +150,15 @@ export const portfolio: Portfolio = {
       image:
         'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80',
       technologies: ['Design Systems', 'React', 'Analytics', 'Motion'],
+      caseStudy: {
+        challenge: 'The team had strong operational data, but no clear narrative for turning that complexity into a confident buying decision.',
+        approach: 'We shaped the product around a simple rhythm: frame the signal, show the context, and make the next action obvious.',
+        outcome: 'A calmer dashboard and sharper launch story gave the team a clearer way to demonstrate value in every sales conversation.',
+        metrics: [
+          { value: '32%', label: 'faster first-session comprehension' },
+          { value: '2.4x', label: 'more qualified demo requests' },
+        ],
+      },
       website: 'https://example.com',
       github: 'https://github.com',
     },
@@ -162,6 +171,15 @@ export const portfolio: Portfolio = {
       image:
         'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80',
       technologies: ['Brand Art Direction', 'UI', 'Web', 'Campaign'],
+      caseStudy: {
+        challenge: 'A culture-led studio needed a digital identity that could feel expressive without making its work difficult to scan or understand.',
+        approach: 'We paired an editorial type system with restrained motion, giving each project room to speak while keeping the navigation direct.',
+        outcome: 'The new platform made the studio easier to remember and gave every pitch a more consistent visual point of view.',
+        metrics: [
+          { value: '41%', label: 'longer average project viewing time' },
+          { value: '5', label: 'new inbound collaborations' },
+        ],
+      },
       behance: 'https://behance.net',
     },
     {
@@ -173,6 +191,15 @@ export const portfolio: Portfolio = {
       image:
         'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
       technologies: ['UX Strategy', 'Prototype', 'Figma', 'Research'],
+      caseStudy: {
+        challenge: 'Distributed product teams were losing time between research, decisions, and the handoff into production.',
+        approach: 'We created an editor-first workspace that made rationale visible and turned scattered feedback into a shared working language.',
+        outcome: 'Teams moved through critique with more confidence because the interface made both the decision and its context easy to revisit.',
+        metrics: [
+          { value: '28%', label: 'fewer duplicated decisions' },
+          { value: '3 days', label: 'saved per sprint cycle' },
+        ],
+      },
       website: 'https://example.com',
       github: 'https://github.com',
     },

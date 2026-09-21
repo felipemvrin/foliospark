@@ -53,9 +53,17 @@ export interface Project {
   description: string
   image: string
   technologies: string[]
+  caseStudy?: CaseStudy
   website?: string
   github?: string
   behance?: string
+}
+
+export interface CaseStudy {
+  challenge: string
+  approach: string
+  outcome: string
+  metrics: PortfolioMetric[]
 }
 
 export interface GitHubProject {
