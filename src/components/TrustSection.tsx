@@ -26,7 +26,7 @@ export function TrustSection() {
           <div className="grid gap-4 sm:grid-cols-3">
             {trustPoints.map((point, index) => (
               <motion.div
-                key={`${point.label}-${index}`}
+                key={point.label}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -43,9 +43,9 @@ export function TrustSection() {
         <div className="mt-10 border-t border-[var(--border)] pt-8">
           <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]">Trusted by</p>
           <div className="mt-5 flex flex-wrap gap-3">
-            {clientNames.map((name, index) => (
+            {clientNames.map((name) => (
               <span
-                key={`${name}-${index}`}
+                key={name}
                 className="rounded-full border border-[var(--border)] bg-[var(--background-alt)] px-3 py-2 text-xs uppercase tracking-[0.18em] text-[var(--muted)]"
               >
                 {name}

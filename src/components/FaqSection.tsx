@@ -41,12 +41,16 @@ export function FaqSection() {
         <div className="mt-10 space-y-4">
           {faqs.map((item, index) => {
             const isOpen = openIndex === index
-            const panelId = `faq-panel-${index}`
-            const buttonId = `faq-button-${index}`
+            const idSuffix = item.question
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-+|-+$/g, '')
+            const panelId = `faq-panel-${idSuffix}`
+            const buttonId = `faq-button-${idSuffix}`
 
             return (
               <motion.div
-                key={`${item.question}-${index}`}
+                key={item.question}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
