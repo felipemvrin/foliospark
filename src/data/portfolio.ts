@@ -25,6 +25,42 @@ export const portfolio: Portfolio = {
     'FolioSpark is a data-first portfolio system built for creatives who want their work to feel premium, human, and highly intentional.',
     'The system pairs editorial composition, responsive motion, and practical storytelling so a personal portfolio feels more like a living identity than a static CV.',
   ],
+  process: [
+    {
+      title: 'Frame the brief',
+      description: 'I turn scattered notes, ambitions, and market context into a clear story arc.',
+      detail: 'Discovery and strategic alignment set the tone before any visuals are designed.',
+    },
+    {
+      title: 'Shape the system',
+      description: 'The visual language, hierarchy, and motion are defined as one coherent product experience.',
+      detail: 'Design systems keep the work expressive without losing clarity or speed.',
+    },
+    {
+      title: 'Build with intent',
+      description: 'I move from prototype to production with accessibility, performance, and trust in mind.',
+      detail: 'Every interaction is intentional, responsive, and designed to support the message.',
+    },
+    {
+      title: 'Refine and launch',
+      description: 'Final polish focuses on conversion, audience clarity, and a memorable first impression.',
+      detail: 'The final launch feels premium because the product and story have been aligned from the start.',
+    },
+  ],
+  testimonials: [
+    {
+      quote: 'Aster made our positioning feel clearer, warmer, and far more premium. The final narrative didn’t just look good; it changed how people understood the business.',
+      name: 'Mila Rowan',
+      role: 'Founder',
+      company: 'Northstar Labs',
+    },
+    {
+      quote: 'The work balanced storytelling with production discipline. We got a portfolio that felt distinctive and a process that was easy to trust from day one.',
+      name: 'Kenji Sato',
+      role: 'Creative Director',
+      company: 'Mori Atelier',
+    },
+  ],
   experience: [
     {
       company: 'Northstar Labs',
