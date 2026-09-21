@@ -40,6 +40,16 @@ function createSessionId() {
     return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
   }
 
+  if (typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function' && typeof Blob !== 'undefined') {
+    const objectUrl = URL.createObjectURL(new Blob())
+    URL.revokeObjectURL(objectUrl)
+    const fallbackToken = objectUrl.split('/').pop()
+
+    if (fallbackToken) {
+      return fallbackToken
+    }
+  }
+
   return `${Date.now().toString(36)}-${globalThis.performance?.now?.().toString(36).replace('.', '') ?? '0'}`
 }
 
