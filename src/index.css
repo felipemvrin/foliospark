@@ -34,12 +34,59 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: var(--background);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--background) 90%, transparent) 0%,
+      color-mix(in srgb, var(--background) 100%, transparent) 100%
+    );
   color: var(--foreground);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+  opacity: 0.5;
 }
 
 ::selection {
   background: rgba(212, 163, 115, 0.22);
+}
+
+.button-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-shine::before {
+  content: '';
+  position: absolute;
+  inset: -30% auto -30% -20%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent);
+  transform: skewX(-20deg) translateX(-200%);
+  transition: transform 0.8s ease;
+}
+
+.button-shine:hover::before {
+  transform: skewX(-20deg) translateX(430%);
+}
+
+.input-shell {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.input-shell:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+  transform: translateY(-1px);
 }
 
 .soft-glow {

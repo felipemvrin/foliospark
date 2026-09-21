@@ -72,15 +72,15 @@ export function Hero() {
           >
             <motion.a
               href="#work"
-              whileHover={{ y: -2, scale: 1.02 }}
+              whileHover={{ y: -3, scale: 1.02, rotate: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] shadow-[0_12px_26px_rgba(212,163,115,0.28)] transition hover:shadow-[0_18px_40px_rgba(212,163,115,0.36)]"
+              className="button-shine inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] shadow-[0_12px_26px_rgba(212,163,115,0.28)] transition hover:shadow-[0_18px_40px_rgba(212,163,115,0.36)]"
             >
               Explore work <ArrowUpRight className="h-4 w-4" />
             </motion.a>
             <motion.a
               href="#contact"
-              whileHover={{ y: -2 }}
+              whileHover={{ y: -3, x: 2 }}
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
@@ -100,8 +100,8 @@ export function Hero() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: 0.35 + index * 0.12, ease: 'easeOut' }}
-                whileHover={{ y: -4 }}
-                className="border-l border-[var(--border)] px-3 first:border-l-0 first:pl-0"
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="cursor-default border-l border-[var(--border)] px-3 first:border-l-0 first:pl-0"
               >
                 <span className="block text-lg font-medium tracking-[-0.06em] text-[var(--foreground)]">{metric.value}</span>
                 <span>{metric.label}</span>
@@ -117,11 +117,12 @@ export function Hero() {
           className="relative"
         >
           <motion.div
-            animate={shouldAnimateAmbient ? { y: [0, -8, 0] } : { y: 0 }}
+            animate={shouldAnimateAmbient ? { y: [0, -8, 0], rotate: [0, 0.7, 0] } : { y: 0, rotate: 0 }}
             transition={shouldAnimateAmbient ? { duration: 6.5, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' } : { duration: 0 }}
             className="relative"
           >
-          <div
+          <motion.div
+            whileHover={{ y: -8, scale: 1.01 }}
             className="relative rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-4"
             style={{ boxShadow: 'var(--shadow-soft)' }}
           >
@@ -143,7 +144,7 @@ export function Hero() {
                 <ArrowDown className="h-4 w-4" />
               </div>
             </div>
-          </div>
+          </motion.div>
           </motion.div>
         </motion.div>
       </div>
