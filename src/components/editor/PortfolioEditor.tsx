@@ -2,13 +2,14 @@ import { useMemo, useRef, useState } from 'react'
 import { AlertTriangle, CheckCircle2, Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
 import { themePresets } from '../../data/themes'
+import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
 import { downloadPortfolio, parsePortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
-import type { BehanceProject, Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
+import type { BehanceProject, CaseStudy, Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
 
 const panelClassName = 'rounded-[1.8rem] border border-[var(--border)] bg-[var(--surface)] p-5'
 const nestedPanelClassName = 'rounded-[1.5rem] border border-[var(--border)] bg-[var(--background-alt)] p-4'
@@ -212,6 +213,25 @@ export function PortfolioEditor() {
     }))
   }
 
+  const updateProjectCaseStudy = (index: number, updates: Partial<CaseStudy>) => {
+    setData((current) => ({
+      ...current,
+      projects: current.projects.map((entry, itemIndex) => {
+        if (itemIndex !== index || !entry.caseStudy) {
+          return entry
+        }
+
+        return {
+          ...entry,
+          caseStudy: {
+            ...entry.caseStudy,
+            ...updates,
+          },
+        }
+      }),
+    }))
+  }
+
   const addProject = () => {
     setData((current) => ({
       ...current,
@@ -234,6 +254,21 @@ export function PortfolioEditor() {
       ...current,
       projects: current.projects.filter((_, itemIndex) => itemIndex !== index),
     }))
+  }
+
+  const addProjectCaseStudy = (index: number) => {
+    updateProject(index, {
+      caseStudy: {
+        challenge: 'Describe the core challenge.',
+        approach: 'Explain the approach and key decisions.',
+        outcome: 'Summarize the outcome and impact.',
+        metrics: [],
+      },
+    })
+  }
+
+  const removeProjectCaseStudy = (index: number) => {
+    updateProject(index, { caseStudy: undefined })
   }
 
   const updateBehanceProject = (index: number, updates: Partial<BehanceProject>) => {
@@ -836,6 +871,64 @@ export function PortfolioEditor() {
                     className={textareaClassName}
                   />
                 </FieldLabel>
+                <div className="mt-4 rounded-[1.3rem] border border-[var(--border)] bg-[var(--surface)] p-4">
+                  <div className="mb-4 flex items-center justify-between gap-4">
+                    <p className="text-[0.62rem] uppercase tracking-[0.24em] text-[var(--muted)]">Case study</p>
+                    {project.caseStudy ? (
+                      <button
+                        type="button"
+                        onClick={() => removeProjectCaseStudy(index)}
+                        className={actionButtonClassName}
+                      >
+                        Remove case study
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => addProjectCaseStudy(index)}
+                        className={actionButtonClassName}
+                      >
+                        Add case study
+                      </button>
+                    )}
+                  </div>
+                  {project.caseStudy ? (
+                    <div className="space-y-4">
+                      <FieldLabel label="Challenge">
+                        <textarea
+                          value={project.caseStudy.challenge}
+                          onChange={(event) => updateProjectCaseStudy(index, { challenge: event.target.value })}
+                          rows={3}
+                          className={textareaClassName}
+                        />
+                      </FieldLabel>
+                      <FieldLabel label="Approach">
+                        <textarea
+                          value={project.caseStudy.approach}
+                          onChange={(event) => updateProjectCaseStudy(index, { approach: event.target.value })}
+                          rows={3}
+                          className={textareaClassName}
+                        />
+                      </FieldLabel>
+                      <FieldLabel label="Outcome">
+                        <textarea
+                          value={project.caseStudy.outcome}
+                          onChange={(event) => updateProjectCaseStudy(index, { outcome: event.target.value })}
+                          rows={3}
+                          className={textareaClassName}
+                        />
+                      </FieldLabel>
+                      <FieldLabel label="Metrics (one per line: value | label)">
+                        <textarea
+                          value={formatCaseStudyMetrics(project.caseStudy.metrics)}
+                          onChange={(event) => updateProjectCaseStudy(index, { metrics: parseCaseStudyMetrics(event.target.value) })}
+                          rows={4}
+                          className={textareaClassName}
+                        />
+                      </FieldLabel>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             ))}
           </div>
