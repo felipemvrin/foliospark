@@ -2,25 +2,33 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import { getMailtoHref } from '../lib/links'
+import { getSafeExternalHref } from '../lib/links'
 import { usePortfolioStore } from '../store/portfolioStore'
 
-const navItems = [
-  { label: 'About', href: '#about' },
-  { label: 'Work', href: '#work' },
-  { label: 'Process', href: '#process' },
-  { label: 'Services', href: '#services' },
-  { label: 'GitHub', href: '#github' },
-  { label: 'Journal', href: '#journal' },
-  { label: 'Resume', href: '#resume' },
-  { label: 'Contact', href: '#contact' },
-]
+function getSafeNavigationHref(target: string) {
+  const trimmedTarget = target.trim()
+
+  if (!trimmedTarget) {
+    return null
+  }
+
+  if (trimmedTarget.startsWith('#')) {
+    return trimmedTarget
+  }
+
+  return getSafeExternalHref(trimmedTarget)
+}
 
 export function NavBar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const email = usePortfolioStore((state) => state.data.profile.email)
-  const emailHref = getMailtoHref(email)
+  const siteSettings = usePortfolioStore((state) => state.data.siteSettings)
+  const navItems = siteSettings?.navigation.items
+    .filter((item) => item.visible)
+    .map((item) => ({ ...item, href: getSafeNavigationHref(item.target) }))
+    .filter((item): item is typeof item & { href: string } => Boolean(item.href)) ?? []
+  const navigation = siteSettings?.navigation
+  const ctaHref = getSafeNavigationHref(navigation?.ctaTarget ?? '') ?? '#contact'
 
   useEffect(() => {
     const hero = document.getElementById('top')
@@ -93,15 +101,15 @@ export function NavBar() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8" aria-label="Main navigation">
         <a href="#top" onClick={() => setOpen(false)} className="inline-flex items-center gap-3 text-sm font-medium uppercase tracking-[0.35em] text-[var(--foreground)]">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[0.55rem] tracking-[0.2em]">
-            F
+            {siteSettings?.logoMark || 'F'}
           </span>
-          FolioSpark
+          {siteSettings?.logoText || 'FolioSpark'}
         </a>
 
-        <div className="hidden items-center gap-8 md:flex">
+        {navigation?.visible !== false ? <div className="hidden items-center gap-8 md:flex">
           {navItems.map((item) => (
             <motion.a
-              key={item.href}
+              key={item.id}
               href={item.href}
               whileHover={{ y: -2 }}
               className="text-[0.7rem] font-medium uppercase tracking-[0.24em] text-[var(--muted)] transition hover:text-[var(--foreground)]"
@@ -109,23 +117,19 @@ export function NavBar() {
               {item.label}
             </motion.a>
           ))}
-        </div>
+        </div> : null}
 
         <div className="hidden items-center gap-3 md:flex">
-          {emailHref ? (
+          {navigation?.visible !== false ? (
             <motion.a
-              href={emailHref}
+              href={ctaHref}
               whileHover={{ y: -2, scale: 1.02, rotate: -1 }}
               whileTap={{ scale: 0.98 }}
               className="button-shine inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:shadow-[0_18px_35px_rgba(17,17,17,0.08)]"
             >
-              Start a project <ArrowUpRight className="h-3.5 w-3.5" />
+              {navigation?.ctaLabel || 'Start a project'} <ArrowUpRight className="h-3.5 w-3.5" />
             </motion.a>
-          ) : (
-            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] opacity-60">
-              Start a project <ArrowUpRight className="h-3.5 w-3.5" />
-            </span>
-          )}
+          ) : null}
         </div>
 
         <button
@@ -153,7 +157,7 @@ export function NavBar() {
             <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5">
               {navItems.map((item) => (
                 <motion.a
-                  key={item.href}
+                  key={item.id}
                   href={item.href}
                   onClick={() => setOpen(false)}
                   initial={{ opacity: 0, x: -8 }}

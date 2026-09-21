@@ -1,4 +1,4 @@
-import type { Portfolio } from '../types/portfolio'
+import type { Portfolio, SiteSettings } from '../types/portfolio'
 import { getSafeExternalHref } from './links'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -25,6 +25,64 @@ function isCaseStudy(value: unknown) {
     hasStringField(value, 'outcome') &&
     Array.isArray(value.metrics) &&
     value.metrics.every((metric) => isRecord(metric) && hasStringField(metric, 'value') && hasStringField(metric, 'label'))
+  )
+}
+
+function isSafeNavigationTarget(value: string) {
+  const target = value.trim()
+
+  if (!target) {
+    return false
+  }
+
+  if (target.startsWith('#')) {
+    return true
+  }
+
+  return Boolean(getSafeExternalHref(target))
+}
+
+function isSafeNavigationTargetField(value: Record<string, unknown>, key: string) {
+  return typeof value[key] === 'string' && isSafeNavigationTarget(value[key])
+}
+
+function isSiteSettings(value: unknown): value is SiteSettings {
+  return (
+    isRecord(value) &&
+    hasStringField(value, 'title') &&
+    hasStringField(value, 'description') &&
+    hasStringField(value, 'logoText') &&
+    hasStringField(value, 'logoMark') &&
+    hasOptionalStringField(value, 'faviconUrl') &&
+    isSafeUrlField(value, 'faviconUrl', false) &&
+    isRecord(value.navigation) &&
+    typeof value.navigation.visible === 'boolean' &&
+    hasStringField(value.navigation, 'ctaLabel') &&
+    hasStringField(value.navigation, 'ctaTarget') &&
+    isSafeNavigationTargetField(value.navigation, 'ctaTarget') &&
+    Array.isArray(value.navigation.items) &&
+    value.navigation.items.every(
+      (item) =>
+        isRecord(item) &&
+        hasStringField(item, 'id') &&
+        hasStringField(item, 'label') &&
+        hasStringField(item, 'target') &&
+        isSafeNavigationTargetField(item, 'target') &&
+        typeof item.visible === 'boolean',
+    ) &&
+    isRecord(value.footer) &&
+    typeof value.footer.visible === 'boolean' &&
+    hasStringField(value.footer, 'copyright') &&
+    hasStringField(value.footer, 'tagline') &&
+    typeof value.footer.showLocation === 'boolean' &&
+    typeof value.footer.showSocialLinks === 'boolean' &&
+    Array.isArray(value.sections) &&
+    value.sections.every(
+      (section) =>
+        isRecord(section) &&
+        hasStringField(section, 'id') &&
+        typeof section.visible === 'boolean',
+    )
   )
 }
 
@@ -185,7 +243,8 @@ export function isPortfolio(value: unknown): value is Portfolio {
         hasStringField(entry, 'label') &&
         hasStringField(entry, 'url') &&
         isSafeUrlField(entry, 'url'),
-    )
+    ) &&
+    (value.siteSettings === undefined || isSiteSettings(value.siteSettings))
   )
 }
 

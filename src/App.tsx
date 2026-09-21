@@ -26,6 +26,7 @@ import { ThemeWrapper } from './components/ThemeWrapper'
 import { WorkSection } from './components/WorkSection'
 import { usePortfolioStore } from './store/portfolioStore'
 import { useThemeStore } from './store/themeStore'
+import { getSafeExternalHref } from './lib/links'
 
 function PublishedPortfolioLoader({ children }: { children: React.ReactNode }) {
   const setData = usePortfolioStore((state) => state.setData)
@@ -94,6 +95,12 @@ function App() {
 
 function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
   const behanceProjects = useBehanceProjects()
+  const siteSettings = usePortfolioStore((state) => state.data.siteSettings)
+  const profile = usePortfolioStore((state) => state.data.profile)
+  const socialLinks = usePortfolioStore((state) => state.data.socialLinks)
+  const visibleSocialLinks = socialLinks
+    .map((link) => ({ ...link, href: getSafeExternalHref(link.url) }))
+    .filter((link): link is typeof link & { href: string } => Boolean(link.href))
   const handleSkipLinkClick = (event: MouseEvent<HTMLAnchorElement>) => {
     const mainContent = document.getElementById('main-content')
 
@@ -136,12 +143,22 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
             </>
           )}
         </main>
-        <footer className="border-t border-[var(--border)] bg-[var(--background)]">
+        {siteSettings?.footer.visible !== false ? <footer className="border-t border-[var(--border)] bg-[var(--background)]">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-[var(--muted)] sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-            <p>FolioSpark © 2026</p>
-            <p className="uppercase tracking-[0.2em] text-[var(--muted)]">Your professional story, in motion.</p>
+            <p>{siteSettings?.footer.copyright || 'FolioSpark © 2026'}</p>
+            <p className="uppercase tracking-[0.2em] text-[var(--muted)]">{siteSettings?.footer.tagline || 'Your professional story, in motion.'}</p>
+            {siteSettings?.footer.showLocation !== false ? <p>{profile.location}</p> : null}
           </div>
-        </footer>
+          {siteSettings?.footer.showSocialLinks !== false && visibleSocialLinks.length > 0 ? (
+            <div className="mx-auto flex max-w-7xl flex-wrap gap-4 px-5 pb-8 text-xs text-[var(--muted)] sm:px-6 lg:px-8">
+              {visibleSocialLinks.map((link) => (
+                <a key={`${link.platform}-${link.label}`} href={link.href} target="_blank" rel="noreferrer" className="transition hover:text-[var(--foreground)]">
+                  {link.label || link.platform}
+                </a>
+              ))}
+            </div>
+          ) : null}
+        </footer> : null}
       </div>
     </ThemeWrapper>
   )

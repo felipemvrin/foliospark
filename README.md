@@ -25,6 +25,7 @@ This project is built as a modern React + TypeScript + Vite application with a d
 - Editable Behance project collection with persistent visual content
 - Automated GitHub Pages deployment from `main`
 - Cleaner architecture for future CMS and publishing expansion
+- Site customization roadmap for navigation, sections, branding, favicon, and footer administration
 
 ## Tech Stack
 
@@ -51,6 +52,47 @@ src/
 ├── App.tsx
 └── main.tsx
 ```
+
+## Site administration
+
+FolioSpark separates professional content from presentation settings:
+
+- `Portfolio` contains profile, work, experience, services, case studies, and social content.
+- `SiteSettings` contains the site title, description, logo, favicon, navigation, footer, and section visibility.
+
+This separation allows the entire public site to be customized without turning visual components into a collection of hardcoded form fields. Legacy portfolio exports remain valid because `siteSettings` is optional and receives safe defaults when loaded.
+
+The administration roadmap is organized into these stages:
+
+1. Site Settings Foundation
+2. Navigation Builder
+3. Section Visibility and Ordering
+4. Branding, title, metadata, and favicon
+5. Footer Builder
+6. Administration UI System
+7. Editor productivity with auto-save and undo/redo
+8. Visual QA and publishing confidence
+
+The current active stage is always reported in implementation updates. Each stage must include its goal, completed work, remaining work, validation results, and the next recommended stage.
+
+### Recommended administration UI
+
+The current stack is sufficient for the public portfolio. For the editor surface, the recommended accessible primitives are Radix UI with shadcn/ui-owned components:
+
+```bash
+npx shadcn@latest init
+npx shadcn@latest add tabs switch select dialog popover tooltip separator input textarea alert
+```
+
+These components should be introduced gradually and customized to FolioSpark's existing tokens. Do not add a second design system or replace the editorial public interface with a generic admin theme.
+
+For accessible section reordering in a later stage:
+
+```bash
+npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
+```
+
+`@dnd-kit` should not be added until basic section visibility and settings persistence are stable.
 
 ## Local Development
 
@@ -110,10 +152,15 @@ To connect Behance through a server-side proxy, set `VITE_BEHANCE_PROXY_URL` bef
 
 ## Roadmap
 
-- Security hardening: URL validation, bounded public preview payloads, secure publishing endpoint configuration, and deployment header guidance
-- Case study deep dives with measurable outcomes
-- Resume / CV presentation mode
-- Hosted analytics dashboard and retention reports
+- Phase 35: Site Settings Foundation, currently in progress
+- Phase 36: Navigation Builder
+- Phase 37: Section Visibility and Ordering
+- Phase 38: Branding, metadata, and customizable SVG favicon
+- Phase 39: Footer Builder
+- Phase 40: Administration UI System
+- Phase 41: Editor productivity with auto-save, undo/redo, and draft clarity
+- Phase 42: Visual QA, accessibility, performance, and publishing confidence
+- Later: hosted analytics dashboard and retention reports
 
 ## Screenshots
 

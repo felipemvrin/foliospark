@@ -112,6 +112,53 @@ export interface ServicePackage {
   featured?: boolean
 }
 
+export type SiteSectionId =
+  | 'about'
+  | 'work'
+  | 'process'
+  | 'services'
+  | 'trust'
+  | 'github'
+  | 'journal'
+  | 'behance'
+  | 'experience'
+  | 'skills'
+  | 'resume'
+  | 'faq'
+  | 'contact'
+
+export interface SiteNavigationItem {
+  id: string
+  label: string
+  target: string
+  visible: boolean
+}
+
+export interface SiteSettings {
+  title: string
+  description: string
+  logoText: string
+  logoMark: string
+  faviconUrl?: string
+  navigation: {
+    visible: boolean
+    items: SiteNavigationItem[]
+    ctaLabel: string
+    ctaTarget: string
+  }
+  footer: {
+    visible: boolean
+    copyright: string
+    tagline: string
+    showLocation: boolean
+    showSocialLinks: boolean
+  }
+  sections: Array<{
+    id: SiteSectionId
+    visible: boolean
+  }>
+}
+
 export interface Portfolio {
   profile: Profile
   metrics: PortfolioMetric[]
@@ -126,4 +173,5 @@ export interface Portfolio {
   githubProjects: GitHubProject[]
   behanceProjects: BehanceProject[]
   socialLinks: SocialLink[]
+  siteSettings?: SiteSettings
 }

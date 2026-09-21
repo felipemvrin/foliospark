@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { AlertTriangle, CheckCircle2, Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
 import { portfolio as defaultPortfolio } from '../../data/portfolio'
+import { createDefaultSiteSettings } from '../../data/siteSettings'
 import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
@@ -10,7 +11,7 @@ import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from
 import { downloadPortfolio, parsePortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
-import type { BehanceProject, CaseStudy, Education, Experience, PortfolioMetric, Profile, Project, SkillGroup, SocialLink } from '../../types/portfolio'
+import type { BehanceProject, CaseStudy, Education, Experience, Portfolio, PortfolioMetric, Profile, Project, SiteSettings, SkillGroup, SocialLink } from '../../types/portfolio'
 
 const panelClassName = 'rounded-[1.8rem] border border-[var(--border)] bg-[var(--surface)] p-5'
 const nestedPanelClassName = 'rounded-[1.5rem] border border-[var(--border)] bg-[var(--background-alt)] p-4'
@@ -107,6 +108,31 @@ export function PortfolioEditor() {
         [field]: value,
       },
     }))
+  }
+
+  const updateSiteSettings = (updates: Partial<SiteSettings>) => {
+    setData((current) => ({
+      ...current,
+      siteSettings: {
+        ...createDefaultSiteSettings(),
+        ...current.siteSettings,
+        ...updates,
+      },
+    }))
+  }
+
+  const updateFooterSettings = (updates: Partial<NonNullable<Portfolio['siteSettings']>['footer']>) => {
+    setData((current) => {
+      const settings = current.siteSettings ?? createDefaultSiteSettings()
+
+      return {
+        ...current,
+        siteSettings: {
+          ...settings,
+          footer: { ...settings.footer, ...updates },
+        },
+      }
+    })
   }
 
   const updateAbout = (value: string) => {
@@ -543,6 +569,93 @@ export function PortfolioEditor() {
       </section>
 
       <div className="space-y-8">
+        <div className={panelClassName}>
+          <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Site settings</p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Control the public site's identity and footer without changing portfolio content.</p>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <FieldLabel label="Site title">
+              <input
+                value={data.siteSettings?.title ?? 'FolioSpark'}
+                onChange={(event) => updateSiteSettings({ title: event.target.value })}
+                className={inputClassName}
+              />
+            </FieldLabel>
+            <FieldLabel label="Logo text">
+              <input
+                value={data.siteSettings?.logoText ?? 'FolioSpark'}
+                onChange={(event) => updateSiteSettings({ logoText: event.target.value })}
+                className={inputClassName}
+              />
+            </FieldLabel>
+            <FieldLabel label="Logo mark">
+              <input
+                value={data.siteSettings?.logoMark ?? 'F'}
+                onChange={(event) => updateSiteSettings({ logoMark: event.target.value.slice(0, 2) })}
+                className={inputClassName}
+                maxLength={2}
+              />
+            </FieldLabel>
+            <FieldLabel label="Favicon URL">
+              <input
+                value={data.siteSettings?.faviconUrl ?? ''}
+                onChange={(event) => updateSiteSettings({ faviconUrl: event.target.value })}
+                className={inputClassName}
+                placeholder="https://example.com/favicon.svg"
+              />
+            </FieldLabel>
+            <div className="md:col-span-2">
+              <FieldLabel label="Site description">
+                <textarea
+                  value={data.siteSettings?.description ?? ''}
+                  onChange={(event) => updateSiteSettings({ description: event.target.value })}
+                  rows={3}
+                  className={textareaClassName}
+                />
+              </FieldLabel>
+            </div>
+          </div>
+          <div className="mt-6 grid gap-4 border-t border-[var(--border)] pt-5 md:grid-cols-2">
+            <FieldLabel label="Footer copyright">
+              <input
+                value={data.siteSettings?.footer.copyright ?? ''}
+                onChange={(event) => updateFooterSettings({ copyright: event.target.value })}
+                className={inputClassName}
+              />
+            </FieldLabel>
+            <FieldLabel label="Footer tagline">
+              <input
+                value={data.siteSettings?.footer.tagline ?? ''}
+                onChange={(event) => updateFooterSettings({ tagline: event.target.value })}
+                className={inputClassName}
+              />
+            </FieldLabel>
+            <label className="flex items-center gap-3 text-sm text-[var(--muted)]">
+              <input
+                type="checkbox"
+                checked={data.siteSettings?.footer.visible ?? true}
+                onChange={(event) => updateFooterSettings({ visible: event.target.checked })}
+              />
+              Show footer
+            </label>
+            <label className="flex items-center gap-3 text-sm text-[var(--muted)]">
+              <input
+                type="checkbox"
+                checked={data.siteSettings?.footer.showLocation ?? true}
+                onChange={(event) => updateFooterSettings({ showLocation: event.target.checked })}
+              />
+              Show location in footer
+            </label>
+            <label className="flex items-center gap-3 text-sm text-[var(--muted)]">
+              <input
+                type="checkbox"
+                checked={data.siteSettings?.footer.showSocialLinks ?? true}
+                onChange={(event) => updateFooterSettings({ showSocialLinks: event.target.checked })}
+              />
+              Show social links in footer
+            </label>
+          </div>
+        </div>
+
         <div className={panelClassName}>
           <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Profile</p>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
