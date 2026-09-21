@@ -45,8 +45,8 @@ export function FaqSection() {
               .toLowerCase()
               .replace(/[^a-z0-9]+/g, '-')
               .replace(/^-+|-+$/g, '')
-            const panelId = `faq-panel-${idSuffix}`
-            const buttonId = `faq-button-${idSuffix}`
+            const panelId = `faq-panel-${idSuffix}-${index}`
+            const buttonId = `faq-button-${idSuffix}-${index}`
 
             return (
               <motion.div
