@@ -26,6 +26,14 @@ describe('publishing API client', () => {
     )
   })
 
+  it('supports relative deployment base paths when building a durable public URL', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', '/foliospark/?theme=Mono#editor')).toBe(
+      'https://example.com/foliospark/?view=published&slug=aster-vale-studio',
+    )
+  })
+
   it('fetches and validates a published portfolio', async () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com')
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
