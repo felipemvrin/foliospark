@@ -53,7 +53,7 @@ FolioSpark currently reads as warm editorial minimalism with a single clay accen
 
 ### P0: release blockers
 
-None identified in this audit. The application builds, lint passes, and the public workflow has meaningful loading, error, and fallback states.
+No functional blockers were identified in this visual audit. Build and lint status should remain CI-driven, and the public workflow currently presents meaningful loading, error, and fallback states.
 
 ### P1: high-value improvements
 
