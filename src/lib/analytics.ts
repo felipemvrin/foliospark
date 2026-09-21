@@ -1,4 +1,4 @@
-export type AnalyticsEventName = 'page_view' | 'outbound_click'
+export type AnalyticsEventName = 'page_view' | 'outbound_click' | 'inquiry_started'
 
 export interface AnalyticsEvent {
   name: AnalyticsEventName

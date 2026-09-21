@@ -4,6 +4,7 @@ import type { FormEvent } from 'react'
 import { ArrowUpRight, ExternalLink, Mail, MapPin, Phone, Send } from 'lucide-react'
 
 import { getMailtoHref, getSafeExternalHref, getSafePhoneHref } from '../lib/links'
+import { trackAnalyticsEvent } from '../lib/analytics'
 import { usePortfolioStore } from '../store/portfolioStore'
 
 export function ContactSection() {
@@ -34,9 +35,20 @@ export function ContactSection() {
     const form = new FormData(event.currentTarget)
     const senderName = String(form.get('name') ?? '').trim()
     const senderEmail = String(form.get('email') ?? '').trim()
+    const projectType = String(form.get('projectType') ?? '').trim()
+    const budget = String(form.get('budget') ?? '').trim()
+    const timeline = String(form.get('timeline') ?? '').trim()
     const message = String(form.get('message') ?? '').trim()
-    const subject = `Project inquiry from ${senderName}`
-    const body = `Name: ${senderName}\nEmail: ${senderEmail}\n\n${message}`
+    const subject = `${projectType || 'Project inquiry'} from ${senderName}`
+    const body = [
+      `Name: ${senderName}`,
+      `Email: ${senderEmail}`,
+      `Project type: ${projectType || 'Not specified'}`,
+      `Budget: ${budget || 'Not specified'}`,
+      `Timeline: ${timeline || 'Not specified'}`,
+      '',
+      message,
+    ].join('\n')
 
     const inquiryHref = getMailtoHref(portfolio.profile.email, subject, body)
 
@@ -45,6 +57,14 @@ export function ContactSection() {
       return
     }
 
+    void trackAnalyticsEvent({
+      name: 'inquiry_started',
+      properties: {
+        projectType: projectType || 'unspecified',
+        budget: budget || 'unspecified',
+        timeline: timeline || 'unspecified',
+      },
+    })
     window.location.href = inquiryHref
     setFormMessage('Your email client is opening.')
   }
@@ -84,6 +104,36 @@ export function ContactSection() {
           <label className="text-sm opacity-80">
             <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">Email</span>
             <input name="email" type="email" required className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none" />
+          </label>
+          <label className="text-sm opacity-80">
+            <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">Project type</span>
+            <select name="projectType" className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none">
+              <option value="">Select an option</option>
+              <option value="Brand positioning">Brand positioning</option>
+              <option value="Portfolio experience">Portfolio experience</option>
+              <option value="Product narrative">Product narrative</option>
+              <option value="Something else">Something else</option>
+            </select>
+          </label>
+          <label className="text-sm opacity-80">
+            <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">Budget range</span>
+            <select name="budget" className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none">
+              <option value="">Select an option</option>
+              <option value="Under $2,500">Under $2,500</option>
+              <option value="$2,500 – $5,000">$2,500 – $5,000</option>
+              <option value="$5,000 – $10,000">$5,000 – $10,000</option>
+              <option value="$10,000+">$10,000+</option>
+            </select>
+          </label>
+          <label className="text-sm opacity-80">
+            <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">Timeline</span>
+            <select name="timeline" className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none">
+              <option value="">Select an option</option>
+              <option value="Exploring">Exploring</option>
+              <option value="Within 1 month">Within 1 month</option>
+              <option value="1–3 months">1–3 months</option>
+              <option value="3+ months">3+ months</option>
+            </select>
           </label>
           <label className="text-sm opacity-80 md:col-span-2">
             <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">Project brief</span>
