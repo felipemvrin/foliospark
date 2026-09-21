@@ -29,6 +29,7 @@ Status: In progress
 - Resume / CV section for recruiters and agency partners — in progress in phase 28
 - Stronger editorial brand storytelling and narrative structure
 - More precise lead qualification flows — completed in phase 29
+- Visual audit and interaction modernization — completed in phase 30
 
 ### Lower priority
 - CMS-like editing improvements for advanced portfolio management
@@ -45,10 +46,12 @@ Status: In progress
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Complete downloadable resume metadata and document export
-2. Stronger editorial brand storytelling and narrative structure
-3. Advanced analytics and publishing dashboard
-4. Expanded integrations and exports
+1. Replace navigation scroll state with observer-based state
+2. Normalize CTA language and reduce repeated eyebrow labels
+3. Add global focus-visible tokens and keyboard QA
+4. Refresh display typography and add one controlled project-card interaction
+5. Complete downloadable resume metadata and document export
+6. Advanced analytics and publishing dashboard
 
 ## Notes
 This roadmap is intentionally sequenced to maximize business value before purely decorative enhancements. The aim is to keep the product premium, credible, and conversion-ready without sacrificing maintainability or production safety.
