@@ -23,12 +23,19 @@ export function NavBar() {
   const emailHref = getMailtoHref(email)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 18)
+    const hero = document.getElementById('top')
 
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
+    if (!hero || !('IntersectionObserver' in window)) {
+      return
+    }
 
-    return () => window.removeEventListener('scroll', onScroll)
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrolled(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-18px 0px 0px' },
+    )
+    observer.observe(hero)
+
+    return () => observer.disconnect()
   }, [])
 
   useEffect(() => {
