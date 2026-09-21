@@ -16,6 +16,8 @@ const basePortfolio = {
   },
   metrics: [],
   about: [],
+  process: [],
+  testimonials: [],
   experience: [],
   education: [],
   skills: [],
@@ -32,5 +34,23 @@ describe('isPortfolio', () => {
 
   it('rejects a profile slug when it is not a string', () => {
     expect(isPortfolio({ ...basePortfolio, profile: { ...basePortfolio.profile, slug: 123 } })).toBe(false)
+  })
+
+  it('rejects process entries when required fields are missing', () => {
+    expect(
+      isPortfolio({
+        ...basePortfolio,
+        process: [{ title: 'Frame', description: 'Discovery first' }],
+      }),
+    ).toBe(false)
+  })
+
+  it('rejects testimonials entries when required fields are missing', () => {
+    expect(
+      isPortfolio({
+        ...basePortfolio,
+        testimonials: [{ quote: 'Great work', name: 'Aster', role: 'Founder' }],
+      }),
+    ).toBe(false)
   })
 })
