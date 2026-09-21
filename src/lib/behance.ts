@@ -47,6 +47,24 @@ export function getBehanceProxyUrl() {
   return getSafeExternalHref(value)
 }
 
+export function getResolvedBehanceProjects({
+  savedProjects,
+  remoteProjects,
+  remoteEndpoint,
+  activeEndpoint,
+}: {
+  savedProjects: BehanceProject[]
+  remoteProjects?: BehanceProject[] | null
+  remoteEndpoint?: string | null
+  activeEndpoint?: string | null
+}) {
+  if (Array.isArray(remoteProjects) && remoteEndpoint && activeEndpoint && remoteEndpoint === activeEndpoint) {
+    return remoteProjects
+  }
+
+  return savedProjects
+}
+
 export async function fetchBehanceProjects(endpoint: string, signal?: AbortSignal): Promise<BehanceProject[]> {
   const response = await fetch(endpoint, {
     headers: { Accept: 'application/json' },

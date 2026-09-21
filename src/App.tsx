@@ -7,6 +7,7 @@ import { ContactSection } from './components/ContactSection'
 import { ExperienceSection } from './components/ExperienceSection'
 import { GitHubSection } from './components/GitHubSection'
 import { Hero } from './components/Hero'
+import { useBehanceProjects } from './hooks/useBehanceProjects'
 import { isPublicPreview } from './lib/publicPreview'
 import { fetchPublishedPortfolio, isPublishedView } from './lib/publishingApi'
 import { JournalSection } from './components/JournalSection'
@@ -86,6 +87,7 @@ function App() {
 }
 
 function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
+  const behanceProjects = useBehanceProjects()
 
   return (
     <ThemeWrapper>
@@ -97,8 +99,8 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
           <AboutSection />
           <WorkSection />
           <GitHubSection />
-          <JournalSection />
-          <BehanceSection />
+          <JournalSection projects={behanceProjects.projects} />
+          <BehanceSection {...behanceProjects} />
           <ExperienceSection />
           <SkillsSection />
           <ContactSection />

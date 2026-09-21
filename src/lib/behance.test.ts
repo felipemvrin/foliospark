@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { fetchBehanceProjects, getBehanceProxyUrl } from './behance'
+import { fetchBehanceProjects, getBehanceProxyUrl, getResolvedBehanceProjects } from './behance'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -79,5 +79,31 @@ describe('getBehanceProxyUrl', () => {
     vi.stubEnv('VITE_BEHANCE_PROXY_URL', 'javascript:alert(1)')
 
     expect(getBehanceProxyUrl()).toBeNull()
+  })
+})
+
+describe('getResolvedBehanceProjects', () => {
+  it('prefers proxy-refreshed projects when the active endpoint matches', () => {
+    const savedProjects = [{ title: 'Saved', cover: 'https://images.example.com/saved.jpg', url: 'https://behance.net/saved', description: 'Saved project', category: 'Saved', publishedAt: '2025', tags: [] }]
+    const remoteProjects = [{ title: 'Remote', cover: 'https://images.example.com/remote.jpg', url: 'https://behance.net/remote', description: 'Remote project', category: 'Remote', publishedAt: '2026', tags: [] }]
+
+    expect(getResolvedBehanceProjects({
+      savedProjects,
+      remoteProjects,
+      remoteEndpoint: 'https://proxy.example.com/behance',
+      activeEndpoint: 'https://proxy.example.com/behance',
+    })).toEqual(remoteProjects)
+  })
+
+  it('falls back to saved projects when the proxy result is stale', () => {
+    const savedProjects = [{ title: 'Saved', cover: 'https://images.example.com/saved.jpg', url: 'https://behance.net/saved', description: 'Saved project', category: 'Saved', publishedAt: '2025', tags: [] }]
+    const remoteProjects = [{ title: 'Remote', cover: 'https://images.example.com/remote.jpg', url: 'https://behance.net/remote', description: 'Remote project', category: 'Remote', publishedAt: '2026', tags: [] }]
+
+    expect(getResolvedBehanceProjects({
+      savedProjects,
+      remoteProjects,
+      remoteEndpoint: 'https://proxy.example.com/old-behance',
+      activeEndpoint: 'https://proxy.example.com/behance',
+    })).toEqual(savedProjects)
   })
 })
