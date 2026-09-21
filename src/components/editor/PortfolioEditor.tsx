@@ -255,19 +255,7 @@ export function PortfolioEditor() {
       ...current,
       projects: current.projects.filter((_, itemIndex) => itemIndex !== index),
     }))
-    setProjectCaseStudyMetricDrafts((current) =>
-      Object.fromEntries(
-        Object.entries(current).flatMap(([draftIndex, value]) => {
-          const numericIndex = Number(draftIndex)
-
-          if (numericIndex === index) {
-            return []
-          }
-
-          return [[String(numericIndex > index ? numericIndex - 1 : numericIndex), value]]
-        }),
-      ),
-    )
+    setProjectCaseStudyMetricDrafts({})
   }
 
   const addProjectCaseStudy = (index: number) => {
