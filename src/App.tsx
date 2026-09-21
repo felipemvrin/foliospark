@@ -12,6 +12,7 @@ import { isPublicPreview } from './lib/publicPreview'
 import { fetchPublishedPortfolio, isPublishedView } from './lib/publishingApi'
 import { JournalSection } from './components/JournalSection'
 import { ProcessSection } from './components/ProcessSection'
+import { ServicesSection } from './components/ServicesSection'
 import { NavBar } from './components/NavBar'
 import { PortfolioEditor } from './components/editor/PortfolioEditor'
 import { ThemePanel } from './components/editor/ThemePanel'
@@ -100,6 +101,7 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
           <AboutSection />
           <WorkSection />
           <ProcessSection />
+          <ServicesSection />
           <GitHubSection />
           <JournalSection projects={behanceProjects.projects} />
           <BehanceSection {...behanceProjects} />

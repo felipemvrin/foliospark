@@ -61,6 +61,27 @@ export const portfolio: Portfolio = {
       company: 'Mori Atelier',
     },
   ],
+  services: [
+    {
+      name: 'Brand Positioning',
+      price: '$2,400',
+      description: 'A focused design sprint for founders who need sharper story, stronger message, and more persuasive visuals.',
+      features: ['Strategic positioning', 'Visual system direction', 'Launch-ready story framing'],
+      featured: true,
+    },
+    {
+      name: 'Portfolio Experience',
+      price: '$3,800',
+      description: 'A premium portfolio build for individuals and studios that want their work to feel memorable and credible.',
+      features: ['Art direction', 'Responsive storytelling', 'Editing and copy refinement'],
+    },
+    {
+      name: 'Product Narrative',
+      price: '$5,600',
+      description: 'A deeper product storytelling and interface package for brands that need a stronger digital presence.',
+      features: ['Messaging system', 'UX and landing flow', 'Conversion-focused polish'],
+    },
+  ],
   experience: [
     {
       company: 'Northstar Labs',
