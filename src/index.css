@@ -124,10 +124,19 @@ a {
 
 @media print {
   body::before,
-  .resume-section ~ *,
   header,
-  footer {
+  footer,
+  main > :not(.resume-section) {
     display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  #root,
+  main {
+    min-height: auto !important;
   }
 
   .resume-section {

@@ -45,8 +45,8 @@ export function ResumeSection() {
               <p className="text-sm text-[var(--muted)]">{portfolio.profile.location}</p>
             </div>
             <div className="mt-8 space-y-8">
-              {portfolio.experience.map((item) => (
-                <article key={`${item.company}-${item.period}`} className="grid gap-3 border-l border-[var(--accent)] pl-5 sm:grid-cols-[0.7fr_1.5fr] sm:gap-6">
+              {portfolio.experience.map((item, index) => (
+                <article key={`${item.company}-${item.period}-${index}`} className="grid gap-3 border-l border-[var(--accent)] pl-5 sm:grid-cols-[0.7fr_1.5fr] sm:gap-6">
                   <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{item.period}</p>
                   <div>
                     <h4 className="text-xl font-medium">{item.role}</h4>
@@ -62,8 +62,8 @@ export function ResumeSection() {
             <div>
               <h3 className="text-2xl font-medium">Education</h3>
               <div className="mt-6 space-y-6">
-                {portfolio.education.map((item) => (
-                  <article key={`${item.institution}-${item.period}`}>
+                {portfolio.education.map((item, index) => (
+                  <article key={`${item.institution}-${item.period}-${index}`}>
                     <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{item.period}</p>
                     <h4 className="mt-2 text-lg font-medium">{item.degree}</h4>
                     <p className="mt-1 text-sm text-[var(--accent)]">{item.institution}</p>
@@ -74,8 +74,8 @@ export function ResumeSection() {
             <div>
               <h3 className="text-2xl font-medium">Capabilities</h3>
               <div className="mt-6 space-y-5">
-                {portfolio.skills.map((group) => (
-                  <div key={group.category}>
+                {portfolio.skills.map((group, index) => (
+                  <div key={`${group.category}-${index}`}>
                     <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{group.category}</p>
                     <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{group.items.join(' · ')}</p>
                   </div>
