@@ -1,7 +1,7 @@
 import { themePresets } from '../data/themes'
 import type { Portfolio } from '../types/portfolio'
 import type { ThemePresetName } from '../types/theme'
-import { isPortfolio } from './portfolioTransfer'
+import { parsePortfolio } from './portfolioTransfer'
 
 const publicViewParam = 'public'
 const portfolioQueryParam = 'data'
@@ -69,9 +69,9 @@ function getPublicPreviewSnapshot(search: string): PublicPreviewSnapshot | null 
     return null
   }
 
-  const portfolio = decodeJsonPayload(encodedPortfolio)
+  const portfolio = parsePortfolio(decodeJsonPayload(encodedPortfolio))
 
-  if (!isPortfolio(portfolio) || !isThemePresetName(theme)) {
+  if (!portfolio || !isThemePresetName(theme)) {
     return null
   }
 

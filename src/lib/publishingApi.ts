@@ -1,6 +1,6 @@
 import type { Portfolio } from '../types/portfolio'
 import type { ThemePresetName } from '../types/theme'
-import { isPortfolio } from './portfolioTransfer'
+import { parsePortfolio } from './portfolioTransfer'
 import { normalizePublicSlug } from './publicPreview'
 
 export interface PublishedPortfolio {
@@ -19,12 +19,17 @@ function isThemePreset(value: unknown): value is ThemePresetName {
 }
 
 function parsePublishedPortfolio(value: unknown, fallbackSlug: string): PublishedPortfolio {
+  const portfolio =
+    typeof value === 'object' && value !== null && 'portfolio' in value
+      ? parsePortfolio(value.portfolio)
+      : null
+
   if (
     typeof value !== 'object' ||
     value === null ||
     !('portfolio' in value) ||
     !('theme' in value) ||
-    !isPortfolio(value.portfolio) ||
+    !portfolio ||
     !isThemePreset(value.theme)
   ) {
     throw new Error('Publishing API returned an invalid portfolio')
@@ -33,7 +38,7 @@ function parsePublishedPortfolio(value: unknown, fallbackSlug: string): Publishe
   const rawSlug = 'slug' in value && typeof value.slug === 'string' ? value.slug : fallbackSlug
 
   return {
-    portfolio: value.portfolio,
+    portfolio,
     theme: value.theme,
     slug: normalizePublicSlug(rawSlug),
   }
