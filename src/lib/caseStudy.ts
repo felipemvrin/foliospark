@@ -10,9 +10,14 @@ export function parseCaseStudyMetrics(value: string): PortfolioMetric[] {
     .map((line) => line.trim())
     .filter(Boolean)
     .flatMap((line) => {
-      const [metricValue, ...labelParts] = line.split('|')
-      const formattedValue = metricValue?.trim()
-      const label = labelParts.join('|').trim()
+      const separatorIndex = line.indexOf('|')
+
+      if (separatorIndex === -1 || separatorIndex !== line.lastIndexOf('|')) {
+        return []
+      }
+
+      const formattedValue = line.slice(0, separatorIndex).trim()
+      const label = line.slice(separatorIndex + 1).trim()
 
       if (!formattedValue || !label) {
         return []
