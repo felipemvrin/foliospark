@@ -5,6 +5,8 @@ import { trackAnalyticsEvent } from './lib/analytics'
 import { BehanceSection } from './components/BehanceSection'
 import { ContactSection } from './components/ContactSection'
 import { ExperienceSection } from './components/ExperienceSection'
+import { FaqSection } from './components/FaqSection'
+import { FinalCtaSection } from './components/FinalCtaSection'
 import { GitHubSection } from './components/GitHubSection'
 import { Hero } from './components/Hero'
 import { useBehanceProjects } from './hooks/useBehanceProjects'
@@ -18,6 +20,7 @@ import { PortfolioEditor } from './components/editor/PortfolioEditor'
 import { ThemePanel } from './components/editor/ThemePanel'
 import { SkillsSection } from './components/SkillsSection'
 import { SeoHead } from './components/SeoHead'
+import { TrustSection } from './components/TrustSection'
 import { ThemeWrapper } from './components/ThemeWrapper'
 import { WorkSection } from './components/WorkSection'
 import { usePortfolioStore } from './store/portfolioStore'
@@ -102,11 +105,14 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
           <WorkSection />
           <ProcessSection />
           <ServicesSection />
+          <TrustSection />
           <GitHubSection />
           <JournalSection projects={behanceProjects.projects} />
           <BehanceSection {...behanceProjects} />
           <ExperienceSection />
           <SkillsSection />
+          <FaqSection />
+          <FinalCtaSection />
           <ContactSection />
           {!isPublicView && (
             <>
