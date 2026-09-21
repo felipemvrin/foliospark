@@ -42,11 +42,11 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           {project.category}
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 18 }}
+          whileInView={{ y: 0 }}
           whileHover={{ y: 0 }}
           transition={{ duration: 0.25 }}
-          className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-full border border-white/25 bg-black/20 px-3 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm opacity-0 transition duration-300 group-hover:opacity-100"
+          className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-full border border-white/25 bg-black/20 px-3 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm opacity-0 transition duration-300 group-focus-within:opacity-100 group-hover:opacity-100"
         >
           <span>Case study</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
