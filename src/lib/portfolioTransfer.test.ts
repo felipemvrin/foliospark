@@ -18,6 +18,7 @@ const basePortfolio = {
   about: [],
   process: [],
   testimonials: [],
+  services: [],
   experience: [],
   education: [],
   skills: [],
@@ -52,5 +53,22 @@ describe('isPortfolio', () => {
         testimonials: [{ quote: 'Great work', name: 'Aster', role: 'Founder' }],
       }),
     ).toBe(false)
+  })
+
+  it('accepts service packages with the expected fields', () => {
+    expect(
+      isPortfolio({
+        ...basePortfolio,
+        services: [
+          {
+            name: 'Brand System',
+            price: '$2,400',
+            description: 'Premium positioning and visuals.',
+            features: ['Identity direction', 'Design system'],
+            featured: true,
+          },
+        ],
+      }),
+    ).toBe(true)
   })
 })
