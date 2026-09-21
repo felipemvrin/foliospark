@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useMotionTemplate, useMotionValue, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, ChevronDown, GitBranch, Globe } from 'lucide-react'
 import { useState } from 'react'
 
@@ -13,9 +13,33 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
   const [isCaseStudyOpen, setIsCaseStudyOpen] = useState(false)
+  const reduceMotion = useReducedMotion()
+  const spotlightEnabled = !reduceMotion
+  const spotlightX = useMotionValue(50)
+  const spotlightY = useMotionValue(50)
+  const spotlightBackground = useMotionTemplate`radial-gradient(circle at ${spotlightX}% ${spotlightY}%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 34%)`
   const websiteHref = project.website ? getSafeExternalHref(project.website) : null
   const githubHref = project.github ? getSafeExternalHref(project.github) : null
   const projectUrl = getPreferredSafeExternalHref(project.website, project.github, project.behance)
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
+    if (!spotlightEnabled || event.pointerType !== 'mouse') {
+      return
+    }
+
+    const bounds = event.currentTarget.getBoundingClientRect()
+    if (bounds.width === 0 || bounds.height === 0) {
+      return
+    }
+
+    spotlightX.set(((event.clientX - bounds.left) / bounds.width) * 100)
+    spotlightY.set(((event.clientY - bounds.top) / bounds.height) * 100)
+  }
+
+  const resetSpotlight = () => {
+    spotlightX.set(50)
+    spotlightY.set(50)
+  }
 
   return (
     <motion.article
@@ -24,10 +48,19 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.08 }}
       whileHover={{ y: -10, scale: 1.01 }}
+      onPointerMove={spotlightEnabled ? handlePointerMove : undefined}
+      onPointerLeave={spotlightEnabled ? resetSpotlight : undefined}
       className="group relative overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[var(--surface)]"
       style={{ boxShadow: 'var(--shadow-soft)' }}
     >
-      <div className="relative overflow-hidden">
+      {spotlightEnabled ? (
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{ background: spotlightBackground }}
+        />
+      ) : null}
+      <div className="relative z-10 overflow-hidden">
         <img
           src={project.image}
           alt={project.title}
@@ -57,7 +90,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         ) : null}
       </div>
 
-      <div className="space-y-5 p-6 sm:p-7">
+      <div className="relative z-10 space-y-5 p-6 sm:p-7">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[var(--muted)]">{project.year}</p>
