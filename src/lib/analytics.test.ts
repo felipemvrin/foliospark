@@ -57,7 +57,8 @@ describe('privacy-first analytics', () => {
 
   it('falls back to an in-memory session id when session storage is unavailable', async () => {
     vi.stubEnv('VITE_ANALYTICS_ENDPOINT', 'https://metrics.example.com/events')
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true })
+    vi.stubGlobal('fetch', fetchMock)
     vi.stubGlobal('window', {
       location: { pathname: '/portfolio' },
       sessionStorage: {
@@ -69,6 +70,13 @@ describe('privacy-first analytics', () => {
     })
 
     await expect(trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'github' } })).resolves.toBe(true)
-    expect(fetch).toHaveBeenCalledOnce()
+    await expect(trackAnalyticsEvent({ name: 'page_view', properties: { mode: 'editor' } })).resolves.toBe(true)
+
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+
+    const firstPayload = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as { sessionId: string }
+    const secondPayload = JSON.parse(fetchMock.mock.calls[1]?.[1]?.body as string) as { sessionId: string }
+
+    expect(firstPayload.sessionId).toBe(secondPayload.sessionId)
   })
 })

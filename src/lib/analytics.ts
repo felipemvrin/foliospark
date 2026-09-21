@@ -29,7 +29,18 @@ function isDoNotTrackEnabled() {
 }
 
 function createSessionId() {
-  return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  const crypto = globalThis.crypto
+
+  if (crypto?.randomUUID) {
+    return crypto.randomUUID()
+  }
+
+  if (crypto?.getRandomValues) {
+    const bytes = crypto.getRandomValues(new Uint8Array(16))
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
+  }
+
+  return `${Date.now().toString(36)}-${globalThis.performance?.now?.().toString(36).replace('.', '') ?? '0'}`
 }
 
 function getSessionId() {
@@ -38,9 +49,9 @@ function getSessionId() {
   }
 
   const storageKey = 'foliospark-analytics-session'
-  const sessionStorage = window.sessionStorage
 
   try {
+    const sessionStorage = window.sessionStorage
     const existing = sessionStorage.getItem(storageKey)
 
     if (existing) {
