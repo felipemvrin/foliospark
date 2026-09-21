@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { AboutSection } from './components/AboutSection'
+import { trackAnalyticsEvent } from './lib/analytics'
 import { BehanceSection } from './components/BehanceSection'
 import { ContactSection } from './components/ContactSection'
 import { ExperienceSection } from './components/ExperienceSection'
@@ -66,6 +67,15 @@ function PublishedPortfolioLoader({ children }: { children: React.ReactNode }) {
 function App() {
   const isPublicView = isPublicPreview(window.location.search)
   const isPublished = isPublishedView(window.location.search)
+
+  useEffect(() => {
+    void trackAnalyticsEvent({
+      name: 'page_view',
+      properties: {
+        mode: isPublished ? 'published' : isPublicView ? 'preview' : 'editor',
+      },
+    })
+  }, [isPublished, isPublicView])
 
   if (isPublished) {
     return <PublishedPortfolioLoader><PortfolioPage isPublicView /></PublishedPortfolioLoader>

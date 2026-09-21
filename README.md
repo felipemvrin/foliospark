@@ -14,6 +14,7 @@ This project is built as a modern React + TypeScript + Vite application with a d
 - GitHub repository refresh with loading, error, and saved-data fallback states
 - Optional Behance proxy ingestion with loading, error, and saved-data fallback states
 - Hosted publishing contract with durable slug URLs and published-view loading
+- Optional privacy-first analytics with Do Not Track support
 - Responsive design tuned for desktop and mobile
 - Reduced-motion support for accessibility
 - Local portfolio editor with persistence and JSON import/export
@@ -90,11 +91,13 @@ For a custom domain, set `APP_SITE_URL` in the deployment environment before bui
 
 Hosted publishing uses an optional `VITE_PUBLISHING_API_URL`. The API should expose `GET /portfolios/:slug` and `PUT /portfolios/:slug`, returning `{ "portfolio": Portfolio, "theme": ThemePresetName, "slug": string }`. The editor publishes to that endpoint, and a durable public URL loads the portfolio with `/?view=published&slug=your-slug`. Keep authentication and storage credentials in the server-side API.
 
+Analytics uses an optional `VITE_ANALYTICS_ENDPOINT` that accepts `POST` events. It is disabled when unset, sends no cookies or personal profile data, and respects the browser's Do Not Track preference. The client sends `page_view` and `outbound_click` events with a coarse destination label.
+
 To connect Behance through a server-side proxy, set `VITE_BEHANCE_PROXY_URL` before building. The browser only calls this proxy; Behance credentials should remain on the server. Without this variable, FolioSpark uses the projects saved in the local portfolio data.
 
 ## Roadmap
 
-- Optional analytics and visitor insights
+- Hosted analytics dashboard and retention reports
 
 ## Screenshots
 
