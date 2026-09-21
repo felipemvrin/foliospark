@@ -121,3 +121,38 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+@media print {
+  body::before,
+  header,
+  footer,
+  main > :not(.resume-section) {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  #root,
+  main {
+    min-height: auto !important;
+  }
+
+  .resume-section {
+    display: block !important;
+    min-height: auto !important;
+    padding: 2rem 0 !important;
+    background: white !important;
+    color: #171717 !important;
+  }
+
+  .resume-section * {
+    color: #171717 !important;
+    border-color: #d4d4d4 !important;
+  }
+
+  .resume-section .text-\[var\(--muted\)\] {
+    color: #525252 !important;
+  }
+}
