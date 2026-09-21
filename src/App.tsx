@@ -9,6 +9,7 @@ import { GitHubSection } from './components/GitHubSection'
 import { Hero } from './components/Hero'
 import { isPublicPreview } from './lib/publicPreview'
 import { fetchPublishedPortfolio, isPublishedView } from './lib/publishingApi'
+import { JournalSection } from './components/JournalSection'
 import { NavBar } from './components/NavBar'
 import { PortfolioEditor } from './components/editor/PortfolioEditor'
 import { ThemePanel } from './components/editor/ThemePanel'
@@ -96,6 +97,7 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
           <AboutSection />
           <WorkSection />
           <GitHubSection />
+          <JournalSection />
           <BehanceSection />
           <ExperienceSection />
           <SkillsSection />
