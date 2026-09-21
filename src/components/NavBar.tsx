@@ -119,11 +119,11 @@ export function NavBar() {
               whileTap={{ scale: 0.98 }}
               className="button-shine inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:shadow-[0_18px_35px_rgba(17,17,17,0.08)]"
             >
-              Book a call <ArrowUpRight className="h-3.5 w-3.5" />
+              Start a project <ArrowUpRight className="h-3.5 w-3.5" />
             </motion.a>
           ) : (
             <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] opacity-60">
-              Book a call <ArrowUpRight className="h-3.5 w-3.5" />
+              Start a project <ArrowUpRight className="h-3.5 w-3.5" />
             </span>
           )}
         </div>

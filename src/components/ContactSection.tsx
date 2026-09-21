@@ -91,11 +91,11 @@ export function ContactSection() {
               whileTap={{ scale: 0.98 }}
               className="button-shine inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] transition hover:opacity-90"
             >
-              Email the studio <ArrowUpRight className="h-4 w-4" />
+              Start a project <ArrowUpRight className="h-4 w-4" />
             </motion.a>
           ) : (
             <span className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] opacity-60">
-              Email the studio <ArrowUpRight className="h-4 w-4" />
+              Start a project <ArrowUpRight className="h-4 w-4" />
             </span>
           )}
         </div>

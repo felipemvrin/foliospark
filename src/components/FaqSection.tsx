@@ -32,8 +32,7 @@ export function FaqSection() {
     <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8 lg:p-10">
         <div className="max-w-2xl">
-          <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]">FAQ</p>
-          <h2 className="mt-5 font-display text-4xl leading-none text-[var(--foreground)] sm:text-5xl">
+          <h2 className="font-display text-4xl leading-none text-[var(--foreground)] sm:text-5xl">
             Questions people ask before they move forward.
           </h2>
         </div>

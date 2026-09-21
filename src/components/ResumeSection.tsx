@@ -13,8 +13,7 @@ export function ResumeSection() {
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-8 border-b border-[var(--border-strong)] pb-10 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] opacity-70">Resume</p>
-            <h2 className="mt-5 font-display text-4xl leading-none sm:text-5xl lg:text-6xl">A concise view of the work behind the work.</h2>
+            <h2 className="font-display text-4xl leading-none sm:text-5xl lg:text-6xl">A concise view of the work behind the work.</h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--muted)]">A practical snapshot for recruiters, collaborators, and teams looking for thoughtful design leadership with technical range.</p>
           </div>
           <div className="flex flex-wrap gap-3 print:hidden">
