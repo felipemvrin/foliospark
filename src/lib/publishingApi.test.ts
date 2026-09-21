@@ -22,7 +22,7 @@ describe('publishing API client', () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
 
     expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://felipemvrin.github.io/foliospark/?theme=Mono#editor')).toBe(
-      'https://felipemvrin.github.io/foliospark/?view=published&slug=aster-vale-studio',
+      'https://felipemvrin.github.io/foliospark/?theme=Mono&view=published&slug=aster-vale-studio',
     )
   })
 
@@ -30,7 +30,7 @@ describe('publishing API client', () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
 
     expect(getPublishedPortfolioHref('Aster Vale Studio', '/foliospark/?theme=Mono#editor')).toBe(
-      'https://example.com/foliospark/?view=published&slug=aster-vale-studio',
+      'https://example.com/foliospark/?theme=Mono&view=published&slug=aster-vale-studio',
     )
   })
 
@@ -44,7 +44,7 @@ describe('publishing API client', () => {
     })
 
     expect(getPublishedPortfolioHref('Aster Vale Studio')).toBe(
-      'https://felipemvrin.github.io/foliospark/?view=published&slug=aster-vale-studio',
+      'https://felipemvrin.github.io/foliospark/?theme=Mono&view=published&slug=aster-vale-studio',
     )
   })
 

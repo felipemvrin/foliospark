@@ -70,8 +70,9 @@ export function getPublishedPortfolioHref(slug: string, baseUrl = typeof window 
     baseUrl,
     typeof window !== 'undefined' ? window.location.href : 'https://example.com/',
   )
-  const url = new URL(sourceUrl.pathname, sourceUrl.origin)
+  const url = new URL(sourceUrl.toString())
 
+  url.hash = ''
   url.searchParams.set('view', 'published')
   url.searchParams.set('slug', normalizePublicSlug(slug))
   return url.toString()
