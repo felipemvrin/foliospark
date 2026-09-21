@@ -4,6 +4,7 @@ import { AlertTriangle, CheckCircle2, Clipboard, Download, Trash2, Upload } from
 import { themePresets } from '../../data/themes'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
+import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
 import { downloadPortfolio, isPortfolio } from '../../lib/portfolioTransfer'
 import { usePortfolioStore } from '../../store/portfolioStore'
 import { useThemeStore } from '../../store/themeStore'
@@ -76,6 +77,8 @@ export function PortfolioEditor() {
   const importInputRef = useRef<HTMLInputElement>(null)
   const [transferMessage, setTransferMessage] = useState('')
   const [shareMessage, setShareMessage] = useState<{ href: string; id: number; text: string } | null>(null)
+  const [publishMessage, setPublishMessage] = useState('')
+  const [isPublishing, setIsPublishing] = useState(false)
   const data = usePortfolioStore((state) => state.data)
   const resetData = usePortfolioStore((state) => state.resetData)
   const setData = usePortfolioStore((state) => state.setData)
@@ -85,6 +88,7 @@ export function PortfolioEditor() {
     [theme],
   )
   const publicPreviewHref = useMemo(() => getPublicPreviewHref(data, theme, data.profile.slug), [data, theme])
+  const publishedHref = useMemo(() => getPublishedPortfolioHref(data.profile.slug || data.profile.name), [data.profile.name, data.profile.slug])
   const publishingReadiness = useMemo(() => getPublishingReadiness(data), [data])
 
   const updateProfile = (field: keyof Profile, value: string) => {
@@ -334,6 +338,25 @@ export function PortfolioEditor() {
     }
   }
 
+  const publish = async () => {
+    if (!getPublishingApiUrl()) {
+      setPublishMessage('Configure VITE_PUBLISHING_API_URL to enable hosted publishing.')
+      return
+    }
+
+    setIsPublishing(true)
+    setPublishMessage('Publishing portfolio…')
+
+    try {
+      await publishPortfolio(data.profile.slug || data.profile.name, data, theme)
+      setPublishMessage('Portfolio published. Use the hosted URL when ready.')
+    } catch (error: unknown) {
+      setPublishMessage(error instanceof Error ? error.message : 'Could not publish portfolio.')
+    } finally {
+      setIsPublishing(false)
+    }
+  }
+
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -367,6 +390,14 @@ export function PortfolioEditor() {
             <Clipboard className="mr-2 inline-block h-3.5 w-3.5" />
             Copy public link
           </button>
+          <button type="button" onClick={publish} disabled={isPublishing} className={actionButtonClassName}>
+            {isPublishing ? 'Publishing…' : 'Publish hosted'}
+          </button>
+          {publishedHref ? (
+            <a href={publishedHref} target="_blank" rel="noreferrer" className={actionButtonClassName}>
+              Open hosted portfolio
+            </a>
+          ) : null}
           <button type="button" onClick={exportData} className={actionButtonClassName}>
             <Download className="mr-2 inline-block h-3.5 w-3.5" />
             Export JSON
@@ -386,6 +417,7 @@ export function PortfolioEditor() {
               {transferMessage}
             </p>
           )}
+          {publishMessage ? <p role="status" className="text-xs text-[var(--muted)]">{publishMessage}</p> : null}
           <button
             type="button"
             onClick={resetData}

@@ -39,6 +39,14 @@ function decodeJsonPayload(value: string) {
   }
 }
 
+export function createReadonlyStorage(value: unknown) {
+  return {
+    getItem: (_name?: string) => JSON.stringify({ state: value, version: 0 }),
+    setItem: (_name?: string, _nextValue?: string) => {},
+    removeItem: (_name?: string) => {},
+  }
+}
+
 function isThemePresetName(value: string): value is ThemePresetName {
   return themePresets.some((preset) => preset.id === value)
 }
@@ -100,14 +108,6 @@ export function getPublicPreviewHref(
   return url.toString()
 }
 
-function createPreviewStorage(value: unknown) {
-  return {
-    getItem: () => JSON.stringify({ state: value, version: 0 }),
-    setItem: () => {},
-    removeItem: () => {},
-  }
-}
-
 export function getPublicPreviewPortfolioStorage(search: string = window.location.search) {
   const snapshot = getPublicPreviewSnapshot(search)
 
@@ -115,7 +115,7 @@ export function getPublicPreviewPortfolioStorage(search: string = window.locatio
     return null
   }
 
-  return createPreviewStorage({ data: snapshot.portfolio })
+  return createReadonlyStorage({ data: snapshot.portfolio })
 }
 
 export function getPublicPreviewThemeStorage(search: string = window.location.search) {
@@ -125,5 +125,5 @@ export function getPublicPreviewThemeStorage(search: string = window.location.se
     return null
   }
 
-  return createPreviewStorage({ preset: snapshot.theme })
+  return createReadonlyStorage({ preset: snapshot.theme })
 }

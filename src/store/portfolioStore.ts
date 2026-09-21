@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-import { getPublicPreviewPortfolioStorage } from '../lib/publicPreview'
+import { createReadonlyStorage, getPublicPreviewPortfolioStorage } from '../lib/publicPreview'
+import { isPublishedView } from '../lib/publishingApi'
 import { portfolio as defaultPortfolio } from '../data/portfolio'
 import type { Portfolio } from '../types/portfolio'
 
@@ -22,7 +23,13 @@ const portfolioStorePersistOptions =
     ? { name: 'foliospark-portfolio' }
     : {
         name: 'foliospark-portfolio',
-        storage: createJSONStorage(() => getPublicPreviewPortfolioStorage() ?? window.localStorage),
+        storage: createJSONStorage(() => {
+          if (isPublishedView(window.location.search)) {
+            return createReadonlyStorage({ data: createDefaultPortfolio() })
+          }
+
+          return getPublicPreviewPortfolioStorage() ?? window.localStorage
+        }),
       }
 
 export const usePortfolioStore = create<PortfolioState>()(

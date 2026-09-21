@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { AboutSection } from './components/AboutSection'
 import { BehanceSection } from './components/BehanceSection'
 import { ContactSection } from './components/ContactSection'
@@ -5,6 +7,7 @@ import { ExperienceSection } from './components/ExperienceSection'
 import { GitHubSection } from './components/GitHubSection'
 import { Hero } from './components/Hero'
 import { isPublicPreview } from './lib/publicPreview'
+import { fetchPublishedPortfolio, isPublishedView } from './lib/publishingApi'
 import { NavBar } from './components/NavBar'
 import { PortfolioEditor } from './components/editor/PortfolioEditor'
 import { ThemePanel } from './components/editor/ThemePanel'
@@ -12,9 +15,66 @@ import { SkillsSection } from './components/SkillsSection'
 import { SeoHead } from './components/SeoHead'
 import { ThemeWrapper } from './components/ThemeWrapper'
 import { WorkSection } from './components/WorkSection'
+import { usePortfolioStore } from './store/portfolioStore'
+import { useThemeStore } from './store/themeStore'
+
+function PublishedPortfolioLoader({ children }: { children: React.ReactNode }) {
+  const setData = usePortfolioStore((state) => state.setData)
+  const setPreset = useThemeStore((state) => state.setPreset)
+  const publishedSlug = new URLSearchParams(window.location.search).get('slug')
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (!publishedSlug) {
+      return
+    }
+
+    const controller = new AbortController()
+
+    fetchPublishedPortfolio(publishedSlug, controller.signal)
+      .then((published) => {
+        setData(published.portfolio)
+        setPreset(published.theme)
+        setStatus('ready')
+      })
+      .catch((reason: unknown) => {
+        if (!controller.signal.aborted) {
+          setError(reason instanceof Error ? reason.message : 'This published portfolio could not be loaded.')
+          setStatus('error')
+        }
+      })
+
+    return () => controller.abort()
+  }, [publishedSlug, setData, setPreset])
+
+  if (!publishedSlug) {
+    return <div className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 text-center text-sm text-[var(--muted)]">This published portfolio URL is missing its slug.</div>
+  }
+
+  if (status === 'loading') {
+    return <div className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 text-sm text-[var(--muted)]">Loading published portfolio…</div>
+  }
+
+  if (status === 'error') {
+    return <div className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 text-center text-sm text-[var(--muted)]">{error}</div>
+  }
+
+  return children
+}
 
 function App() {
   const isPublicView = isPublicPreview(window.location.search)
+  const isPublished = isPublishedView(window.location.search)
+
+  if (isPublished) {
+    return <PublishedPortfolioLoader><PortfolioPage isPublicView /></PublishedPortfolioLoader>
+  }
+
+  return <PortfolioPage isPublicView={isPublicView} />
+}
+
+function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
 
   return (
     <ThemeWrapper>

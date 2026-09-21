@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getPublicPreviewHref, normalizePublicSlug } from './publicPreview'
+import { createReadonlyStorage, getPublicPreviewHref, normalizePublicSlug } from './publicPreview'
 import { buildRobotsTxt, buildSitemapXml, getCanonicalSiteUrl, getSeoMetadata, getSiteBasePath, shouldGenerateRobotsTxt } from './seo'
 
 describe('public preview urls', () => {
@@ -78,6 +78,15 @@ describe('public preview urls', () => {
 
     expect(url.hash).toBe('#launch-2026')
     expect(url.searchParams.get('slug')).toBe('launch-2026')
+  })
+
+  it('creates a read-only storage snapshot', () => {
+    const storage = createReadonlyStorage({ data: { slug: 'aster-vale' } })
+
+    expect(storage.getItem('foliospark')).toBe('{"state":{"data":{"slug":"aster-vale"}},"version":0}')
+    expect(storage.setItem('foliospark', 'next-state')).toBeUndefined()
+    expect(storage.removeItem('foliospark')).toBeUndefined()
+    expect(storage.getItem('foliospark')).toBe('{"state":{"data":{"slug":"aster-vale"}},"version":0}')
   })
 
   it('prefers a configured public site url for canonical metadata', () => {
