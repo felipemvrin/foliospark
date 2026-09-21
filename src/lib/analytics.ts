@@ -6,6 +6,7 @@ export interface AnalyticsEvent {
 }
 
 let fallbackSessionId: string | null = null
+let fallbackSessionCounter = 0
 
 function getEndpoint() {
   const value = import.meta.env.VITE_ANALYTICS_ENDPOINT?.trim()
@@ -40,17 +41,8 @@ function createSessionId() {
     return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
   }
 
-  if (typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function' && typeof Blob !== 'undefined') {
-    const objectUrl = URL.createObjectURL(new Blob())
-    URL.revokeObjectURL(objectUrl)
-    const fallbackToken = objectUrl.split('/').pop()
-
-    if (fallbackToken) {
-      return fallbackToken
-    }
-  }
-
-  return `${Date.now().toString(36)}-${globalThis.performance?.now?.().toString(36).replace('.', '') ?? '0'}`
+  fallbackSessionCounter += 1
+  return `${Date.now().toString(36)}-${globalThis.performance?.now?.().toString(36).replace('.', '') ?? '0'}-${fallbackSessionCounter.toString(36)}`
 }
 
 function getSessionId() {
