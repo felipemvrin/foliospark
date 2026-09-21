@@ -854,7 +854,7 @@ export function PortfolioEditor() {
           </div>
           <div className="space-y-5">
             {data.projects.map((project, index) => {
-              const projectDraftKey = projectDraftKeys[index] ?? `project-fallback-${index}`
+              const projectDraftKey = projectDraftKeys[index]!
 
               return (
                 <div key={projectDraftKey} className={nestedPanelClassName}>
