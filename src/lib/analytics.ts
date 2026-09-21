@@ -5,13 +5,31 @@ export interface AnalyticsEvent {
   properties: Record<string, string>
 }
 
+let fallbackSessionId: string | null = null
+
 function getEndpoint() {
   const value = import.meta.env.VITE_ANALYTICS_ENDPOINT?.trim()
   return value ? value.replace(/\/$/, '') : null
 }
 
 function isDoNotTrackEnabled() {
-  return typeof navigator !== 'undefined' && navigator.doNotTrack === '1'
+  if (typeof navigator === 'undefined') {
+    return false
+  }
+
+  const windowWithDnt = typeof window !== 'undefined'
+    ? (window as Window & typeof globalThis & { doNotTrack?: string })
+    : undefined
+  const navigatorWithLegacyDnt = navigator as Navigator & { msDoNotTrack?: string }
+  const dntValue = navigatorWithLegacyDnt.doNotTrack
+    ?? windowWithDnt?.doNotTrack
+    ?? navigatorWithLegacyDnt.msDoNotTrack
+
+  return dntValue === '1' || dntValue === 'yes'
+}
+
+function createSessionId() {
+  return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
 }
 
 function getSessionId() {
@@ -20,15 +38,22 @@ function getSessionId() {
   }
 
   const storageKey = 'foliospark-analytics-session'
-  const existing = window.sessionStorage.getItem(storageKey)
+  const sessionStorage = window.sessionStorage
 
-  if (existing) {
-    return existing
+  try {
+    const existing = sessionStorage.getItem(storageKey)
+
+    if (existing) {
+      return existing
+    }
+
+    const sessionId = createSessionId()
+    sessionStorage.setItem(storageKey, sessionId)
+    return sessionId
+  } catch {
+    fallbackSessionId ??= createSessionId()
+    return fallbackSessionId
   }
-
-  const sessionId = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
-  window.sessionStorage.setItem(storageKey, sessionId)
-  return sessionId
 }
 
 export function getAnalyticsEndpoint() {
