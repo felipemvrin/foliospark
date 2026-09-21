@@ -99,8 +99,9 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
     <ThemeWrapper>
       <SeoHead />
       <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <NavBar />
-        <main>
+        <main id="main-content" tabIndex={-1}>
           <Hero />
           <AboutSection />
           <WorkSection />

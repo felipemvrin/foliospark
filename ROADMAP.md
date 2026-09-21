@@ -46,10 +46,9 @@ Status: In progress
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Complete global keyboard QA across public and editor flows
-2. Refresh display typography
-3. Complete downloadable resume metadata and document export
-4. Advanced analytics and publishing dashboard
+1. Refresh display typography
+2. Complete downloadable resume metadata and document export
+3. Advanced analytics and publishing dashboard
 
 ## Notes
 This roadmap is intentionally sequenced to maximize business value before purely decorative enhancements. The aim is to keep the product premium, credible, and conversion-ready without sacrificing maintainability or production safety.
