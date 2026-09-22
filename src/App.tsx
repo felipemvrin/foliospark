@@ -155,7 +155,7 @@ function PortfolioPage({ isPublicView, isAdminRoute }: { isPublicView: boolean; 
           <FinalCtaSection />
           {isAdminRoute && !isPublicView && (
             <>
-              <div className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 lg:px-8">
+              <div id="appearance-settings" className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 lg:px-8">
                 <ThemePanel />
               </div>
               <PortfolioEditor />

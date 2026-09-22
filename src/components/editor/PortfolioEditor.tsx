@@ -642,7 +642,23 @@ export function PortfolioEditor() {
         </div>
       </div>
 
-      <section className={panelClassName} aria-labelledby="publishing-readiness-title">
+      <nav className="sticky top-20 z-30 mb-8 overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--background)]/95 p-2 backdrop-blur-xl" aria-label="Administration sections">
+        <div className="flex min-w-max gap-2">
+          {[
+            ['site-settings', 'Site'],
+            ['section-settings', 'Sections'],
+            ['navigation-settings', 'Navigation'],
+            ['profile-settings', 'Profile'],
+            ['content-settings', 'Content'],
+            ['appearance-settings', 'Appearance'],
+            ['publishing-settings', 'Publishing'],
+          ].map(([id, label]) => (
+            <a key={id} href={`#${id}`} className={actionButtonClassName}>{label}</a>
+          ))}
+        </div>
+      </nav>
+
+      <section id="publishing-settings" className={panelClassName} aria-labelledby="publishing-readiness-title">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Publishing</p>
@@ -681,7 +697,7 @@ export function PortfolioEditor() {
       </section>
 
       <div className="space-y-8">
-        <div className={panelClassName}>
+        <div id="site-settings" className={panelClassName}>
           <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Site settings</p>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Control the public site's identity and footer without changing portfolio content.</p>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
@@ -817,7 +833,7 @@ export function PortfolioEditor() {
           </div>
         </div>
 
-        <div className={panelClassName}>
+        <div id="section-settings" className={panelClassName}>
           <div>
             <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Sections</p>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Choose which public sections appear and use the ordering buttons to control how they render on the page.</p>
@@ -853,7 +869,7 @@ export function PortfolioEditor() {
           <p className="mt-4 text-xs text-[var(--muted)]">Contact stays enabled so visitors always have a path to reach you.</p>
         </div>
 
-        <div className={panelClassName}>
+        <div id="navigation-settings" className={panelClassName}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Navigation</p>
@@ -932,7 +948,7 @@ export function PortfolioEditor() {
           </div>
         </div>
 
-        <div className={panelClassName}>
+        <div id="profile-settings" className={panelClassName}>
           <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Profile</p>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <FieldLabel label="Name">
@@ -1020,7 +1036,7 @@ export function PortfolioEditor() {
           </div>
         </div>
 
-        <div className={panelClassName}>
+        <div id="content-settings" className={panelClassName}>
           <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Metrics</p>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             {data.metrics.map((metric, index) => (
