@@ -31,6 +31,20 @@ export interface TranslationDictionary {
     budget: string
     timeline: string
     projectBrief: string
+    selectOption: string
+    missingEmailAddress: string
+    missingPhoneNumber: string
+    addEmailBeforeInquiry: string
+    emailClientOpening: string
+    projectInquiryFallback: string
+    notSpecified: string
+    projectTypeOptions: readonly string[]
+    budgetOptions: readonly string[]
+    timelineOptions: readonly string[]
+    faqItems: ReadonlyArray<{
+      question: string
+      answer: string
+    }>
   }
   nav: {
     about: string
@@ -95,6 +109,38 @@ const translations: Record<Locale, TranslationDictionary> = {
       budget: 'Presupuesto',
       timeline: 'Plazo',
       projectBrief: 'Brief del proyecto',
+      selectOption: 'Selecciona una opción',
+      missingEmailAddress: 'Agrega un email',
+      missingPhoneNumber: 'Agrega un teléfono',
+      addEmailBeforeInquiry: 'Agrega un email antes de enviar una consulta.',
+      emailClientOpening: 'Se está abriendo tu cliente de email.',
+      projectInquiryFallback: 'Consulta de proyecto',
+      notSpecified: 'No especificado',
+      projectTypeOptions: ['Posicionamiento de marca', 'Experiencia de portfolio', 'Narrativa de producto', 'Otro'],
+      budgetOptions: ['Menos de $2,500', '$2,500 – $5,000', '$5,000 – $10,000', '$10,000+'],
+      timelineOptions: ['Explorando', 'En 1 mes', '1–3 meses', '3+ meses'],
+      faqItems: [
+        {
+          question: '¿Qué tipo de proyectos encajan mejor con FolioSpark?',
+          answer:
+            'Está pensado para creativos, founders y equipos de producto que necesitan una presencia online premium, editorial, creíble y lista para convertir sin depender de un CMS a medida.',
+        },
+        {
+          question: '¿Cuánto suele tardar la creación de un portfolio?',
+          answer:
+            'La mayoría de los proyectos duran entre una y tres semanas según la profundidad del contenido, las revisiones y cuánto de la dirección editorial ya esté definido.',
+        },
+        {
+          question: '¿Puedo editar el contenido después del lanzamiento?',
+          answer:
+            'Sí. El producto está construido sobre datos estructurados, así que el portfolio se puede actualizar fácilmente sin reescribir toda la estructura de la página ni el sistema de diseño.',
+        },
+        {
+          question: '¿El sitio es seguro y está listo para producción?',
+          answer:
+            'El frontend sigue un enfoque centrado en validación, enlaces externos seguros, uso controlado del entorno y analítica enfocada en privacidad. Para reforzar un despliegue real, también recomendamos headers a nivel de hosting y autenticación backend para la publicación hospedada.',
+        },
+      ],
     },
     nav: {
       about: 'Sobre mí',
@@ -157,6 +203,38 @@ const translations: Record<Locale, TranslationDictionary> = {
       budget: 'Budget range',
       timeline: 'Timeline',
       projectBrief: 'Project brief',
+      selectOption: 'Select an option',
+      missingEmailAddress: 'Add an email address',
+      missingPhoneNumber: 'Add a phone number',
+      addEmailBeforeInquiry: 'Add an email address before sending an inquiry.',
+      emailClientOpening: 'Your email client is opening.',
+      projectInquiryFallback: 'Project inquiry',
+      notSpecified: 'Not specified',
+      projectTypeOptions: ['Brand positioning', 'Portfolio experience', 'Product narrative', 'Something else'],
+      budgetOptions: ['Under $2,500', '$2,500 – $5,000', '$5,000 – $10,000', '$10,000+'],
+      timelineOptions: ['Exploring', 'Within 1 month', '1–3 months', '3+ months'],
+      faqItems: [
+        {
+          question: 'What kind of projects are best suited for FolioSpark?',
+          answer:
+            'It is designed for creatives, founders, and product teams who need a premium online presence that feels editorial, credible, and conversion-ready without requiring a custom CMS build.',
+        },
+        {
+          question: 'How long does a portfolio build usually take?',
+          answer:
+            'Most engagements run from one to three weeks depending on content depth, revisions, and how much of the editorial direction is already defined.',
+        },
+        {
+          question: 'Can I edit the content after launch?',
+          answer:
+            'Yes. The product is built around structured data, so the portfolio is easy to update without rewriting the entire page structure or design system.',
+        },
+        {
+          question: 'Is the site secure and production-ready?',
+          answer:
+            'The frontend follows a validation-first approach with safe external links, controlled environment usage, and a privacy-focused analytics model. For production hardening, we also recommend deployment-level headers and backend auth for hosted publishing.',
+        },
+      ],
     },
     nav: {
       about: 'About',

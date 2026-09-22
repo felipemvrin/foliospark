@@ -45,13 +45,13 @@ export function ContactSection() {
     const budget = String(form.get('budget') ?? '').trim()
     const timeline = String(form.get('timeline') ?? '').trim()
     const message = String(form.get('message') ?? '').trim()
-    const subject = `${projectType || 'Project inquiry'} from ${senderName}`
+    const subject = `${projectType || copy.home.projectInquiryFallback} ${senderName ? `— ${senderName}` : ''}`.trim()
     const body = [
-      `Name: ${senderName}`,
-      `Email: ${senderEmail}`,
-      `Project type: ${projectType || 'Not specified'}`,
-      `Budget: ${budget || 'Not specified'}`,
-      `Timeline: ${timeline || 'Not specified'}`,
+      `${copy.home.name}: ${senderName}`,
+      `${copy.home.email}: ${senderEmail}`,
+      `${copy.home.projectType}: ${projectType || copy.home.notSpecified}`,
+      `${copy.home.budget}: ${budget || copy.home.notSpecified}`,
+      `${copy.home.timeline}: ${timeline || copy.home.notSpecified}`,
       '',
       message,
     ].join('\n')
@@ -59,7 +59,7 @@ export function ContactSection() {
     const inquiryHref = getMailtoHref(portfolio.profile.email, subject, body)
 
     if (!inquiryHref) {
-      setFormMessage('Add an email address before sending an inquiry.')
+      setFormMessage(copy.home.addEmailBeforeInquiry)
       return
     }
 
@@ -72,7 +72,7 @@ export function ContactSection() {
       },
     })
     window.location.href = inquiryHref
-    setFormMessage('Your email client is opening.')
+    setFormMessage(copy.home.emailClientOpening)
   }
 
   return (
@@ -112,31 +112,34 @@ export function ContactSection() {
           <label className="text-sm opacity-80">
             <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">{copy.home.projectType}</span>
             <select name="projectType" className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none">
-              <option value="">Select an option</option>
-              <option value="Brand positioning">Brand positioning</option>
-              <option value="Portfolio experience">Portfolio experience</option>
-              <option value="Product narrative">Product narrative</option>
-              <option value="Something else">Something else</option>
+              <option value="">{copy.home.selectOption}</option>
+              {projectTypeAnalyticsValues.map((value, index) => (
+                <option key={value} value={value}>
+                  {copy.home.projectTypeOptions[index] ?? value}
+                </option>
+              ))}
             </select>
           </label>
           <label className="text-sm opacity-80">
             <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">{copy.home.budget}</span>
             <select name="budget" className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none">
-              <option value="">Select an option</option>
-              <option value="Under $2,500">Under $2,500</option>
-              <option value="$2,500 – $5,000">$2,500 – $5,000</option>
-              <option value="$5,000 – $10,000">$5,000 – $10,000</option>
-              <option value="$10,000+">$10,000+</option>
+              <option value="">{copy.home.selectOption}</option>
+              {budgetAnalyticsValues.map((value, index) => (
+                <option key={value} value={value}>
+                  {copy.home.budgetOptions[index] ?? value}
+                </option>
+              ))}
             </select>
           </label>
           <label className="text-sm opacity-80">
             <span className="mb-2 block text-[0.65rem] uppercase tracking-[0.2em]">{copy.home.timeline}</span>
             <select name="timeline" className="input-shell w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-3 text-[var(--foreground)] outline-none">
-              <option value="">Select an option</option>
-              <option value="Exploring">Exploring</option>
-              <option value="Within 1 month">Within 1 month</option>
-              <option value="1–3 months">1–3 months</option>
-              <option value="3+ months">3+ months</option>
+              <option value="">{copy.home.selectOption}</option>
+              {timelineAnalyticsValues.map((value, index) => (
+                <option key={value} value={value}>
+                  {copy.home.timelineOptions[index] ?? value}
+                </option>
+              ))}
             </select>
           </label>
           <label className="text-sm opacity-80 md:col-span-2">
@@ -165,7 +168,7 @@ export function ContactSection() {
                 {email}
               </a>
             ) : (
-              <span className="text-sm opacity-70">Add an email address</span>
+              <span className="text-sm opacity-70">{copy.home.missingEmailAddress}</span>
             )}
           </div>
           <div className="flex items-center gap-3">
@@ -175,7 +178,7 @@ export function ContactSection() {
                 {phone}
               </a>
             ) : (
-              <span className="text-sm opacity-70">Add a phone number</span>
+              <span className="text-sm opacity-70">{copy.home.missingPhoneNumber}</span>
             )}
           </div>
           <div className="flex items-center gap-3">

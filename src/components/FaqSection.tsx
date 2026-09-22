@@ -4,29 +4,6 @@ import { useState } from 'react'
 import { getTranslations } from '../lib/i18n'
 import { usePortfolioStore } from '../store/portfolioStore'
 
-const faqs = [
-  {
-    question: 'What kind of projects are best suited for FolioSpark?',
-    answer:
-      'It is designed for creatives, founders, and product teams who need a premium online presence that feels editorial, credible, and conversion-ready without requiring a custom CMS build.',
-  },
-  {
-    question: 'How long does a portfolio build usually take?',
-    answer:
-      'Most engagements run from one to three weeks depending on content depth, revisions, and how much of the editorial direction is already defined.',
-  },
-  {
-    question: 'Can I edit the content after launch?',
-    answer:
-      'Yes. The product is built around structured data, so the portfolio is easy to update without rewriting the entire page structure or design system.',
-  },
-  {
-    question: 'Is the site secure and production-ready?',
-    answer:
-      'The frontend follows a validation-first approach with safe external links, controlled environment usage, and a privacy-focused analytics model. For production hardening, we also recommend deployment-level headers and backend auth for hosted publishing.',
-  },
-]
-
 export function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
   const copy = getTranslations(usePortfolioStore((state) => state.data.siteSettings?.locale))
@@ -39,7 +16,7 @@ export function FaqSection() {
         </div>
 
         <div className="mt-10 space-y-4">
-          {faqs.map((item, index) => {
+          {copy.home.faqItems.map((item, index) => {
             const isOpen = openIndex === index
             const idSuffix = item.question
               .toLowerCase()
