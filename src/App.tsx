@@ -17,7 +17,7 @@ import { ProcessSection } from './components/ProcessSection'
 import { ResumeSection } from './components/ResumeSection'
 import { ServicesSection } from './components/ServicesSection'
 import { NavBar } from './components/NavBar'
-import { PortfolioEditor } from './components/editor/PortfolioEditor'
+import { AdminSectionNav, PortfolioEditor } from './components/editor/PortfolioEditor'
 import { ThemePanel } from './components/editor/ThemePanel'
 import { SkillsSection } from './components/SkillsSection'
 import { SeoHead } from './components/SeoHead'
@@ -155,7 +155,10 @@ function PortfolioPage({ isPublicView, isAdminRoute }: { isPublicView: boolean; 
           <FinalCtaSection />
           {isAdminRoute && !isPublicView && (
             <>
-              <div id="appearance-settings" className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 lg:px-8">
+              <div className="mx-auto max-w-7xl px-5 pt-8 sm:px-6 lg:px-8">
+                <AdminSectionNav />
+              </div>
+              <div id="appearance-settings" className="mx-auto max-w-7xl scroll-mt-40 px-5 pb-20 sm:px-6 lg:px-8">
                 <ThemePanel />
               </div>
               <PortfolioEditor />
