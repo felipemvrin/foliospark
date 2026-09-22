@@ -18,7 +18,19 @@ export function WorkSection() {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-3">
           {portfolio.projects.map((project, index) => (
-            <ProjectCard key={`${project.title}-${index}`} project={project} index={index} />
+            <ProjectCard
+              key={`${project.title}-${index}`}
+              project={project}
+              index={index}
+              copy={{
+                viewProject: copy.home.viewProject,
+                readCaseStudy: copy.home.readCaseStudy,
+                readTheCaseStudy: copy.home.readTheCaseStudy,
+                challenge: copy.home.challenge,
+                approach: copy.home.approach,
+                outcome: copy.home.outcome,
+              }}
+            />
           ))}
         </div>
       </div>

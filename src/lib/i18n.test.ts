@@ -47,8 +47,14 @@ describe('i18n', () => {
     expect(getTranslations('es').home.workTitle).toBe('Diseñado para captar atención, creado para generar confianza.')
     expect(getTranslations('es').home.readCaseStudy).toBe('Ver caso de estudio')
     expect(getTranslations('es').home.challenge).toBe('Desafío')
+    expect(getTranslations('es').home.readTheCaseStudy).toBe('Ver el caso de estudio')
+    expect(getTranslations('es').home.approach).toBe('Enfoque')
+    expect(getTranslations('es').home.outcome).toBe('Resultado')
     expect(getTranslations('en').home.workEyebrow).toBe('Selected work')
     expect(getTranslations('en').home.viewProject).toBe('View project')
+    expect(getTranslations('en').home.readTheCaseStudy).toBe('Read the case study')
+    expect(getTranslations('en').home.approach).toBe('Approach')
+    expect(getTranslations('en').home.outcome).toBe('Outcome')
   })
 
   it('provides localized trust-section copy', () => {
