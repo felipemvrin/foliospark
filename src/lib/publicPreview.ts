@@ -8,6 +8,7 @@ const portfolioQueryParam = 'data'
 const themeQueryParam = 'theme'
 const slugQueryParam = 'slug'
 const maxPreviewPayloadLength = 200_000
+const adminPathSegment = '/admin'
 
 export function normalizePublicSlug(value: string) {
   const normalized = (value ?? '')
@@ -18,6 +19,26 @@ export function normalizePublicSlug(value: string) {
     .replace(/^-+|-+$/g, '')
 
   return normalized || 'portfolio'
+}
+
+export function getPublicAppUrl(
+  baseUrl = typeof window !== 'undefined' ? window.location.href : 'https://example.com',
+) {
+  const url = new URL(
+    baseUrl,
+    typeof window !== 'undefined' ? window.location.href : 'https://example.com/',
+  )
+  const normalizedPathname = url.pathname.replace(/\/+$/, '') || '/'
+
+  if (normalizedPathname === adminPathSegment || normalizedPathname.endsWith(adminPathSegment)) {
+    const publicPathname = normalizedPathname.slice(0, -adminPathSegment.length) || '/'
+
+    url.pathname = publicPathname === '/' || publicPathname.endsWith('/')
+      ? publicPathname
+      : `${publicPathname}/`
+  }
+
+  return url
 }
 
 function encodeJsonPayload(value: unknown) {
@@ -96,7 +117,7 @@ export function getPublicPreviewHref(
   customSlug?: string,
   baseUrl = typeof window !== 'undefined' ? window.location.href : 'https://example.com',
 ) {
-  const url = new URL(baseUrl)
+  const url = getPublicAppUrl(baseUrl)
 
   // Public preview links reserve the fragment for the canonical vanity slug.
   url.hash = ''

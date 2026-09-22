@@ -1,7 +1,7 @@
 import type { Portfolio } from '../types/portfolio'
 import type { ThemePresetName } from '../types/theme'
 import { parsePortfolio } from './portfolioTransfer'
-import { normalizePublicSlug } from './publicPreview'
+import { getPublicAppUrl, normalizePublicSlug } from './publicPreview'
 
 export interface PublishedPortfolio {
   portfolio: Portfolio
@@ -94,11 +94,7 @@ export function getPublishedPortfolioHref(slug: string, baseUrl = typeof window 
     return null
   }
 
-  const sourceUrl = new URL(
-    baseUrl,
-    typeof window !== 'undefined' ? window.location.href : 'https://example.com/',
-  )
-  const url = new URL(sourceUrl.toString())
+  const url = getPublicAppUrl(baseUrl)
 
   url.hash = ''
   url.searchParams.set('view', 'published')
