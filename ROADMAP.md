@@ -43,13 +43,14 @@ Status: In progress
 - Keep settings safe for import, preview, publishing, and reset flows
 
 ### Phase 36 — Navigation Builder
-Status: Planned
+Status: In progress
 
-- Edit navigation labels and targets
-- Show or hide navigation items
-- Configure the primary navigation CTA
+- Edit navigation labels and targets — completed
+- Show or hide navigation items — completed
+- Configure the primary navigation CTA — completed
 - Preserve stable anchor IDs for existing shared links
 - Prevent duplicate or invalid navigation targets
+- Add accessible reordering only after visibility controls are stable
 
 ### Phase 37 — Section Visibility and Ordering
 Status: Planned
@@ -120,14 +121,13 @@ Status: Planned
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Complete phase 35 with the Site Settings editor panel
-2. Build phase 36 navigation administration
-3. Build phase 37 section visibility and ordering
-4. Build phase 38 branding, metadata, and favicon controls
-5. Build phase 39 footer administration
-6. Build phase 40 administration UI system
-7. Resume metadata and document export
-8. Advanced analytics and publishing dashboard
+1. Complete phase 36 with duplicate-target validation and anchor preservation
+2. Build phase 37 section visibility and ordering
+3. Build phase 38 branding, metadata, and favicon controls
+4. Build phase 39 footer administration
+5. Build phase 40 administration UI system
+6. Resume metadata and document export
+7. Advanced analytics and publishing dashboard
 
 ## Administration decisions
 

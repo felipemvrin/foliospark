@@ -202,4 +202,34 @@ describe('isPortfolio', () => {
       }),
     ).toBeNull()
   })
+
+  it('accepts external navigation targets with safe protocols', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          navigation: {
+            ...baseSiteSettings.navigation,
+            items: [{ id: 'work', label: 'Work', target: 'https://example.com/work', visible: true }],
+          },
+        },
+      }),
+    ).not.toBeNull()
+  })
+
+  it('accepts external navigation call-to-action targets with safe protocols', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          navigation: {
+            ...baseSiteSettings.navigation,
+            ctaTarget: 'http://example.com/contact',
+          },
+        },
+      }),
+    ).not.toBeNull()
+  })
 })

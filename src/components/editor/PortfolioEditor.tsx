@@ -5,6 +5,7 @@ import { portfolio as defaultPortfolio } from '../../data/portfolio'
 import { createDefaultSiteSettings } from '../../data/siteSettings'
 import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
+import { getSafeExternalHref } from '../../lib/links'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
@@ -130,6 +131,39 @@ export function PortfolioEditor() {
         siteSettings: {
           ...settings,
           footer: { ...settings.footer, ...updates },
+        },
+      }
+    })
+  }
+
+  const updateNavigationSettings = (updates: Partial<NonNullable<Portfolio['siteSettings']>['navigation']>) => {
+    setData((current) => {
+      const settings = current.siteSettings ?? createDefaultSiteSettings()
+
+      return {
+        ...current,
+        siteSettings: {
+          ...settings,
+          navigation: { ...settings.navigation, ...updates },
+        },
+      }
+    })
+  }
+
+  const updateNavigationItem = (index: number, updates: Partial<NonNullable<Portfolio['siteSettings']>['navigation']['items'][number]>) => {
+    setData((current) => {
+      const settings = current.siteSettings ?? createDefaultSiteSettings()
+
+      return {
+        ...current,
+        siteSettings: {
+          ...settings,
+          navigation: {
+            ...settings.navigation,
+            items: settings.navigation.items.map((item, itemIndex) =>
+              itemIndex === index ? { ...item, ...updates } : item,
+            ),
+          },
         },
       }
     })
@@ -653,6 +687,85 @@ export function PortfolioEditor() {
               />
               Show social links in footer
             </label>
+          </div>
+        </div>
+
+        <div className={panelClassName}>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Navigation</p>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Edit labels, destinations, visibility, and the primary navigation action.</p>
+            </div>
+            <label className="flex items-center gap-3 text-sm text-[var(--muted)]">
+              <input
+                type="checkbox"
+                checked={data.siteSettings?.navigation.visible ?? true}
+                onChange={(event) => updateNavigationSettings({ visible: event.target.checked })}
+              />
+              Show navigation
+            </label>
+          </div>
+
+          <div className="mt-5 grid gap-4 border-b border-[var(--border)] pb-5 md:grid-cols-2">
+            <FieldLabel label="Primary CTA label">
+              <input
+                value={data.siteSettings?.navigation.ctaLabel ?? 'Start a project'}
+                onChange={(event) => updateNavigationSettings({ ctaLabel: event.target.value })}
+                className={inputClassName}
+              />
+            </FieldLabel>
+            <FieldLabel label="Primary CTA target">
+              <input
+                value={data.siteSettings?.navigation.ctaTarget ?? '#contact'}
+                onChange={(event) => updateNavigationSettings({ ctaTarget: event.target.value })}
+                className={inputClassName}
+                placeholder="#contact or https://example.com"
+              />
+            </FieldLabel>
+          </div>
+
+          <div className="mt-5 space-y-4">
+            {(data.siteSettings?.navigation.items ?? createDefaultSiteSettings().navigation.items).map((item, index) => {
+              const target = item.target.trim()
+              const isInternalTarget = target.startsWith('#')
+              const hasTarget = target.length > 0
+              const hasSafeExternalTarget = !isInternalTarget && Boolean(getSafeExternalHref(target))
+              const hasInvalidExternalTarget = hasTarget && !isInternalTarget && !hasSafeExternalTarget
+
+              return (
+                <div key={`${item.id}-${index}`} className={nestedPanelCompactClassName}>
+                  <div className="grid gap-4 md:grid-cols-[1fr_1fr_auto] md:items-end">
+                    <FieldLabel label="Label">
+                      <input
+                        value={item.label}
+                        onChange={(event) => updateNavigationItem(index, { label: event.target.value })}
+                        className={inputClassName}
+                      />
+                    </FieldLabel>
+                    <FieldLabel label="Target">
+                      <input
+                        value={item.target}
+                        onChange={(event) => updateNavigationItem(index, { target: event.target.value })}
+                        className={inputClassName}
+                        placeholder="#work"
+                      />
+                    </FieldLabel>
+                    <label className="flex items-center gap-3 pb-2 text-sm text-[var(--muted)]">
+                      <input
+                        type="checkbox"
+                        checked={item.visible}
+                        onChange={(event) => updateNavigationItem(index, { visible: event.target.checked })}
+                      />
+                      Visible
+                    </label>
+                  </div>
+                  {!hasTarget ? <p className="mt-3 text-xs text-rose-700">Add a target before showing this item.</p> : null}
+                  {hasInvalidExternalTarget ? (
+                    <p className="mt-3 text-xs text-rose-700">External destinations must use a valid HTTP or HTTPS URL.</p>
+                  ) : null}
+                </div>
+              )
+            })}
           </div>
         </div>
 
