@@ -247,9 +247,9 @@ export const portfolio: Portfolio = {
     },
   ],
   socialLinks: [
-    { platform: 'github', label: 'GitHub', url: 'https://github.com' },
-    { platform: 'behance', label: 'Behance', url: 'https://behance.net' },
-    { platform: 'linkedin', label: 'LinkedIn', url: 'https://linkedin.com' },
+    { platform: 'github', label: 'GitHub', url: 'https://github.com/felipemvrin/' },
+    { platform: 'behance', label: 'Behance', url: 'https://www.behance.net/felipemarin' },
+    { platform: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/felipemarin/' },
     { platform: 'instagram', label: 'Instagram', url: 'https://instagram.com' },
     { platform: 'x', label: 'X', url: 'https://x.com' },
     { platform: 'website', label: 'Website', url: 'https://astervale.studio' },

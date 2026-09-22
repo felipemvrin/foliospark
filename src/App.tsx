@@ -101,6 +101,7 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
   const visibleSocialLinks = socialLinks
     .map((link) => ({ ...link, href: getSafeExternalHref(link.url) }))
     .filter((link): link is typeof link & { href: string } => Boolean(link.href))
+  const isSectionVisible = (id: string) => siteSettings?.sections.find((section) => section.id === id)?.visible ?? true
   const handleSkipLinkClick = (event: MouseEvent<HTMLAnchorElement>) => {
     const mainContent = document.getElementById('main-content')
 
@@ -120,18 +121,18 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
         <NavBar />
         <main id="main-content" tabIndex={-1}>
           <Hero />
-          <AboutSection />
-          <WorkSection />
-          <ProcessSection />
-          <ServicesSection />
-          <TrustSection />
-          <GitHubSection />
-          <JournalSection projects={behanceProjects.projects} />
-          <BehanceSection {...behanceProjects} />
-          <ExperienceSection />
-          <SkillsSection />
-          <ResumeSection />
-          <FaqSection />
+          {isSectionVisible('about') ? <AboutSection /> : null}
+          {isSectionVisible('work') ? <WorkSection /> : null}
+          {isSectionVisible('process') ? <ProcessSection /> : null}
+          {isSectionVisible('services') ? <ServicesSection /> : null}
+          {isSectionVisible('trust') ? <TrustSection /> : null}
+          {isSectionVisible('github') ? <GitHubSection /> : null}
+          {isSectionVisible('journal') ? <JournalSection projects={behanceProjects.projects} /> : null}
+          {isSectionVisible('behance') ? <BehanceSection {...behanceProjects} /> : null}
+          {isSectionVisible('experience') ? <ExperienceSection /> : null}
+          {isSectionVisible('skills') ? <SkillsSection /> : null}
+          {isSectionVisible('resume') ? <ResumeSection /> : null}
+          {isSectionVisible('faq') ? <FaqSection /> : null}
           <FinalCtaSection />
           <ContactSection />
           {!isPublicView && (
