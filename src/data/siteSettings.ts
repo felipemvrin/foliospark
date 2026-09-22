@@ -26,6 +26,7 @@ export const defaultSiteSettings: SiteSettings = {
     tagline: 'Your professional story, in motion.',
     showLocation: true,
     showSocialLinks: true,
+    links: [],
   },
   sections: [
     { id: 'about', visible: true },

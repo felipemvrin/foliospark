@@ -137,6 +137,40 @@ export function PortfolioEditor() {
     })
   }
 
+  const updateFooterLink = (index: number, updates: Partial<NonNullable<Portfolio['siteSettings']>['footer']['links'][number]>) => {
+    setData((current) => {
+      const settings = current.siteSettings ?? createDefaultSiteSettings()
+
+      return {
+        ...current,
+        siteSettings: {
+          ...settings,
+          footer: {
+            ...settings.footer,
+            links: settings.footer.links.map((link, linkIndex) =>
+              linkIndex === index ? { ...link, ...updates } : link,
+            ),
+          },
+        },
+      }
+    })
+  }
+
+  const addFooterLink = () => {
+    const settings = data.siteSettings ?? createDefaultSiteSettings()
+    updateFooterSettings({
+      links: [
+        ...settings.footer.links,
+        { id: `footer-link-${settings.footer.links.length + 1}`, label: 'New link', target: '#contact', visible: true },
+      ],
+    })
+  }
+
+  const removeFooterLink = (index: number) => {
+    const settings = data.siteSettings ?? createDefaultSiteSettings()
+    updateFooterSettings({ links: settings.footer.links.filter((_, linkIndex) => linkIndex !== index) })
+  }
+
   const updateNavigationSettings = (updates: Partial<NonNullable<Portfolio['siteSettings']>['navigation']>) => {
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
@@ -738,6 +772,44 @@ export function PortfolioEditor() {
               />
               Show social links in footer
             </label>
+          </div>
+          <div className="mt-6 border-t border-[var(--border)] pt-5">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-[var(--foreground)]">Footer links</p>
+                <p className="mt-1 text-xs text-[var(--muted)]">Add legal pages or other useful destinations.</p>
+              </div>
+              <button type="button" onClick={addFooterLink} className={actionButtonClassName}>Add link</button>
+            </div>
+            <div className="mt-4 space-y-4">
+              {(data.siteSettings?.footer.links ?? []).map((link, index) => {
+                const target = link.target.trim()
+                const hasInvalidTarget = target.length === 0 || (!target.startsWith('#') && !getSafeExternalHref(target))
+
+                return (
+                  <div key={link.id} className={nestedPanelCompactClassName}>
+                    <div className="grid gap-4 md:grid-cols-[1fr_1fr_auto] md:items-end">
+                      <FieldLabel label="Label">
+                        <input value={link.label} onChange={(event) => updateFooterLink(index, { label: event.target.value })} className={inputClassName} />
+                      </FieldLabel>
+                      <FieldLabel label="Target">
+                        <input value={link.target} onChange={(event) => updateFooterLink(index, { target: event.target.value })} className={inputClassName} placeholder="/privacy or https://example.com" />
+                      </FieldLabel>
+                      <div className="flex items-center gap-3 pb-2">
+                        <label className="flex items-center gap-2 text-sm text-[var(--muted)]">
+                          <input type="checkbox" checked={link.visible} onChange={(event) => updateFooterLink(index, { visible: event.target.checked })} />
+                          Visible
+                        </label>
+                        <button type="button" onClick={() => removeFooterLink(index)} className={actionButtonClassName} aria-label={`Remove ${link.label} footer link`}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                    {hasInvalidTarget ? <p className="mt-3 text-xs text-rose-700">Use an internal anchor or a valid HTTP/HTTPS URL.</p> : null}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
 

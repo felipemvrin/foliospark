@@ -249,6 +249,21 @@ describe('isPortfolio', () => {
     ).not.toBeNull()
   })
 
+  it('accepts safe custom footer links', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          footer: {
+            ...baseSiteSettings.footer,
+            links: [{ id: 'privacy', label: 'Privacy', target: '/privacy', visible: true }],
+          },
+        },
+      }),
+    ).not.toBeNull()
+  })
+
   it('backfills missing site settings sections for legacy portfolios', () => {
     expect(
       parsePortfolio({

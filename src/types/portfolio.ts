@@ -134,6 +134,13 @@ export interface SiteNavigationItem {
   visible: boolean
 }
 
+export interface SiteFooterLink {
+  id: string
+  label: string
+  target: string
+  visible: boolean
+}
+
 export interface SiteSettings {
   title: string
   description: string
@@ -152,6 +159,7 @@ export interface SiteSettings {
     tagline: string
     showLocation: boolean
     showSocialLinks: boolean
+    links: SiteFooterLink[]
   }
   sections: Array<{
     id: SiteSectionId

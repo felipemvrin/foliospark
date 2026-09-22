@@ -77,6 +77,15 @@ function isSiteSettings(value: unknown): value is SiteSettings {
     hasStringField(value.footer, 'tagline') &&
     typeof value.footer.showLocation === 'boolean' &&
     typeof value.footer.showSocialLinks === 'boolean' &&
+    Array.isArray(value.footer.links) &&
+    value.footer.links.every(
+      (link) =>
+        isRecord(link) &&
+        hasStringField(link, 'id') &&
+        hasStringField(link, 'label') &&
+        isSafeNavigationTargetField(link, 'target') &&
+        typeof link.visible === 'boolean',
+    ) &&
     Array.isArray(value.sections) &&
     value.sections.every(
       (section) =>
@@ -110,6 +119,16 @@ function withLegacyPortfolioDefaults(value: unknown): unknown {
     normalized.siteSettings = {
       ...normalized.siteSettings,
       sections: createDefaultSiteSettings().sections,
+    }
+  }
+
+  if (isRecord(normalized.siteSettings) && isRecord(normalized.siteSettings.footer) && (!('links' in normalized.siteSettings.footer) || normalized.siteSettings.footer.links === undefined)) {
+    normalized.siteSettings = {
+      ...normalized.siteSettings,
+      footer: {
+        ...normalized.siteSettings.footer,
+        links: [],
+      },
     }
   }
 
