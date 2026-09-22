@@ -119,6 +119,17 @@ http://localhost:5173/?view=public
 
 This view hides the editor and theme controls and the generated link includes the current portfolio data and theme so it can be shared as a public-facing snapshot.
 
+The public portfolio is available at `/`. Administration is intentionally separated at `/admin`:
+
+```text
+http://localhost:5173/          # public portfolio
+http://localhost:5173/admin     # local administration UI
+http://localhost:5173/?view=public
+http://localhost:5173/?view=published&slug=your-slug
+```
+
+The `/admin` route is currently a client-side boundary for the static app. It prevents the editor from rendering on the public route, but it is not server-side authentication. Add authentication and authorization in the publishing API before treating `/admin` as a protected production control plane.
+
 ## Deployment
 
 Pushes to `main` build and deploy the static site through GitHub Pages using the workflow in `.github/workflows/deploy.yml`.
@@ -157,7 +168,7 @@ To connect Behance through a server-side proxy, set `VITE_BEHANCE_PROXY_URL` bef
 - Phase 37: Section Visibility and Ordering
 - Phase 38: Branding, metadata, and customizable SVG favicon
 - Phase 39: Footer Builder
-- Phase 40: Administration UI System
+- Phase 40: `/admin` route boundary and Administration UI System, currently in progress
 - Phase 41: Editor productivity with auto-save, undo/redo, and draft clarity
 - Phase 42: Visual QA, accessibility, performance, and publishing confidence
 - Later: hosted analytics dashboard and retention reports
