@@ -732,7 +732,7 @@ export function PortfolioEditor() {
         <div className={panelClassName}>
           <div>
             <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Sections</p>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Choose which public sections appear. The current order stays stable while section ordering is prepared for a later accessible editor.</p>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Choose which public sections appear and use the ordering buttons to control how they render on the page.</p>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {(data.siteSettings?.sections ?? createDefaultSiteSettings().sections).map((section, index, sections) => {

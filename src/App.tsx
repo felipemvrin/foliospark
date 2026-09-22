@@ -24,6 +24,7 @@ import { SeoHead } from './components/SeoHead'
 import { TrustSection } from './components/TrustSection'
 import { ThemeWrapper } from './components/ThemeWrapper'
 import { WorkSection } from './components/WorkSection'
+import { getOrderedSections } from './lib/siteSections'
 import { usePortfolioStore } from './store/portfolioStore'
 import { useThemeStore } from './store/themeStore'
 import type { SiteSectionId } from './types/portfolio'
@@ -102,8 +103,7 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
   const visibleSocialLinks = socialLinks
     .map((link) => ({ ...link, href: getSafeExternalHref(link.url) }))
     .filter((link): link is typeof link & { href: string } => Boolean(link.href))
-  const isSectionVisible = (id: string) => siteSettings?.sections.find((section) => section.id === id)?.visible ?? true
-  const sections = siteSettings?.sections ?? []
+  const sections = getOrderedSections(siteSettings?.sections)
 
   const renderSection = (id: SiteSectionId) => {
     switch (id) {
@@ -142,25 +142,7 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
         <NavBar />
         <main id="main-content" tabIndex={-1}>
           <Hero />
-          {sections.length > 0
-            ? sections.filter((section) => section.visible || section.id === 'contact').map((section) => renderSection(section.id))
-            : (
-              <>
-                {isSectionVisible('about') ? <AboutSection /> : null}
-                {isSectionVisible('work') ? <WorkSection /> : null}
-                {isSectionVisible('process') ? <ProcessSection /> : null}
-                {isSectionVisible('services') ? <ServicesSection /> : null}
-                {isSectionVisible('trust') ? <TrustSection /> : null}
-                {isSectionVisible('github') ? <GitHubSection /> : null}
-                {isSectionVisible('journal') ? <JournalSection projects={behanceProjects.projects} /> : null}
-                {isSectionVisible('behance') ? <BehanceSection {...behanceProjects} /> : null}
-                {isSectionVisible('experience') ? <ExperienceSection /> : null}
-                {isSectionVisible('skills') ? <SkillsSection /> : null}
-                {isSectionVisible('resume') ? <ResumeSection /> : null}
-                {isSectionVisible('faq') ? <FaqSection /> : null}
-                <ContactSection />
-              </>
-            )}
+          {sections.filter((section) => section.visible || section.id === 'contact').map((section) => renderSection(section.id))}
           <FinalCtaSection />
           {!isPublicView && (
             <>
