@@ -71,7 +71,8 @@ The administration roadmap is organized into these stages:
 5. Footer Builder
 6. Administration UI System
 7. Editor productivity with auto-save and undo/redo
-8. Visual QA and publishing confidence
+8. Internationalization with Spanish default and English alternate
+9. Visual QA and publishing confidence
 
 The current active stage is always reported in implementation updates. Each stage must include its goal, completed work, remaining work, validation results, and the next recommended stage.
 
