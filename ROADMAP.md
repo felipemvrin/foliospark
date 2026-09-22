@@ -57,8 +57,8 @@ Status: In progress
 
 - Show or hide public sections — completed
 - Keep essential conversion sections enabled — completed
-- Reorder sections from the editor
-- Preview the resulting page order
+- Reorder sections from the editor with accessible move controls — completed
+- Render the configured page order publicly — completed
 - Protect essential publishing sections such as hero and contact
 - Add accessible drag and drop only when the basic toggles are stable
 
@@ -122,9 +122,9 @@ Status: Planned
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Complete phase 37 with accessible section ordering and page-order preview
-2. Build phase 38 branding, metadata, and favicon controls
-3. Build phase 39 footer administration
+1. Complete phase 37 with stronger essential-section validation
+2. Build phase 38 branding, metadata, and generated favicon controls
+3. Build phase 39 footer administration and legal links
 4. Build phase 40 administration UI system
 5. Resume metadata and document export
 6. Advanced analytics and publishing dashboard

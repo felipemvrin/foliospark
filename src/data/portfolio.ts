@@ -160,7 +160,7 @@ export const portfolio: Portfolio = {
         ],
       },
       website: 'https://example.com',
-      github: 'https://github.com',
+      github: 'https://github.com/felipemvrin/',
     },
     {
       title: 'Studio Kumo',
@@ -180,7 +180,7 @@ export const portfolio: Portfolio = {
           { value: '5', label: 'new inbound collaborations' },
         ],
       },
-      behance: 'https://behance.net',
+      behance: 'https://www.behance.net/felipemarin',
     },
     {
       title: 'Mono Signal',
@@ -201,7 +201,7 @@ export const portfolio: Portfolio = {
         ],
       },
       website: 'https://example.com',
-      github: 'https://github.com',
+      github: 'https://github.com/felipemvrin/',
     },
   ],
   githubProjects: [
@@ -211,7 +211,7 @@ export const portfolio: Portfolio = {
       language: 'TypeScript',
       stars: 148,
       forks: 34,
-      url: 'https://github.com',
+      url: 'https://github.com/felipemvrin/',
       updatedAt: 'Updated 3 days ago',
     },
     {
@@ -220,7 +220,7 @@ export const portfolio: Portfolio = {
       language: 'React',
       stars: 96,
       forks: 19,
-      url: 'https://github.com',
+      url: 'https://github.com/felipemvrin/',
       updatedAt: 'Updated 1 week ago',
     },
   ],
@@ -230,7 +230,7 @@ export const portfolio: Portfolio = {
       description: 'Editorial identity exploration for a cultural publication with motion-led storytelling.',
       cover:
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
-      url: 'https://behance.net',
+      url: 'https://www.behance.net/felipemarin',
       category: 'Editorial Design',
       publishedAt: 'May 2025',
       tags: ['Brand', 'Motion', 'Culture'],
@@ -240,7 +240,7 @@ export const portfolio: Portfolio = {
       description: 'A study in tactile interfaces, spatial rhythm, and modern product narratives.',
       cover:
         'https://images.unsplash.com/photo-1497366412874-3415097a27e7?auto=format&fit=crop&w=1200&q=80',
-      url: 'https://behance.net',
+      url: 'https://www.behance.net/felipemarin',
       category: 'Interaction Design',
       publishedAt: 'January 2025',
       tags: ['Interface', 'Prototype', 'Systems'],
@@ -250,8 +250,5 @@ export const portfolio: Portfolio = {
     { platform: 'github', label: 'GitHub', url: 'https://github.com/felipemvrin/' },
     { platform: 'behance', label: 'Behance', url: 'https://www.behance.net/felipemarin' },
     { platform: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/felipemarin/' },
-    { platform: 'instagram', label: 'Instagram', url: 'https://instagram.com' },
-    { platform: 'x', label: 'X', url: 'https://x.com' },
-    { platform: 'website', label: 'Website', url: 'https://astervale.studio' },
   ],
 }

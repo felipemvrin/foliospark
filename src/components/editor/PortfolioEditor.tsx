@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import { AlertTriangle, CheckCircle2, Clipboard, Download, Trash2, Upload } from 'lucide-react'
+import { AlertTriangle, ArrowDown, ArrowUp, CheckCircle2, Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
 import { portfolio as defaultPortfolio } from '../../data/portfolio'
 import { createDefaultSiteSettings } from '../../data/siteSettings'
@@ -180,6 +180,29 @@ export function PortfolioEditor() {
           sections: settings.sections.map((section) =>
             section.id === id ? { ...section, visible } : section,
           ),
+        },
+      }
+    })
+  }
+
+  const moveSection = (index: number, direction: -1 | 1) => {
+    setData((current) => {
+      const settings = current.siteSettings ?? createDefaultSiteSettings()
+      const nextIndex = index + direction
+
+      if (nextIndex < 0 || nextIndex >= settings.sections.length) {
+        return current
+      }
+
+      const sections = [...settings.sections]
+      const [section] = sections.splice(index, 1)
+      sections.splice(nextIndex, 0, section)
+
+      return {
+        ...current,
+        siteSettings: {
+          ...settings,
+          sections,
         },
       }
     })
@@ -712,20 +735,30 @@ export function PortfolioEditor() {
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Choose which public sections appear. The current order stays stable while section ordering is prepared for a later accessible editor.</p>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {(data.siteSettings?.sections ?? createDefaultSiteSettings().sections).map((section) => {
+            {(data.siteSettings?.sections ?? createDefaultSiteSettings().sections).map((section, index, sections) => {
               const isRequired = section.id === 'contact'
 
               return (
-                <label key={section.id} className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--background-alt)] px-3 py-3 text-sm text-[var(--muted)]">
-                  <span className="capitalize">{section.id}</span>
-                  <input
-                    type="checkbox"
-                    checked={section.visible}
-                    disabled={isRequired}
-                    onChange={(event) => updateSectionVisibility(section.id, event.target.checked)}
-                    aria-label={`Show ${section.id} section`}
-                  />
-                </label>
+                <div key={section.id} className="rounded-xl border border-[var(--border)] bg-[var(--background-alt)] px-3 py-3 text-sm text-[var(--muted)]">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="capitalize">{section.id}</span>
+                    <input
+                      type="checkbox"
+                      checked={section.visible}
+                      disabled={isRequired}
+                      onChange={(event) => updateSectionVisibility(section.id, event.target.checked)}
+                      aria-label={`Show ${section.id} section`}
+                    />
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <button type="button" onClick={() => moveSection(index, -1)} disabled={index === 0} className={actionButtonClassName} aria-label={`Move ${section.id} section up`}>
+                      <ArrowUp className="h-3.5 w-3.5" />
+                    </button>
+                    <button type="button" onClick={() => moveSection(index, 1)} disabled={index === sections.length - 1} className={actionButtonClassName} aria-label={`Move ${section.id} section down`}>
+                      <ArrowDown className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
               )
             })}
           </div>

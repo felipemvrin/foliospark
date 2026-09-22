@@ -26,6 +26,7 @@ import { ThemeWrapper } from './components/ThemeWrapper'
 import { WorkSection } from './components/WorkSection'
 import { usePortfolioStore } from './store/portfolioStore'
 import { useThemeStore } from './store/themeStore'
+import type { SiteSectionId } from './types/portfolio'
 import { getSafeExternalHref } from './lib/links'
 
 function PublishedPortfolioLoader({ children }: { children: React.ReactNode }) {
@@ -102,6 +103,26 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
     .map((link) => ({ ...link, href: getSafeExternalHref(link.url) }))
     .filter((link): link is typeof link & { href: string } => Boolean(link.href))
   const isSectionVisible = (id: string) => siteSettings?.sections.find((section) => section.id === id)?.visible ?? true
+  const sections = siteSettings?.sections ?? []
+
+  const renderSection = (id: SiteSectionId) => {
+    switch (id) {
+      case 'about': return <AboutSection key={id} />
+      case 'work': return <WorkSection key={id} />
+      case 'process': return <ProcessSection key={id} />
+      case 'services': return <ServicesSection key={id} />
+      case 'trust': return <TrustSection key={id} />
+      case 'github': return <GitHubSection key={id} />
+      case 'journal': return <JournalSection key={id} projects={behanceProjects.projects} />
+      case 'behance': return <BehanceSection key={id} {...behanceProjects} />
+      case 'experience': return <ExperienceSection key={id} />
+      case 'skills': return <SkillsSection key={id} />
+      case 'resume': return <ResumeSection key={id} />
+      case 'faq': return <FaqSection key={id} />
+      case 'contact': return <ContactSection key={id} />
+      default: return null
+    }
+  }
   const handleSkipLinkClick = (event: MouseEvent<HTMLAnchorElement>) => {
     const mainContent = document.getElementById('main-content')
 
@@ -121,20 +142,26 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
         <NavBar />
         <main id="main-content" tabIndex={-1}>
           <Hero />
-          {isSectionVisible('about') ? <AboutSection /> : null}
-          {isSectionVisible('work') ? <WorkSection /> : null}
-          {isSectionVisible('process') ? <ProcessSection /> : null}
-          {isSectionVisible('services') ? <ServicesSection /> : null}
-          {isSectionVisible('trust') ? <TrustSection /> : null}
-          {isSectionVisible('github') ? <GitHubSection /> : null}
-          {isSectionVisible('journal') ? <JournalSection projects={behanceProjects.projects} /> : null}
-          {isSectionVisible('behance') ? <BehanceSection {...behanceProjects} /> : null}
-          {isSectionVisible('experience') ? <ExperienceSection /> : null}
-          {isSectionVisible('skills') ? <SkillsSection /> : null}
-          {isSectionVisible('resume') ? <ResumeSection /> : null}
-          {isSectionVisible('faq') ? <FaqSection /> : null}
+          {sections.length > 0
+            ? sections.filter((section) => section.visible || section.id === 'contact').map((section) => renderSection(section.id))
+            : (
+              <>
+                {isSectionVisible('about') ? <AboutSection /> : null}
+                {isSectionVisible('work') ? <WorkSection /> : null}
+                {isSectionVisible('process') ? <ProcessSection /> : null}
+                {isSectionVisible('services') ? <ServicesSection /> : null}
+                {isSectionVisible('trust') ? <TrustSection /> : null}
+                {isSectionVisible('github') ? <GitHubSection /> : null}
+                {isSectionVisible('journal') ? <JournalSection projects={behanceProjects.projects} /> : null}
+                {isSectionVisible('behance') ? <BehanceSection {...behanceProjects} /> : null}
+                {isSectionVisible('experience') ? <ExperienceSection /> : null}
+                {isSectionVisible('skills') ? <SkillsSection /> : null}
+                {isSectionVisible('resume') ? <ResumeSection /> : null}
+                {isSectionVisible('faq') ? <FaqSection /> : null}
+                <ContactSection />
+              </>
+            )}
           <FinalCtaSection />
-          <ContactSection />
           {!isPublicView && (
             <>
               <div className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 lg:px-8">
