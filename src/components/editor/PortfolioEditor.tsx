@@ -5,6 +5,7 @@ import { portfolio as defaultPortfolio } from '../../data/portfolio'
 import { createDefaultSiteSettings } from '../../data/siteSettings'
 import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
+import { getSafeExternalHref } from '../../lib/links'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
@@ -725,11 +726,14 @@ export function PortfolioEditor() {
 
           <div className="mt-5 space-y-4">
             {(data.siteSettings?.navigation.items ?? createDefaultSiteSettings().navigation.items).map((item, index) => {
-              const isInternalTarget = item.target.trim().startsWith('#')
-              const hasTarget = item.target.trim().length > 0
+              const target = item.target.trim()
+              const isInternalTarget = target.startsWith('#')
+              const hasTarget = target.length > 0
+              const hasSafeExternalTarget = !isInternalTarget && Boolean(getSafeExternalHref(target))
+              const hasInvalidExternalTarget = hasTarget && !isInternalTarget && !hasSafeExternalTarget
 
               return (
-                <div key={item.id} className={nestedPanelCompactClassName}>
+                <div key={`${item.id}-${index}`} className={nestedPanelCompactClassName}>
                   <div className="grid gap-4 md:grid-cols-[1fr_1fr_auto] md:items-end">
                     <FieldLabel label="Label">
                       <input
@@ -756,7 +760,9 @@ export function PortfolioEditor() {
                     </label>
                   </div>
                   {!hasTarget ? <p className="mt-3 text-xs text-rose-700">Add a target before showing this item.</p> : null}
-                  {!isInternalTarget && hasTarget ? <p className="mt-3 text-xs text-[var(--muted)]">External destinations must use HTTPS.</p> : null}
+                  {hasInvalidExternalTarget ? (
+                    <p className="mt-3 text-xs text-rose-700">External destinations must use a valid HTTP or HTTPS URL.</p>
+                  ) : null}
                 </div>
               )
             })}

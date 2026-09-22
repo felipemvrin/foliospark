@@ -217,4 +217,19 @@ describe('isPortfolio', () => {
       }),
     ).not.toBeNull()
   })
+
+  it('accepts external navigation call-to-action targets with safe protocols', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          navigation: {
+            ...baseSiteSettings.navigation,
+            ctaTarget: 'http://example.com/contact',
+          },
+        },
+      }),
+    ).not.toBeNull()
+  })
 })
