@@ -3,6 +3,7 @@ import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { getSafeExternalHref } from '../lib/links'
+import { sortNavigationItemsBySections } from '../lib/siteSections'
 import { usePortfolioStore } from '../store/portfolioStore'
 
 function getSafeNavigationHref(target: string) {
@@ -23,10 +24,10 @@ export function NavBar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const siteSettings = usePortfolioStore((state) => state.data.siteSettings)
-  const navItems = siteSettings?.navigation.items
+  const navItems = sortNavigationItemsBySections(siteSettings?.navigation.items ?? [], siteSettings?.sections)
     .filter((item) => item.visible)
     .map((item) => ({ ...item, href: getSafeNavigationHref(item.target) }))
-    .filter((item): item is typeof item & { href: string } => Boolean(item.href)) ?? []
+    .filter((item): item is typeof item & { href: string } => Boolean(item.href))
   const navigation = siteSettings?.navigation
   const ctaHref = getSafeNavigationHref(navigation?.ctaTarget ?? '') ?? '#contact'
 
