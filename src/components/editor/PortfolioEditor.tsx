@@ -169,6 +169,22 @@ export function PortfolioEditor() {
     })
   }
 
+  const updateSectionVisibility = (id: NonNullable<Portfolio['siteSettings']>['sections'][number]['id'], visible: boolean) => {
+    setData((current) => {
+      const settings = current.siteSettings ?? createDefaultSiteSettings()
+
+      return {
+        ...current,
+        siteSettings: {
+          ...settings,
+          sections: settings.sections.map((section) =>
+            section.id === id ? { ...section, visible } : section,
+          ),
+        },
+      }
+    })
+  }
+
   const updateAbout = (value: string) => {
     setData((current) => ({
       ...current,
@@ -688,6 +704,32 @@ export function PortfolioEditor() {
               Show social links in footer
             </label>
           </div>
+        </div>
+
+        <div className={panelClassName}>
+          <div>
+            <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Sections</p>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Choose which public sections appear. The current order stays stable while section ordering is prepared for a later accessible editor.</p>
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {(data.siteSettings?.sections ?? createDefaultSiteSettings().sections).map((section) => {
+              const isRequired = section.id === 'contact'
+
+              return (
+                <label key={section.id} className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--background-alt)] px-3 py-3 text-sm text-[var(--muted)]">
+                  <span className="capitalize">{section.id}</span>
+                  <input
+                    type="checkbox"
+                    checked={section.visible}
+                    disabled={isRequired}
+                    onChange={(event) => updateSectionVisibility(section.id, event.target.checked)}
+                    aria-label={`Show ${section.id} section`}
+                  />
+                </label>
+              )
+            })}
+          </div>
+          <p className="mt-4 text-xs text-[var(--muted)]">Contact stays enabled so visitors always have a path to reach you.</p>
         </div>
 
         <div className={panelClassName}>

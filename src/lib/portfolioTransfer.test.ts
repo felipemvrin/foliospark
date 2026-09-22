@@ -232,4 +232,19 @@ describe('isPortfolio', () => {
       }),
     ).not.toBeNull()
   })
+
+  it('accepts section visibility settings', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          sections: [
+            { id: 'about', visible: false },
+            { id: 'contact', visible: true },
+          ],
+        },
+      }),
+    ).not.toBeNull()
+  })
 })

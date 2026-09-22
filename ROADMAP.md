@@ -53,9 +53,10 @@ Status: In progress
 - Add accessible reordering only after visibility controls are stable
 
 ### Phase 37 — Section Visibility and Ordering
-Status: Planned
+Status: In progress
 
-- Show or hide public sections
+- Show or hide public sections — completed
+- Keep essential conversion sections enabled — completed
 - Reorder sections from the editor
 - Preview the resulting page order
 - Protect essential publishing sections such as hero and contact
@@ -121,13 +122,12 @@ Status: Planned
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Complete phase 36 with duplicate-target validation and anchor preservation
-2. Build phase 37 section visibility and ordering
-3. Build phase 38 branding, metadata, and favicon controls
-4. Build phase 39 footer administration
-5. Build phase 40 administration UI system
-6. Resume metadata and document export
-7. Advanced analytics and publishing dashboard
+1. Complete phase 37 with accessible section ordering and page-order preview
+2. Build phase 38 branding, metadata, and favicon controls
+3. Build phase 39 footer administration
+4. Build phase 40 administration UI system
+5. Resume metadata and document export
+6. Advanced analytics and publishing dashboard
 
 ## Administration decisions
 
