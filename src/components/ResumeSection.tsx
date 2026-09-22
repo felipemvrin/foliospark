@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion'
 import { Download, Mail } from 'lucide-react'
 
+import { getTranslations } from '../lib/i18n'
 import { getMailtoHref } from '../lib/links'
 import { usePortfolioStore } from '../store/portfolioStore'
 
 export function ResumeSection() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const copy = getTranslations(portfolio.siteSettings?.locale)
   const emailHref = getMailtoHref(portfolio.profile.email)
 
   return (
@@ -13,8 +15,8 @@ export function ResumeSection() {
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-8 border-b border-[var(--border-strong)] pb-10 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <h2 className="font-display text-4xl leading-none sm:text-5xl lg:text-6xl">A concise view of the work behind the work.</h2>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--muted)]">A practical snapshot for recruiters, collaborators, and teams looking for thoughtful design leadership with technical range.</p>
+            <h2 className="font-display text-4xl leading-none sm:text-5xl lg:text-6xl">{copy.home.resumeTitle}</h2>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--muted)]">{copy.home.resumeDescription}</p>
           </div>
           <div className="flex flex-wrap gap-3 print:hidden">
             <motion.button
@@ -24,11 +26,11 @@ export function ResumeSection() {
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--surface)] px-4 py-2.5 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:opacity-90"
             >
-              Print / PDF <Download className="h-4 w-4" />
+              {copy.home.printPdf} <Download className="h-4 w-4" />
             </motion.button>
             {emailHref ? (
               <a href={emailHref} className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2.5 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-[var(--on-accent)] transition hover:opacity-90">
-                Contact <Mail className="h-4 w-4" />
+                {copy.home.contact} <Mail className="h-4 w-4" />
               </a>
             ) : null}
           </div>
@@ -38,8 +40,8 @@ export function ResumeSection() {
           <div>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h3 className="text-2xl font-medium">Experience</h3>
-                <p className="mt-2 text-sm text-[var(--muted)]">Selected roles and responsibilities.</p>
+                <h3 className="text-2xl font-medium">{copy.home.experience}</h3>
+                <p className="mt-2 text-sm text-[var(--muted)]">{copy.home.experienceDescriptionShort}</p>
               </div>
               <p className="text-sm text-[var(--muted)]">{portfolio.profile.location}</p>
             </div>
@@ -59,7 +61,7 @@ export function ResumeSection() {
 
           <div className="space-y-10">
             <div>
-              <h3 className="text-2xl font-medium">Education</h3>
+              <h3 className="text-2xl font-medium">{copy.home.education}</h3>
               <div className="mt-6 space-y-6">
                 {portfolio.education.map((item, index) => (
                   <article key={`${item.institution}-${item.period}-${index}`}>
@@ -71,7 +73,7 @@ export function ResumeSection() {
               </div>
             </div>
             <div>
-              <h3 className="text-2xl font-medium">Capabilities</h3>
+              <h3 className="text-2xl font-medium">{copy.home.capabilities}</h3>
               <div className="mt-6 space-y-5">
                 {portfolio.skills.map((group, index) => (
                   <div key={`${group.category}-${index}`}>

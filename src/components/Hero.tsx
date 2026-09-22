@@ -70,7 +70,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
-            className="flex flex-col gap-4 sm:flex-row"
+            className="flex"
           >
             <motion.a
               href="#work"
@@ -79,14 +79,6 @@ export function Hero() {
               className="button-shine inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] shadow-[0_12px_26px_rgba(212,163,115,0.28)] transition hover:shadow-[0_18px_40px_rgba(212,163,115,0.36)]"
             >
               {copy.home.exploreWork} <ArrowUpRight className="h-4 w-4" />
-            </motion.a>
-            <motion.a
-              href="#contact"
-              whileHover={{ y: -3, x: 2 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
-            >
-              {copy.home.startProject}
             </motion.a>
           </motion.div>
 

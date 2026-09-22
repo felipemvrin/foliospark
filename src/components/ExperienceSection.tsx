@@ -1,17 +1,19 @@
 import { motion } from 'framer-motion'
 
+import { getTranslations } from '../lib/i18n'
 import { usePortfolioStore } from '../store/portfolioStore'
 import { SectionHeading } from './SectionHeading'
 
 export function ExperienceSection() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const copy = getTranslations(portfolio.siteSettings?.locale)
 
   return (
     <section id="experience" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <SectionHeading
-        eyebrow="Experience"
-        title="A career shaped by systems and story."
-        description="From product design to brand narrative, each chapter is built around clarity, craft, and meaningful outcomes."
+        eyebrow={copy.home.experienceEyebrow}
+        title={copy.home.experienceTitle}
+        description={copy.home.experienceDescription}
       />
 
       <div className="mt-12 space-y-6">

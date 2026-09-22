@@ -41,4 +41,31 @@ describe('i18n', () => {
     expect(english.projectInquiryFallback).toBe('Project inquiry')
     expect(english.faqItems[3]?.question).toBe('Is the site secure and production-ready?')
   })
+
+  it('provides localized work-section copy', () => {
+    expect(getTranslations('es').home.workEyebrow).toBe('Proyectos seleccionados')
+    expect(getTranslations('es').home.workTitle).toBe('Diseñado para captar atención, creado para generar confianza.')
+    expect(getTranslations('es').home.readCaseStudy).toBe('Ver caso de estudio')
+    expect(getTranslations('es').home.challenge).toBe('Desafío')
+    expect(getTranslations('es').home.readTheCaseStudy).toBe('Ver el caso de estudio')
+    expect(getTranslations('es').home.approach).toBe('Enfoque')
+    expect(getTranslations('es').home.outcome).toBe('Resultado')
+    expect(getTranslations('en').home.workEyebrow).toBe('Selected work')
+    expect(getTranslations('en').home.viewProject).toBe('View project')
+    expect(getTranslations('en').home.readTheCaseStudy).toBe('Read the case study')
+    expect(getTranslations('en').home.approach).toBe('Approach')
+    expect(getTranslations('en').home.outcome).toBe('Outcome')
+  })
+
+  it('provides localized trust-section copy', () => {
+    expect(getTranslations('es').home.trustPoints[1]).toEqual({ value: '1–3 sem.', label: 'plazo habitual de entrega' })
+    expect(getTranslations('es').home.trustedBy).toBe('Han confiado en nosotros')
+    expect(getTranslations('en').home.trustTitle).toBe('Used by teams that need clarity, polish, and momentum.')
+  })
+
+  it('provides localized experience and resume interface copy', () => {
+    expect(getTranslations('es').home.experienceEyebrow).toBe('Trayectoria')
+    expect(getTranslations('es').home.printPdf).toBe('Imprimir / PDF')
+    expect(getTranslations('en').home.capabilities).toBe('Capabilities')
+  })
 })

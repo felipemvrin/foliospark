@@ -6,12 +6,22 @@ import { trackAnalyticsEvent } from '../lib/analytics'
 import { getPreferredSafeExternalHref, getSafeExternalHref } from '../lib/links'
 import type { Project } from '../types/portfolio'
 
+interface ProjectCardCopy {
+  viewProject: string
+  readCaseStudy: string
+  readTheCaseStudy: string
+  challenge: string
+  approach: string
+  outcome: string
+}
+
 interface ProjectCardProps {
   project: Project
   index: number
+  copy: ProjectCardCopy
 }
 
-export function ProjectCard({ project, index }: ProjectCardProps) {
+export function ProjectCard({ project, index, copy }: ProjectCardProps) {
   const [isCaseStudyOpen, setIsCaseStudyOpen] = useState(false)
   const reduceMotion = useReducedMotion()
   const spotlightEnabled = !reduceMotion
@@ -84,7 +94,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             transition={{ duration: 0.25 }}
             className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-full border border-white/25 bg-black/20 px-3 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm opacity-0 transition duration-300 group-focus-within:opacity-100 group-hover:opacity-100"
           >
-            <span>{project.caseStudy ? 'Read case study' : 'View project'}</span>
+            <span>{project.caseStudy ? copy.readCaseStudy : copy.viewProject}</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
           </motion.div>
         ) : null}
@@ -100,7 +110,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             {websiteHref ? (
               <a
                 href={websiteHref}
-                aria-label={`Visit ${project.title}`}
+                aria-label={`${copy.viewProject}: ${project.title}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'project_website' } })}
@@ -134,22 +144,22 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
               onClick={() => setIsCaseStudyOpen((open) => !open)}
               className="flex w-full items-center justify-between gap-4 text-left text-sm font-medium text-[var(--foreground)]"
             >
-              <span>Read the case study</span>
+              <span>{copy.readTheCaseStudy}</span>
               <ChevronDown className={`h-4 w-4 transition ${isCaseStudyOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isCaseStudyOpen ? (
               <div className="mt-5 space-y-5 text-sm leading-7 text-[var(--muted)]">
                 <div>
-                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">Challenge</p>
+                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">{copy.challenge}</p>
                   <p className="mt-2">{project.caseStudy.challenge}</p>
                 </div>
                 <div>
-                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">Approach</p>
+                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">{copy.approach}</p>
                   <p className="mt-2">{project.caseStudy.approach}</p>
                 </div>
                 <div>
-                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">Outcome</p>
+                  <p className="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">{copy.outcome}</p>
                   <p className="mt-2">{project.caseStudy.outcome}</p>
                 </div>
                 {project.caseStudy.metrics.length > 0 ? (
@@ -187,7 +197,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             onClick={() => void trackAnalyticsEvent({ name: 'outbound_click', properties: { destination: 'project_primary' } })}
             className="inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)] transition hover:gap-3"
           >
-            View project <ArrowUpRight className="h-4 w-4" />
+            {copy.viewProject} <ArrowUpRight className="h-4 w-4" />
           </a>
         ) : null}
       </div>
