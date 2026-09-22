@@ -87,6 +87,7 @@ Status: In progress
 - Separate the public `/` route from the `/admin` administration route — completed
 - Keep public preview and published views readonly — completed
 - Distinguish `public`, `preview`, `published`, and `admin` analytics modes — completed
+- Add internal administration navigation for Site, Sections, Navigation, Profile, Content, Appearance, and Publishing — completed
 - Add server-side authentication and authorization for `/admin` when a backend exists
 - Split the editor into Site, Navigation, Sections, Content, Appearance, and Publishing panels
 - Add collapsible groups and mobile-friendly editor navigation
