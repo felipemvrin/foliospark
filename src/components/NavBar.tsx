@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { getSafeExternalHref } from '../lib/links'
 import { sortNavigationItemsBySections } from '../lib/siteSections'
 import { usePortfolioStore } from '../store/portfolioStore'
+import { resolveLocalizedCtaLabel, resolveLocalizedNavLabel } from '../lib/i18n'
 
 function getSafeNavigationHref(target: string) {
   const trimmedTarget = target.trim()
@@ -26,10 +27,15 @@ export function NavBar() {
   const siteSettings = usePortfolioStore((state) => state.data.siteSettings)
   const navItems = sortNavigationItemsBySections(siteSettings?.navigation.items ?? [], siteSettings?.sections)
     .filter((item) => item.visible)
-    .map((item) => ({ ...item, href: getSafeNavigationHref(item.target) }))
+    .map((item) => ({
+      ...item,
+      href: getSafeNavigationHref(item.target),
+      resolvedLabel: resolveLocalizedNavLabel(item.id, item.label, siteSettings?.locale),
+    }))
     .filter((item): item is typeof item & { href: string } => Boolean(item.href))
   const navigation = siteSettings?.navigation
   const ctaHref = getSafeNavigationHref(navigation?.ctaTarget ?? '') ?? '#contact'
+  const resolvedCtaLabel = resolveLocalizedCtaLabel(navigation?.ctaLabel, siteSettings?.locale)
 
   useEffect(() => {
     const hero = document.getElementById('top')
@@ -115,7 +121,7 @@ export function NavBar() {
               whileHover={{ y: -2 }}
               className="text-[0.7rem] font-medium uppercase tracking-[0.24em] text-[var(--muted)] transition hover:text-[var(--foreground)]"
             >
-              {item.label}
+              {item.resolvedLabel}
             </motion.a>
           ))}
         </div> : null}
@@ -128,7 +134,7 @@ export function NavBar() {
               whileTap={{ scale: 0.98 }}
               className="button-shine inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[var(--foreground)] transition hover:shadow-[0_18px_35px_rgba(17,17,17,0.08)]"
             >
-              {navigation?.ctaLabel || 'Start a project'} <ArrowUpRight className="h-3.5 w-3.5" />
+              {resolvedCtaLabel} <ArrowUpRight className="h-3.5 w-3.5" />
             </motion.a>
           ) : null}
         </div>
@@ -166,7 +172,7 @@ export function NavBar() {
                   transition={{ duration: 0.18 }}
                   className="text-sm font-medium uppercase tracking-[0.2em] text-[var(--foreground)]"
                 >
-                  {item.label}
+                  {item.resolvedLabel}
                 </motion.a>
               ))}
             </div>

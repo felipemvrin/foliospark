@@ -294,4 +294,10 @@ describe('isPortfolio', () => {
       },
     })
   })
+
+  it('accepts Spanish as the default site locale and English as an alternative', () => {
+    expect(parsePortfolio({ ...basePortfolio, siteSettings: { ...baseSiteSettings, locale: 'es' } })).not.toBeNull()
+    expect(parsePortfolio({ ...basePortfolio, siteSettings: { ...baseSiteSettings, locale: 'en' } })).not.toBeNull()
+    expect(parsePortfolio({ ...basePortfolio, siteSettings: { ...baseSiteSettings, locale: 'fr' } })).toBeNull()
+  })
 })

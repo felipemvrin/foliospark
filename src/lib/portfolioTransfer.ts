@@ -54,6 +54,7 @@ function isSafeFooterTargetField(value: Record<string, unknown>, key: string) {
 function isSiteSettings(value: unknown): value is SiteSettings {
   return (
     isRecord(value) &&
+    (value.locale === undefined || value.locale === 'es' || value.locale === 'en') &&
     hasStringField(value, 'title') &&
     hasStringField(value, 'description') &&
     hasStringField(value, 'logoText') &&
