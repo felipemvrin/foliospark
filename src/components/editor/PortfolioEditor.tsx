@@ -188,10 +188,9 @@ export function PortfolioEditor() {
     const timeout = window.setTimeout(() => setSaveState('saved'), 250)
 
     return () => window.clearTimeout(timeout)
-  }, [data])
+  }, [data, theme])
 
   const updateProfile = (field: keyof Profile, value: string) => {
-    setSaveState('saving')
     setData((current) => ({
       ...current,
       profile: {
@@ -202,7 +201,6 @@ export function PortfolioEditor() {
   }
 
   const updateSiteSettings = (updates: Partial<SiteSettings>) => {
-    setSaveState('saving')
     setData((current) => ({
       ...current,
       siteSettings: {
@@ -214,7 +212,6 @@ export function PortfolioEditor() {
   }
 
   const updateFooterSettings = (updates: Partial<NonNullable<Portfolio['siteSettings']>['footer']>) => {
-    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
 
@@ -263,7 +260,6 @@ export function PortfolioEditor() {
   }
 
   const updateNavigationSettings = (updates: Partial<NonNullable<Portfolio['siteSettings']>['navigation']>) => {
-    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
 
@@ -278,7 +274,6 @@ export function PortfolioEditor() {
   }
 
   const updateNavigationItem = (index: number, updates: Partial<NonNullable<Portfolio['siteSettings']>['navigation']['items'][number]>) => {
-    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
 
@@ -298,7 +293,6 @@ export function PortfolioEditor() {
   }
 
   const updateSectionVisibility = (id: NonNullable<Portfolio['siteSettings']>['sections'][number]['id'], visible: boolean) => {
-    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
 
@@ -315,7 +309,6 @@ export function PortfolioEditor() {
   }
 
   const moveSection = (index: number, direction: -1 | 1) => {
-    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
       const nextIndex = index + direction
@@ -339,7 +332,6 @@ export function PortfolioEditor() {
   }
 
   const updateAbout = (value: string) => {
-    setSaveState('saving')
     setData((current) => ({
       ...current,
       about: value.split(/\n\s*\n/).filter(Boolean),
@@ -347,7 +339,6 @@ export function PortfolioEditor() {
   }
 
   const updateMetric = (index: number, updates: Partial<PortfolioMetric>) => {
-    setSaveState('saving')
     setData((current) => ({
       ...current,
       metrics: current.metrics.map((entry, itemIndex) =>
@@ -357,7 +348,6 @@ export function PortfolioEditor() {
   }
 
   const updateExperience = (index: number, updates: Partial<Experience>) => {
-    setSaveState('saving')
     setData((current) => ({
       ...current,
       experience: current.experience.map((entry, itemIndex) =>
