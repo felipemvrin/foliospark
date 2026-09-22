@@ -106,7 +106,21 @@ Status: Planned
 - Preview persistence
 - Confirmations for destructive reset or delete actions
 
-### Phase 42 — Visual QA and publishing confidence
+### Phase 42 — Internationalization and Spanish home
+Status: High priority, planned next
+
+- Audit all visible English copy in the public home and administration UI
+- Add a language setting with Spanish as the default public language
+- Support English as an alternate language without duplicating component markup
+- Move interface strings into typed translation dictionaries
+- Translate navigation, hero, section headings, CTAs, forms, states, errors, footer, and editor labels
+- Translate default portfolio seed content, case studies, services, FAQ, and resume copy
+- Localize metadata, Open Graph text, document language, and generated favicon context where relevant
+- Preserve user-authored portfolio content when changing language
+- Persist the language in `SiteSettings` and carry it through preview and published views
+- Add tests for fallback language, missing keys, and public-preview language persistence
+
+### Phase 43 — Visual QA and publishing confidence
 Status: Planned
 
 - Responsive checks at 320, 375, 768, 1024, and 1440 pixels
@@ -132,8 +146,10 @@ Status: Planned
 ## Priority order for next steps
 1. Complete phase 39 with footer link ordering and layout presets
 2. Complete phase 40 with collapsible panels and production authentication boundary
-3. Resume metadata and document export
-4. Advanced analytics and publishing dashboard
+3. Build phase 42 internationalization with Spanish as the default public language
+4. Resume metadata and document export
+5. Phase 43 visual QA and publishing confidence
+6. Advanced analytics and publishing dashboard
 
 ## Administration decisions
 

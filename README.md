@@ -71,9 +71,25 @@ The administration roadmap is organized into these stages:
 5. Footer Builder
 6. Administration UI System
 7. Editor productivity with auto-save and undo/redo
-8. Visual QA and publishing confidence
+8. Internationalization with Spanish default and English alternate
+9. Visual QA and publishing confidence
 
 The current active stage is always reported in implementation updates. Each stage must include its goal, completed work, remaining work, validation results, and the next recommended stage.
+
+### Language strategy
+
+The current public home and administration interface contain hardcoded English strings and English seed content. Internationalization is therefore a high-priority product phase, not a copy-only pass.
+
+The planned language model is:
+
+- Spanish as the default public language for the project owner and primary audience.
+- English as an alternate language.
+- Typed translation dictionaries for interface strings.
+- A persisted language setting in `SiteSettings`.
+- Language carried through local preview, published portfolio responses, SEO metadata, and document language.
+- User-authored portfolio content preserved when the interface language changes.
+
+The implementation should translate the home, navigation, section headings, calls to action, forms, loading and error states, footer, editor labels, FAQ, services, case studies, resume content, and default seed data without duplicating component markup.
 
 ### Recommended administration UI
 
@@ -170,7 +186,8 @@ To connect Behance through a server-side proxy, set `VITE_BEHANCE_PROXY_URL` bef
 - Phase 39: Footer Builder
 - Phase 40: `/admin` route boundary and Administration UI System, currently in progress
 - Phase 41: Editor productivity with auto-save, undo/redo, and draft clarity
-- Phase 42: Visual QA, accessibility, performance, and publishing confidence
+- Phase 42: Internationalization with Spanish default and English alternate, high priority
+- Phase 43: Visual QA, accessibility, performance, and publishing confidence
 - Later: hosted analytics dashboard and retention reports
 
 ## Screenshots
