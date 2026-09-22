@@ -165,6 +165,8 @@ export function PortfolioEditor() {
   const [shareMessage, setShareMessage] = useState<{ href: string; id: number; text: string } | null>(null)
   const [publishMessage, setPublishMessage] = useState('')
   const [isPublishing, setIsPublishing] = useState(false)
+  const [saveState, setSaveState] = useState<'saved' | 'saving'>('saved')
+  const hasObservedDataRef = useRef(false)
   const [projectDraftKeys, setProjectDraftKeys] = useState(() => data.projects.map(() => createProjectDraftKey()))
   const [projectCaseStudyMetricDrafts, setProjectCaseStudyMetricDrafts] = useState<Record<string, string>>({})
   const theme = useThemeStore((state) => state.preset)
@@ -175,6 +177,18 @@ export function PortfolioEditor() {
   const publicPreviewHref = useMemo(() => getPublicPreviewHref(data, theme, data.profile.slug), [data, theme])
   const publishedHref = useMemo(() => getPublishedPortfolioHref(data.profile.slug || data.profile.name), [data.profile.name, data.profile.slug])
   const publishingReadiness = useMemo(() => getPublishingReadiness(data), [data])
+
+  useEffect(() => {
+    if (!hasObservedDataRef.current) {
+      hasObservedDataRef.current = true
+      return
+    }
+
+    setSaveState('saving')
+    const timeout = window.setTimeout(() => setSaveState('saved'), 250)
+
+    return () => window.clearTimeout(timeout)
+  }, [data, theme])
 
   const updateProfile = (field: keyof Profile, value: string) => {
     setData((current) => ({
@@ -648,15 +662,20 @@ export function PortfolioEditor() {
           <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Editor</p>
           <h2 className="mt-3 font-display text-4xl text-[var(--foreground)] sm:text-5xl">Portfolio administration</h2>
         </div>
-        <div
+        <div className="flex items-center gap-3">
+          <span role="status" className="text-xs text-[var(--muted)]">
+            {saveState === 'saving' ? 'Saving locally…' : 'Saved locally'}
+          </span>
+          <div
           className="inline-flex w-fit rounded-full border px-3 py-2 text-[0.62rem] uppercase tracking-[0.24em]"
           style={{
             background: selectedTheme.colors.accentSoft,
             borderColor: selectedTheme.colors.border,
             color: selectedTheme.colors.foreground,
           }}
-        >
-          {selectedTheme.name}
+          >
+            {selectedTheme.name}
+          </div>
         </div>
       </div>
 
