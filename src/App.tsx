@@ -28,7 +28,7 @@ import { getOrderedSections } from './lib/siteSections'
 import { usePortfolioStore } from './store/portfolioStore'
 import { useThemeStore } from './store/themeStore'
 import type { SiteSectionId } from './types/portfolio'
-import { getSafeExternalHref } from './lib/links'
+import { getSafeExternalHref, getSafeFooterHref } from './lib/links'
 
 function PublishedPortfolioLoader({ children }: { children: React.ReactNode }) {
   const setData = usePortfolioStore((state) => state.setData)
@@ -103,6 +103,13 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
   const visibleSocialLinks = socialLinks
     .map((link) => ({ ...link, href: getSafeExternalHref(link.url) }))
     .filter((link): link is typeof link & { href: string } => Boolean(link.href))
+  const footerLinks = (siteSettings?.footer.links ?? [])
+    .filter((link) => link.visible)
+    .map((link) => ({
+      ...link,
+      href: getSafeFooterHref(link.target),
+    }))
+    .filter((link): link is typeof link & { href: string } => Boolean(link.href))
   const sections = getOrderedSections(siteSettings?.sections)
 
   const renderSection = (id: SiteSectionId) => {
@@ -164,6 +171,21 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
               {visibleSocialLinks.map((link) => (
                 <a key={`${link.platform}-${link.label}`} href={link.href} target="_blank" rel="noreferrer" className="transition hover:text-[var(--foreground)]">
                   {link.label || link.platform}
+                </a>
+              ))}
+            </div>
+          ) : null}
+          {footerLinks.length > 0 ? (
+            <div className="mx-auto flex max-w-7xl flex-wrap gap-4 px-5 pb-8 text-xs text-[var(--muted)] sm:px-6 lg:px-8">
+              {footerLinks.map((link) => (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  target={link.href.startsWith('http://') || link.href.startsWith('https://') ? '_blank' : undefined}
+                  rel={link.href.startsWith('http://') || link.href.startsWith('https://') ? 'noreferrer' : undefined}
+                  className="transition hover:text-[var(--foreground)]"
+                >
+                  {link.label}
                 </a>
               ))}
             </div>

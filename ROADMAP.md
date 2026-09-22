@@ -63,22 +63,23 @@ Status: In progress
 - Add accessible drag and drop only when the basic toggles are stable
 
 ### Phase 38 — Branding, Title, Metadata, and Favicon
-Status: Planned
+Status: Completed in phase 38
 
-- Edit site title and description
-- Edit logo text and logo mark
-- Generate a customizable SVG favicon from the logo mark and accent token
-- Update document title, canonical metadata, and social metadata
-- Validate favicon URLs and imported branding values
+- Edit site title and description — completed
+- Edit logo text and logo mark — completed
+- Generate a customizable SVG favicon from the logo mark and accent token — completed
+- Update document title, canonical metadata, and social metadata — completed
+- Validate favicon URLs and imported branding values — completed
 
 ### Phase 39 — Footer Builder
-Status: Planned
+Status: In progress
 
-- Edit copyright and tagline
-- Show or hide location
-- Show or hide social links
-- Add optional legal links
-- Control footer visibility and preview it live
+- Edit copyright and tagline — completed
+- Show or hide location — completed
+- Show or hide social links — completed
+- Add optional legal and custom links — completed
+- Control footer visibility and preview it live — completed
+- Add footer link ordering and layout presets
 
 ### Phase 40 — Administration UI System
 Status: Planned
@@ -122,12 +123,10 @@ Status: Planned
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Complete phase 37 with stronger essential-section validation
-2. Build phase 38 branding, metadata, and generated favicon controls
-3. Build phase 39 footer administration and legal links
-4. Build phase 40 administration UI system
-5. Resume metadata and document export
-6. Advanced analytics and publishing dashboard
+1. Complete phase 39 with footer link ordering and layout presets
+2. Build phase 40 administration UI system
+3. Resume metadata and document export
+4. Advanced analytics and publishing dashboard
 
 ## Administration decisions
 

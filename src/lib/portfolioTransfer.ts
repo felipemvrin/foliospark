@@ -1,6 +1,6 @@
 import type { Portfolio, SiteSettings } from '../types/portfolio'
 import { createDefaultSiteSettings } from '../data/siteSettings'
-import { getSafeExternalHref } from './links'
+import { getSafeExternalHref, getSafeFooterHref } from './links'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -47,6 +47,10 @@ function isSafeNavigationTargetField(value: Record<string, unknown>, key: string
   return typeof value[key] === 'string' && isSafeNavigationTarget(value[key])
 }
 
+function isSafeFooterTargetField(value: Record<string, unknown>, key: string) {
+  return typeof value[key] === 'string' && Boolean(getSafeFooterHref(value[key]))
+}
+
 function isSiteSettings(value: unknown): value is SiteSettings {
   return (
     isRecord(value) &&
@@ -77,6 +81,15 @@ function isSiteSettings(value: unknown): value is SiteSettings {
     hasStringField(value.footer, 'tagline') &&
     typeof value.footer.showLocation === 'boolean' &&
     typeof value.footer.showSocialLinks === 'boolean' &&
+    Array.isArray(value.footer.links) &&
+    value.footer.links.every(
+      (link) =>
+        isRecord(link) &&
+        hasStringField(link, 'id') &&
+        hasStringField(link, 'label') &&
+        isSafeFooterTargetField(link, 'target') &&
+        typeof link.visible === 'boolean',
+    ) &&
     Array.isArray(value.sections) &&
     value.sections.every(
       (section) =>
@@ -110,6 +123,16 @@ function withLegacyPortfolioDefaults(value: unknown): unknown {
     normalized.siteSettings = {
       ...normalized.siteSettings,
       sections: createDefaultSiteSettings().sections,
+    }
+  }
+
+  if (isRecord(normalized.siteSettings) && isRecord(normalized.siteSettings.footer) && (!('links' in normalized.siteSettings.footer) || normalized.siteSettings.footer.links === undefined)) {
+    normalized.siteSettings = {
+      ...normalized.siteSettings,
+      footer: {
+        ...normalized.siteSettings.footer,
+        links: [],
+      },
     }
   }
 
