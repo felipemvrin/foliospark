@@ -1,4 +1,5 @@
 import type { Portfolio, SiteSettings } from '../types/portfolio'
+import { createDefaultSiteSettings } from '../data/siteSettings'
 import { getSafeExternalHref } from './links'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -99,14 +100,20 @@ function withLegacyPortfolioDefaults(value: unknown): unknown {
     return value
   }
 
-  if ('services' in value && value.services !== undefined) {
-    return value
+  const normalized: Record<string, unknown> = { ...value }
+
+  if (!('services' in normalized) || normalized.services === undefined) {
+    normalized.services = []
   }
 
-  return {
-    ...value,
-    services: [],
+  if (isRecord(normalized.siteSettings) && (!('sections' in normalized.siteSettings) || normalized.siteSettings.sections === undefined)) {
+    normalized.siteSettings = {
+      ...normalized.siteSettings,
+      sections: createDefaultSiteSettings().sections,
+    }
   }
+
+  return normalized
 }
 
 export function isPortfolio(value: unknown): value is Portfolio {

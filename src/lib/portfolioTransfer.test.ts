@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { createDefaultSiteSettings } from '../data/siteSettings'
 import { isPortfolio, parsePortfolio } from './portfolioTransfer'
 
 const basePortfolio = {
@@ -246,5 +247,21 @@ describe('isPortfolio', () => {
         },
       }),
     ).not.toBeNull()
+  })
+
+  it('backfills missing site settings sections for legacy portfolios', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          sections: undefined,
+        },
+      }),
+    ).toMatchObject({
+      siteSettings: {
+        sections: createDefaultSiteSettings().sections,
+      },
+    })
   })
 })
