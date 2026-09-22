@@ -3,9 +3,11 @@ import { ArrowDown, ArrowUpRight, Sparkles } from 'lucide-react'
 import { useRef } from 'react'
 
 import { usePortfolioStore } from '../store/portfolioStore'
+import { getTranslations } from '../lib/i18n'
 
 export function Hero() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const copy = getTranslations(usePortfolioStore((state) => state.data.siteSettings?.locale))
   const sectionRef = useRef<HTMLElement | null>(null)
   const isInView = useInView(sectionRef, { amount: 0.2 })
   const reduceMotion = useReducedMotion()
@@ -33,7 +35,7 @@ export function Hero() {
             className="flex items-center gap-3 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]"
           >
             <Sparkles className="h-3.5 w-3.5" />
-            Professional portfolio system
+            {copy.home.heroEyebrow}
           </motion.div>
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
@@ -76,7 +78,7 @@ export function Hero() {
               whileTap={{ scale: 0.98 }}
               className="button-shine inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--on-accent)] shadow-[0_12px_26px_rgba(212,163,115,0.28)] transition hover:shadow-[0_18px_40px_rgba(212,163,115,0.36)]"
             >
-              Explore work <ArrowUpRight className="h-4 w-4" />
+              {copy.home.exploreWork} <ArrowUpRight className="h-4 w-4" />
             </motion.a>
             <motion.a
               href="#contact"
@@ -84,7 +86,7 @@ export function Hero() {
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-6 py-3.5 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
-              Start a project
+              {copy.home.startProject}
             </motion.a>
           </motion.div>
 
@@ -127,7 +129,7 @@ export function Hero() {
             style={{ boxShadow: 'var(--shadow-soft)' }}
           >
             <div className="mb-4 flex items-center justify-between border-b border-[var(--border)] pb-3 text-[0.64rem] uppercase tracking-[0.28em] text-[var(--muted)]">
-              <span>Portfolio</span>
+              <span>{copy.home.portfolioLabel}</span>
               <span>01 / 06</span>
             </div>
             <img
@@ -137,7 +139,7 @@ export function Hero() {
             />
             <div className="mt-5 flex items-center justify-between gap-4 border-t border-[var(--border)] pt-4">
               <div>
-                <p className="text-[0.64rem] uppercase tracking-[0.28em] text-[var(--muted)]">Current role</p>
+                <p className="text-[0.64rem] uppercase tracking-[0.28em] text-[var(--muted)]">{copy.home.currentRole}</p>
                 <p className="mt-2 text-xl font-medium text-[var(--foreground)]">{portfolio.profile.role}</p>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--background-alt)] text-[var(--muted)]">

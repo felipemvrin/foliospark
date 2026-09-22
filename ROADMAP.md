@@ -113,6 +113,7 @@ Status: In progress
 - Add a language setting with Spanish as the default public language — completed
 - Support English as an alternate language without duplicating component markup — foundation completed
 - Move interface strings into typed translation dictionaries — foundation completed
+- Translate Hero, About, Process, Services, CTA, FAQ, and Contact shell strings — completed
 - Translate navigation, hero, section headings, CTAs, forms, states, errors, footer, and editor labels
 - Translate default portfolio seed content, case studies, services, FAQ, and resume copy
 - Localize metadata, Open Graph text, document language, and generated favicon context where relevant

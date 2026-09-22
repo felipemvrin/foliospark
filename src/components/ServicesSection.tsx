@@ -2,17 +2,19 @@ import { motion } from 'framer-motion'
 
 import { usePortfolioStore } from '../store/portfolioStore'
 import { SectionHeading } from './SectionHeading'
+import { getTranslations } from '../lib/i18n'
 
 export function ServicesSection() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const copy = getTranslations(usePortfolioStore((state) => state.data.siteSettings?.locale))
 
   return (
     <section id="services" className="bg-[var(--background-alt)] py-20">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Services"
-          title="Flexible engagement for the work that matters most."
-          description="From positioning to launch-ready storytelling, each package is designed to help ambitious teams move with clarity and confidence."
+          eyebrow={copy.home.servicesEyebrow}
+          title={copy.home.servicesTitle}
+          description={copy.home.servicesDescription}
         />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
@@ -29,7 +31,7 @@ export function ServicesSection() {
             >
               {service.featured ? (
                 <div className="mb-5 inline-flex rounded-full border border-[var(--accent)] bg-[var(--accent-soft)] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.2em] text-[var(--foreground)]">
-                  Most requested
+                  {copy.home.mostRequested}
                 </div>
               ) : null}
 

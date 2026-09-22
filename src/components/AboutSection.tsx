@@ -2,15 +2,17 @@ import { motion } from 'framer-motion'
 
 import { usePortfolioStore } from '../store/portfolioStore'
 import { SectionHeading } from './SectionHeading'
+import { getTranslations } from '../lib/i18n'
 
 export function AboutSection() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const copy = getTranslations(usePortfolioStore((state) => state.data.siteSettings?.locale))
 
   return (
     <section id="about" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <SectionHeading
-        eyebrow="About"
-        title="An identity that moves with the work."
+        eyebrow={copy.home.aboutEyebrow}
+        title={copy.home.aboutTitle}
           description={portfolio.profile.bio}
       />
 
@@ -23,7 +25,7 @@ export function AboutSection() {
           whileHover={{ y: -4 }}
           className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
         >
-          <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]">Profile</p>
+          <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] text-[var(--muted)]">{copy.home.profileLabel}</p>
           <div className="mt-6 space-y-6 text-base leading-8 text-[var(--muted)]">
             {portfolio.about.map((paragraph, paragraphIndex) => (
               <p key={`${paragraph}-${paragraphIndex}`}>{paragraph}</p>
@@ -39,7 +41,7 @@ export function AboutSection() {
           whileHover={{ y: -4 }}
           className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface-strong)] p-6 text-[var(--on-strong)] sm:p-8"
         >
-          <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] opacity-70">Overview</p>
+          <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] opacity-70">{copy.home.overviewLabel}</p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {portfolio.skills.slice(0, 4).map((group, groupIndex) => (
               <div

@@ -26,4 +26,19 @@ describe('i18n', () => {
     expect(resolveLocalizedFooterTagline('Your professional story, in motion.', 'es')).toBe('Tu historia profesional, en movimiento.')
     expect(resolveLocalizedFooterTagline('A handcrafted tagline', 'es')).toBe('A handcrafted tagline')
   })
+
+  it('provides localized FAQ and contact-form shell copy for the home page', () => {
+    const spanish = getTranslations('es').home
+    const english = getTranslations('en').home
+
+    expect(spanish.selectOption).toBe('Selecciona una opción')
+    expect(spanish.projectTypeOptions).toEqual(['Posicionamiento de marca', 'Experiencia de portfolio', 'Narrativa de producto', 'Otro'])
+    expect(spanish.timelineOptions).toEqual(['Explorando', 'En 1 mes', '1–3 meses', '3+ meses'])
+    expect(spanish.faqItems[0]?.question).toBe('¿Qué tipo de proyectos encajan mejor con FolioSpark?')
+    expect(spanish.faqItems).toHaveLength(4)
+
+    expect(english.selectOption).toBe('Select an option')
+    expect(english.projectInquiryFallback).toBe('Project inquiry')
+    expect(english.faqItems[3]?.question).toBe('Is the site secure and production-ready?')
+  })
 })

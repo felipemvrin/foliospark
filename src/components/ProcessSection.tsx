@@ -2,16 +2,18 @@ import { motion } from 'framer-motion'
 
 import { usePortfolioStore } from '../store/portfolioStore'
 import { SectionHeading } from './SectionHeading'
+import { getTranslations } from '../lib/i18n'
 
 export function ProcessSection() {
   const portfolio = usePortfolioStore((state) => state.data)
+  const copy = getTranslations(usePortfolioStore((state) => state.data.siteSettings?.locale))
 
   return (
     <section id="process" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <SectionHeading
-        eyebrow="Process"
-        title="A creative process built to feel clear and premium."
-        description="Strategy, identities, and interfaces all move together so the work feels intentional from discovery through launch."
+        eyebrow={copy.home.processEyebrow}
+        title={copy.home.processTitle}
+        description={copy.home.processDescription}
       />
 
       <div className="mt-12 grid gap-6 lg:grid-cols-4">

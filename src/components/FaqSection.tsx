@@ -1,44 +1,22 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
-
-const faqs = [
-  {
-    question: 'What kind of projects are best suited for FolioSpark?',
-    answer:
-      'It is designed for creatives, founders, and product teams who need a premium online presence that feels editorial, credible, and conversion-ready without requiring a custom CMS build.',
-  },
-  {
-    question: 'How long does a portfolio build usually take?',
-    answer:
-      'Most engagements run from one to three weeks depending on content depth, revisions, and how much of the editorial direction is already defined.',
-  },
-  {
-    question: 'Can I edit the content after launch?',
-    answer:
-      'Yes. The product is built around structured data, so the portfolio is easy to update without rewriting the entire page structure or design system.',
-  },
-  {
-    question: 'Is the site secure and production-ready?',
-    answer:
-      'The frontend follows a validation-first approach with safe external links, controlled environment usage, and a privacy-focused analytics model. For production hardening, we also recommend deployment-level headers and backend auth for hosted publishing.',
-  },
-]
+import { getTranslations } from '../lib/i18n'
+import { usePortfolioStore } from '../store/portfolioStore'
 
 export function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const copy = getTranslations(usePortfolioStore((state) => state.data.siteSettings?.locale))
 
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8 lg:p-10">
         <div className="max-w-2xl">
-          <h2 className="font-display text-4xl leading-none text-[var(--foreground)] sm:text-5xl">
-            Questions people ask before they move forward.
-          </h2>
+          <h2 className="font-display text-4xl leading-none text-[var(--foreground)] sm:text-5xl">{copy.home.faqTitle}</h2>
         </div>
 
         <div className="mt-10 space-y-4">
-          {faqs.map((item, index) => {
+          {copy.home.faqItems.map((item, index) => {
             const isOpen = openIndex === index
             const idSuffix = item.question
               .toLowerCase()
