@@ -142,6 +142,7 @@ export interface SiteFooterLink {
 }
 
 export interface SiteSettings {
+  locale?: 'es' | 'en'
   title: string
   description: string
   logoText: string

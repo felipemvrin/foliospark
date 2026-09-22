@@ -29,6 +29,7 @@ import { usePortfolioStore } from './store/portfolioStore'
 import { useThemeStore } from './store/themeStore'
 import type { SiteSectionId } from './types/portfolio'
 import { getSafeExternalHref, getSafeFooterHref } from './lib/links'
+import { getTranslations } from './lib/i18n'
 
 function PublishedPortfolioLoader({ children }: { children: React.ReactNode }) {
   const setData = usePortfolioStore((state) => state.setData)
@@ -113,6 +114,7 @@ function PortfolioPage({ isPublicView, isAdminRoute }: { isPublicView: boolean; 
     }))
     .filter((link): link is typeof link & { href: string } => Boolean(link.href))
   const sections = getOrderedSections(siteSettings?.sections)
+  const copy = getTranslations(siteSettings?.locale)
 
   const renderSection = (id: SiteSectionId) => {
     switch (id) {
@@ -147,7 +149,7 @@ function PortfolioPage({ isPublicView, isAdminRoute }: { isPublicView: boolean; 
     <ThemeWrapper>
       <SeoHead />
       <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
-        <a href="#main-content" className="skip-link" onClick={handleSkipLinkClick}>Skip to content</a>
+        <a href="#main-content" className="skip-link" onClick={handleSkipLinkClick}>{copy.shell.skipToContent}</a>
         <NavBar />
         <main id="main-content" tabIndex={-1}>
           <Hero />
@@ -168,7 +170,7 @@ function PortfolioPage({ isPublicView, isAdminRoute }: { isPublicView: boolean; 
         {siteSettings?.footer.visible !== false ? <footer className="border-t border-[var(--border)] bg-[var(--background)]">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-[var(--muted)] sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
             <p>{siteSettings?.footer.copyright || 'FolioSpark © 2026'}</p>
-            <p className="uppercase tracking-[0.2em] text-[var(--muted)]">{siteSettings?.footer.tagline || 'Your professional story, in motion.'}</p>
+            <p className="uppercase tracking-[0.2em] text-[var(--muted)]">{siteSettings?.footer.tagline || copy.shell.footerTagline}</p>
             {siteSettings?.footer.showLocation !== false ? <p>{profile.location}</p> : null}
           </div>
           {siteSettings?.footer.showSocialLinks !== false && visibleSocialLinks.length > 0 ? (

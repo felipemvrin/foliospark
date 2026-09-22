@@ -107,12 +107,12 @@ Status: Planned
 - Confirmations for destructive reset or delete actions
 
 ### Phase 42 — Internationalization and Spanish home
-Status: High priority, planned next
+Status: In progress
 
-- Audit all visible English copy in the public home and administration UI
-- Add a language setting with Spanish as the default public language
-- Support English as an alternate language without duplicating component markup
-- Move interface strings into typed translation dictionaries
+- Audit all visible English copy in the public home and administration UI — completed
+- Add a language setting with Spanish as the default public language — completed
+- Support English as an alternate language without duplicating component markup — foundation completed
+- Move interface strings into typed translation dictionaries — foundation completed
 - Translate navigation, hero, section headings, CTAs, forms, states, errors, footer, and editor labels
 - Translate default portfolio seed content, case studies, services, FAQ, and resume copy
 - Localize metadata, Open Graph text, document language, and generated favicon context where relevant

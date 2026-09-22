@@ -5,6 +5,7 @@ import { themePresets } from '../data/themes'
 import { isPublicPreview } from '../lib/publicPreview'
 import { getSeoMetadata } from '../lib/seo'
 import { usePortfolioStore } from '../store/portfolioStore'
+import { getLocale } from '../lib/i18n'
 import { useThemeStore } from '../store/themeStore'
 
 function setMeta(attribute: 'name' | 'property', key: string, content: string) {
@@ -55,6 +56,7 @@ export function SeoHead() {
   const themeId = useThemeStore((state) => state.preset)
 
   useEffect(() => {
+    document.documentElement.lang = getLocale(siteSettings?.locale)
     const fallbackCanonicalUrl = new URL(window.location.href)
     fallbackCanonicalUrl.hash = ''
 

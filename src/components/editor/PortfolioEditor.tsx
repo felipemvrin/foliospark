@@ -6,6 +6,7 @@ import { createDefaultSiteSettings } from '../../data/siteSettings'
 import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
 import { getSiteFaviconHref } from '../../lib/favicon'
+import { getLocale, getTranslations, type Locale } from '../../lib/i18n'
 import { getSafeExternalHref, getSafeFooterHref } from '../../lib/links'
 import { getNextVisibleSectionTops, getTopmostVisibleSectionId } from '../../lib/adminSectionNavigation'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
@@ -174,6 +175,8 @@ export function PortfolioEditor() {
     () => themePresets.find((item) => item.id === theme) ?? themePresets[0],
     [theme],
   )
+  const locale = getLocale(data.siteSettings?.locale)
+  const copy = getTranslations(locale)
   const publicPreviewHref = useMemo(() => getPublicPreviewHref(data, theme, data.profile.slug), [data, theme])
   const publishedHref = useMemo(() => getPublishedPortfolioHref(data.profile.slug || data.profile.name), [data.profile.name, data.profile.slug])
   const publishingReadiness = useMemo(() => getPublishingReadiness(data), [data])
@@ -209,6 +212,10 @@ export function PortfolioEditor() {
         ...updates,
       },
     }))
+  }
+
+  const updateLocale = (nextLocale: Locale) => {
+    updateSiteSettings({ locale: nextLocale })
   }
 
   const updateFooterSettings = (updates: Partial<NonNullable<Portfolio['siteSettings']>['footer']>) => {
@@ -774,6 +781,13 @@ export function PortfolioEditor() {
           <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Site settings</p>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Control the public site's identity and footer without changing portfolio content.</p>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <label className="block text-sm text-[var(--muted)]">
+              <span className="mb-2 block text-[0.62rem] uppercase tracking-[0.24em] text-[var(--muted)]">{copy.editor.language}</span>
+              <select value={locale} onChange={(event) => updateLocale(event.target.value as Locale)} className={inputClassName}>
+                <option value="es">{copy.editor.spanish}</option>
+                <option value="en">{copy.editor.english}</option>
+              </select>
+            </label>
             <FieldLabel label="Site title">
               <input
                 value={data.siteSettings?.title ?? 'FolioSpark'}

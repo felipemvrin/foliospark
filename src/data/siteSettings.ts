@@ -1,6 +1,7 @@
 import type { SiteSettings } from '../types/portfolio'
 
 export const defaultSiteSettings: SiteSettings = {
+  locale: 'es',
   title: 'FolioSpark',
   description: 'A premium portfolio and CV builder for expressive professional stories.',
   logoText: 'FolioSpark',
