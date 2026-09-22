@@ -5,7 +5,7 @@ import { portfolio as defaultPortfolio } from '../../data/portfolio'
 import { createDefaultSiteSettings } from '../../data/siteSettings'
 import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
-import { getGeneratedFaviconHref } from '../../lib/favicon'
+import { getSiteFaviconHref } from '../../lib/favicon'
 import { getSafeExternalHref } from '../../lib/links'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
@@ -690,8 +690,8 @@ export function PortfolioEditor() {
           </div>
           <div className="mt-6 flex items-center gap-4 rounded-[1.4rem] border border-[var(--border)] bg-[var(--background-alt)] p-4">
             <img
-              src={getGeneratedFaviconHref(data.siteSettings?.logoMark ?? 'F', selectedTheme.colors.accent, selectedTheme.colors.foreground)}
-              alt="Generated favicon preview"
+              src={getSiteFaviconHref(data.siteSettings?.faviconUrl, data.siteSettings?.logoMark ?? 'F', selectedTheme.colors.accent, selectedTheme.colors.foreground)}
+              alt="Favicon preview"
               className="h-14 w-14 rounded-2xl border border-[var(--border)] bg-[var(--surface)]"
             />
             <div className="min-w-0">
