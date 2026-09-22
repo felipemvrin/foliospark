@@ -7,6 +7,7 @@ import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
 import { getSiteFaviconHref } from '../../lib/favicon'
 import { getSafeExternalHref, getSafeFooterHref } from '../../lib/links'
+import { getNextVisibleSectionTops, getTopmostVisibleSectionId } from '../../lib/adminSectionNavigation'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
@@ -98,6 +99,7 @@ async function copyTextToClipboard(value: string) {
 
 export function AdminSectionNav() {
   const [activeSection, setActiveSection] = useState<string>(adminSectionLinks[0][0])
+  const visibleSectionTopsRef = useRef<Map<string, number>>(new Map())
 
   useEffect(() => {
     const sections = adminSectionLinks
@@ -110,12 +112,18 @@ export function AdminSectionNav() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top)[0]
+        visibleSectionTopsRef.current = getNextVisibleSectionTops(
+          visibleSectionTopsRef.current,
+          entries.map((entry) => ({
+            id: entry.target.id,
+            isIntersecting: entry.isIntersecting,
+            top: entry.boundingClientRect.top,
+          })),
+        )
+        const nextActiveSection = getTopmostVisibleSectionId(visibleSectionTopsRef.current)
 
-        if (visibleEntry) {
-          setActiveSection(visibleEntry.target.id)
+        if (nextActiveSection) {
+          setActiveSection(nextActiveSection)
         }
       },
       { rootMargin: '-150px 0px -55% 0px', threshold: [0, 0.2, 0.6] },
@@ -133,6 +141,7 @@ export function AdminSectionNav() {
           <a
             key={id}
             href={`#${id}`}
+            onClick={() => setActiveSection(id)}
             aria-current={activeSection === id ? 'location' : undefined}
             className={`${actionButtonClassName} ${activeSection === id ? 'border-[var(--accent)] bg-[var(--accent-soft)]' : ''}`}
           >
