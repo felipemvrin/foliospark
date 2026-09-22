@@ -1,6 +1,37 @@
 export type Locale = 'es' | 'en'
 
 export interface TranslationDictionary {
+  home: {
+    heroEyebrow: string
+    exploreWork: string
+    startProject: string
+    portfolioLabel: string
+    currentRole: string
+    aboutEyebrow: string
+    aboutTitle: string
+    profileLabel: string
+    overviewLabel: string
+    processEyebrow: string
+    processTitle: string
+    processDescription: string
+    servicesEyebrow: string
+    servicesTitle: string
+    servicesDescription: string
+    mostRequested: string
+    readyToLaunch: string
+    ctaTitle: string
+    ctaDescription: string
+    faqTitle: string
+    contactTitle: string
+    emailStudio: string
+    sendInquiry: string
+    name: string
+    email: string
+    projectType: string
+    budget: string
+    timeline: string
+    projectBrief: string
+  }
   nav: {
     about: string
     work: string
@@ -34,6 +65,37 @@ export interface TranslationDictionary {
 
 const translations: Record<Locale, TranslationDictionary> = {
   es: {
+    home: {
+      heroEyebrow: 'Sistema de portfolio profesional',
+      exploreWork: 'Ver proyectos',
+      startProject: 'Iniciar un proyecto',
+      portfolioLabel: 'Portfolio',
+      currentRole: 'Rol actual',
+      aboutEyebrow: 'Sobre mí',
+      aboutTitle: 'Una identidad que evoluciona con tu trabajo.',
+      profileLabel: 'Perfil',
+      overviewLabel: 'Resumen',
+      processEyebrow: 'Proceso',
+      processTitle: 'Un proceso creativo claro y cuidado.',
+      processDescription: 'Estrategia, identidad e interfaces avanzan juntas desde el descubrimiento hasta el lanzamiento.',
+      servicesEyebrow: 'Servicios',
+      servicesTitle: 'Una colaboración flexible para el trabajo que importa.',
+      servicesDescription: 'Desde el posicionamiento hasta el lanzamiento, cada servicio ayuda a comunicar tu valor con claridad.',
+      mostRequested: 'Más solicitado',
+      readyToLaunch: 'Listo para empezar',
+      ctaTitle: 'Convierte tu trabajo en un activo de negocio más sólido.',
+      ctaDescription: 'Si vendes servicios, presentas un estudio o estás construyendo tu siguiente etapa, FolioSpark ayuda a que tu historia tenga la misma credibilidad que tu trabajo.',
+      faqTitle: 'Preguntas frecuentes antes de avanzar.',
+      contactTitle: 'Construye la historia que acompaña a tu trabajo.',
+      emailStudio: 'Iniciar un proyecto',
+      sendInquiry: 'Enviar consulta',
+      name: 'Nombre',
+      email: 'Email',
+      projectType: 'Tipo de proyecto',
+      budget: 'Presupuesto',
+      timeline: 'Plazo',
+      projectBrief: 'Brief del proyecto',
+    },
     nav: {
       about: 'Sobre mí',
       work: 'Proyectos',
@@ -65,6 +127,37 @@ const translations: Record<Locale, TranslationDictionary> = {
     },
   },
   en: {
+    home: {
+      heroEyebrow: 'Professional portfolio system',
+      exploreWork: 'Explore work',
+      startProject: 'Start a project',
+      portfolioLabel: 'Portfolio',
+      currentRole: 'Current role',
+      aboutEyebrow: 'About',
+      aboutTitle: 'An identity that moves with the work.',
+      profileLabel: 'Profile',
+      overviewLabel: 'Overview',
+      processEyebrow: 'Process',
+      processTitle: 'A creative process built to feel clear and premium.',
+      processDescription: 'Strategy, identities, and interfaces move together from discovery through launch.',
+      servicesEyebrow: 'Services',
+      servicesTitle: 'Flexible engagement for the work that matters most.',
+      servicesDescription: 'From positioning to launch-ready storytelling, each package helps ambitious teams move with clarity.',
+      mostRequested: 'Most requested',
+      readyToLaunch: 'Ready to launch',
+      ctaTitle: 'Turn your work into a sharper business asset.',
+      ctaDescription: 'Whether you are selling a service, outlining a studio, or positioning a next chapter, FolioSpark helps the story feel as credible as the work itself.',
+      faqTitle: 'Questions people ask before they move forward.',
+      contactTitle: 'Build the story that follows your work.',
+      emailStudio: 'Start a project',
+      sendInquiry: 'Send inquiry',
+      name: 'Name',
+      email: 'Email',
+      projectType: 'Project type',
+      budget: 'Budget range',
+      timeline: 'Timeline',
+      projectBrief: 'Project brief',
+    },
     nav: {
       about: 'About',
       work: 'Work',

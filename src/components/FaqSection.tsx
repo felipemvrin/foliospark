@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+import { getTranslations } from '../lib/i18n'
+import { usePortfolioStore } from '../store/portfolioStore'
 
 const faqs = [
   {
@@ -27,14 +29,13 @@ const faqs = [
 
 export function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const copy = getTranslations(usePortfolioStore((state) => state.data.siteSettings?.locale))
 
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
       <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8 lg:p-10">
         <div className="max-w-2xl">
-          <h2 className="font-display text-4xl leading-none text-[var(--foreground)] sm:text-5xl">
-            Questions people ask before they move forward.
-          </h2>
+          <h2 className="font-display text-4xl leading-none text-[var(--foreground)] sm:text-5xl">{copy.home.faqTitle}</h2>
         </div>
 
         <div className="mt-10 space-y-4">
