@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AlertTriangle, ArrowDown, ArrowUp, CheckCircle2, Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
 import { portfolio as defaultPortfolio } from '../../data/portfolio'
@@ -97,11 +97,47 @@ async function copyTextToClipboard(value: string) {
 }
 
 export function AdminSectionNav() {
+  const [activeSection, setActiveSection] = useState<string>(adminSectionLinks[0][0])
+
+  useEffect(() => {
+    const sections = adminSectionLinks
+      .map(([id]) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section))
+
+    if (sections.length === 0 || !('IntersectionObserver' in window)) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top)[0]
+
+        if (visibleEntry) {
+          setActiveSection(visibleEntry.target.id)
+        }
+      },
+      { rootMargin: '-150px 0px -55% 0px', threshold: [0, 0.2, 0.6] },
+    )
+
+    sections.forEach((section) => observer.observe(section))
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <nav className="sticky top-20 z-30 mb-8 overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--background)]/95 p-2 backdrop-blur-xl" aria-label="Administration sections">
       <div className="flex min-w-max gap-2">
         {adminSectionLinks.map(([id, label]) => (
-          <a key={id} href={`#${id}`} className={actionButtonClassName}>{label}</a>
+          <a
+            key={id}
+            href={`#${id}`}
+            aria-current={activeSection === id ? 'location' : undefined}
+            className={`${actionButtonClassName} ${activeSection === id ? 'border-[var(--accent)] bg-[var(--accent-soft)]' : ''}`}
+          >
+            {label}
+          </a>
         ))}
       </div>
     </nav>
