@@ -26,6 +26,12 @@ export interface TranslationDictionary {
     experienceDescriptionShort: string
     education: string
     capabilities: string
+    viewProject: string
+    readCaseStudy: string
+    readTheCaseStudy: string
+    challenge: string
+    approach: string
+    outcome: string
     portfolioLabel: string
     currentRole: string
     aboutEyebrow: string
@@ -126,6 +132,12 @@ const translations: Record<Locale, TranslationDictionary> = {
       experienceDescriptionShort: 'Roles y responsabilidades seleccionados.',
       education: 'Formación',
       capabilities: 'Capacidades',
+      viewProject: 'Ver proyecto',
+      readCaseStudy: 'Ver caso de estudio',
+      readTheCaseStudy: 'Ver el caso de estudio',
+      challenge: 'Desafío',
+      approach: 'Enfoque',
+      outcome: 'Resultado',
       portfolioLabel: 'Portfolio',
       currentRole: 'Rol actual',
       aboutEyebrow: 'Sobre mí',
@@ -242,6 +254,12 @@ const translations: Record<Locale, TranslationDictionary> = {
       experienceDescriptionShort: 'Selected roles and responsibilities.',
       education: 'Education',
       capabilities: 'Capabilities',
+      viewProject: 'View project',
+      readCaseStudy: 'Read case study',
+      readTheCaseStudy: 'Read the case study',
+      challenge: 'Challenge',
+      approach: 'Approach',
+      outcome: 'Outcome',
       portfolioLabel: 'Portfolio',
       currentRole: 'Current role',
       aboutEyebrow: 'About',

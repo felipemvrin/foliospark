@@ -45,7 +45,10 @@ describe('i18n', () => {
   it('provides localized work-section copy', () => {
     expect(getTranslations('es').home.workEyebrow).toBe('Proyectos seleccionados')
     expect(getTranslations('es').home.workTitle).toBe('Diseñado para captar atención, creado para generar confianza.')
+    expect(getTranslations('es').home.readCaseStudy).toBe('Ver caso de estudio')
+    expect(getTranslations('es').home.challenge).toBe('Desafío')
     expect(getTranslations('en').home.workEyebrow).toBe('Selected work')
+    expect(getTranslations('en').home.viewProject).toBe('View project')
   })
 
   it('provides localized trust-section copy', () => {
