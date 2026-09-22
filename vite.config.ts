@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -30,9 +31,19 @@ const defaultSiteUrl = process.env.APP_SITE_URL
 const pagesBasePath = process.env.GITHUB_ACTIONS ? getSiteBasePath(defaultSiteUrl) : '/'
 const defaultSeoMetadata = getSeoMetadata(portfolio.profile, 'Minimal', defaultSiteUrl)
 const staticSiteUrl = getCanonicalSiteUrl(portfolio.profile.siteUrl ?? '', defaultSiteUrl)
+const mainHtmlEntry = fileURLToPath(new URL('./index.html', import.meta.url))
+const adminHtmlEntry = fileURLToPath(new URL('./admin/index.html', import.meta.url))
 
 export default defineConfig({
   base: pagesBasePath,
+  build: {
+    rollupOptions: {
+      input: {
+        main: mainHtmlEntry,
+        admin: adminHtmlEntry,
+      },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),

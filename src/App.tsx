@@ -76,26 +76,28 @@ function PublishedPortfolioLoader({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  const pathname = window.location.pathname.replace(/\/$/, '') || '/'
   const isPublicView = isPublicPreview(window.location.search)
   const isPublished = isPublishedView(window.location.search)
+  const isAdminRoute = pathname === '/admin' || pathname.endsWith('/admin')
 
   useEffect(() => {
     void trackAnalyticsEvent({
       name: 'page_view',
       properties: {
-        mode: isPublished ? 'published' : isPublicView ? 'preview' : 'editor',
+        mode: isPublished ? 'published' : isPublicView ? 'preview' : isAdminRoute ? 'admin' : 'public',
       },
     })
-  }, [isPublished, isPublicView])
+  }, [isAdminRoute, isPublished, isPublicView])
 
   if (isPublished) {
-    return <PublishedPortfolioLoader><PortfolioPage isPublicView /></PublishedPortfolioLoader>
+    return <PublishedPortfolioLoader><PortfolioPage isPublicView isAdminRoute={false} /></PublishedPortfolioLoader>
   }
 
-  return <PortfolioPage isPublicView={isPublicView} />
+  return <PortfolioPage isPublicView={isPublicView || !isAdminRoute} isAdminRoute={isAdminRoute} />
 }
 
-function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
+function PortfolioPage({ isPublicView, isAdminRoute }: { isPublicView: boolean; isAdminRoute: boolean }) {
   const behanceProjects = useBehanceProjects()
   const siteSettings = usePortfolioStore((state) => state.data.siteSettings)
   const profile = usePortfolioStore((state) => state.data.profile)
@@ -151,7 +153,7 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
           <Hero />
           {sections.filter((section) => section.visible || section.id === 'contact').map((section) => renderSection(section.id))}
           <FinalCtaSection />
-          {!isPublicView && (
+          {isAdminRoute && !isPublicView && (
             <>
               <div className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 lg:px-8">
                 <ThemePanel />

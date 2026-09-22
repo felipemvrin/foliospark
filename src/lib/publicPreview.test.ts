@@ -86,6 +86,48 @@ describe('public preview urls', () => {
     expect(url.searchParams.get('slug')).toBe('launch-2026')
   })
 
+  it('drops the admin route segment from generated preview urls', () => {
+    const href = getPublicPreviewHref(
+      {
+        profile: {
+          name: 'Aster Vale',
+          role: 'Design Engineer',
+          headline: '',
+          bio: '',
+          location: '',
+          email: '',
+          phone: '',
+          website: '',
+          photo: '',
+          slug: 'aster-vale',
+        },
+        metrics: [],
+        about: [],
+        process: [],
+        testimonials: [],
+        services: [],
+        experience: [],
+        education: [],
+        skills: [],
+        projects: [],
+        githubProjects: [],
+        behanceProjects: [],
+        socialLinks: [],
+      },
+      'Minimal',
+      'Aster Vale Studio',
+      'https://felipemvrin.github.io/foliospark/admin/?theme=Mono#editor',
+    )
+
+    const url = new URL(href)
+
+    expect(url.origin + url.pathname).toBe('https://felipemvrin.github.io/foliospark/')
+    expect(url.searchParams.get('view')).toBe('public')
+    expect(url.searchParams.get('theme')).toBe('Minimal')
+    expect(url.searchParams.get('slug')).toBe('aster-vale-studio')
+    expect(url.hash).toBe('#aster-vale-studio')
+  })
+
   it('creates a read-only storage snapshot', () => {
     const storage = createReadonlyStorage({ data: { slug: 'aster-vale' } })
 

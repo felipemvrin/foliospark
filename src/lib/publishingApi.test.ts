@@ -62,6 +62,14 @@ describe('publishing API client', () => {
     )
   })
 
+  it('drops the admin route segment when building a durable public URL', () => {
+    vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
+
+    expect(getPublishedPortfolioHref('Aster Vale Studio', 'https://felipemvrin.github.io/foliospark/admin/?theme=Mono#editor')).toBe(
+      'https://felipemvrin.github.io/foliospark/?theme=Mono&view=published&slug=aster-vale-studio',
+    )
+  })
+
   it('preserves the current app path when using the runtime location by default', () => {
     vi.stubEnv('VITE_PUBLISHING_API_URL', 'https://api.example.com/')
     vi.stubGlobal('window', {

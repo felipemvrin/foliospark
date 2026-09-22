@@ -81,9 +81,13 @@ Status: In progress
 - Control footer visibility and preview it live — completed
 - Add footer link ordering and layout presets
 
-### Phase 40 — Administration UI System
-Status: Planned
+### Phase 40 — Admin Route and Administration UI System
+Status: In progress
 
+- Separate the public `/` route from the `/admin` administration route — completed
+- Keep public preview and published views readonly — completed
+- Distinguish `public`, `preview`, `published`, and `admin` analytics modes — completed
+- Add server-side authentication and authorization for `/admin` when a backend exists
 - Split the editor into Site, Navigation, Sections, Content, Appearance, and Publishing panels
 - Add collapsible groups and mobile-friendly editor navigation
 - Add inline validation and saved-state feedback
@@ -124,7 +128,7 @@ Status: Planned
 
 ## Priority order for next steps
 1. Complete phase 39 with footer link ordering and layout presets
-2. Build phase 40 administration UI system
+2. Complete phase 40 with the administration panel system and production authentication boundary
 3. Resume metadata and document export
 4. Advanced analytics and publishing dashboard
 
@@ -136,6 +140,7 @@ Status: Planned
 - Add `@dnd-kit` only when section ordering reaches phase 37 and basic visibility controls are validated.
 - Do not introduce AdminJS, Refine, Material UI, or Ant Design for this local portfolio editor.
 - Preserve public anchor IDs, published URLs, import compatibility, and existing analytics field names.
+- Treat `/admin` as a UI boundary only until server-side authentication and authorization are available.
 
 ## Phase reporting protocol
 
