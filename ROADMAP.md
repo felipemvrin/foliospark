@@ -114,7 +114,7 @@ Status: In progress
 - Support English as an alternate language without duplicating component markup — foundation completed
 - Move interface strings into typed translation dictionaries — foundation completed
 - Translate Hero, About, Process, Services, CTA, FAQ, and Contact shell strings — completed
-- Translate navigation, hero, section headings, CTAs, forms, states, errors, footer, and editor labels
+- Translate navigation, hero, section headings, CTAs, forms, states, errors, footer, and editor labels — in progress (public home shell, work, trust, experience, and resume interface completed)
 - Translate default portfolio seed content, case studies, services, FAQ, and resume copy
 - Localize metadata, Open Graph text, document language, and generated favicon context where relevant
 - Preserve user-authored portfolio content when changing language

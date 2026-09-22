@@ -41,4 +41,22 @@ describe('i18n', () => {
     expect(english.projectInquiryFallback).toBe('Project inquiry')
     expect(english.faqItems[3]?.question).toBe('Is the site secure and production-ready?')
   })
+
+  it('provides localized work-section copy', () => {
+    expect(getTranslations('es').home.workEyebrow).toBe('Proyectos seleccionados')
+    expect(getTranslations('es').home.workTitle).toBe('Diseñado para captar atención, creado para generar confianza.')
+    expect(getTranslations('en').home.workEyebrow).toBe('Selected work')
+  })
+
+  it('provides localized trust-section copy', () => {
+    expect(getTranslations('es').home.trustPoints[1]).toEqual({ value: '1–3 sem.', label: 'plazo habitual de entrega' })
+    expect(getTranslations('es').home.trustedBy).toBe('Han confiado en nosotros')
+    expect(getTranslations('en').home.trustTitle).toBe('Used by teams that need clarity, polish, and momentum.')
+  })
+
+  it('provides localized experience and resume interface copy', () => {
+    expect(getTranslations('es').home.experienceEyebrow).toBe('Trayectoria')
+    expect(getTranslations('es').home.printPdf).toBe('Imprimir / PDF')
+    expect(getTranslations('en').home.capabilities).toBe('Capabilities')
+  })
 })

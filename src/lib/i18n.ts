@@ -5,6 +5,27 @@ export interface TranslationDictionary {
     heroEyebrow: string
     exploreWork: string
     startProject: string
+    workEyebrow: string
+    workTitle: string
+    workDescription: string
+    trustTitle: string
+    trustDescription: string
+    trustPoints: ReadonlyArray<{
+      value: string
+      label: string
+    }>
+    trustedBy: string
+    experienceEyebrow: string
+    experienceTitle: string
+    experienceDescription: string
+    resumeTitle: string
+    resumeDescription: string
+    printPdf: string
+    contact: string
+    experience: string
+    experienceDescriptionShort: string
+    education: string
+    capabilities: string
     portfolioLabel: string
     currentRole: string
     aboutEyebrow: string
@@ -83,6 +104,28 @@ const translations: Record<Locale, TranslationDictionary> = {
       heroEyebrow: 'Sistema de portfolio profesional',
       exploreWork: 'Ver proyectos',
       startProject: 'Iniciar un proyecto',
+      workEyebrow: 'Proyectos seleccionados',
+      workTitle: 'Diseñado para captar atención, creado para generar confianza.',
+      workDescription: 'Una combinación cuidada de narrativa de portfolio y pensamiento de producto: cada proyecto busca ser editorial, útil y memorable.',
+      trustTitle: 'Elegido por equipos que buscan claridad, cuidado e impulso.',
+      trustDescription: 'FolioSpark está pensado para quienes quieren que su trabajo se perciba premium sin procesos lentos ni frágiles. El resultado es una historia más sólida, menos fricción y un sitio que ayuda a los clientes a avanzar.',
+      trustPoints: [
+        { value: '14', label: 'lanzamientos de marca' },
+        { value: '1–3 sem.', label: 'plazo habitual de entrega' },
+        { value: '4.9/5', label: 'satisfacción de clientes' },
+      ],
+      trustedBy: 'Han confiado en nosotros',
+      experienceEyebrow: 'Trayectoria',
+      experienceTitle: 'Una carrera definida por sistemas e historias.',
+      experienceDescription: 'Desde el diseño de producto hasta la narrativa de marca, cada etapa se construye con claridad, oficio y resultados relevantes.',
+      resumeTitle: 'Una vista concisa del trabajo detrás del trabajo.',
+      resumeDescription: 'Un resumen práctico para reclutadores, colaboradores y equipos que buscan liderazgo de diseño reflexivo con alcance técnico.',
+      printPdf: 'Imprimir / PDF',
+      contact: 'Contacto',
+      experience: 'Experiencia',
+      experienceDescriptionShort: 'Roles y responsabilidades seleccionados.',
+      education: 'Formación',
+      capabilities: 'Capacidades',
       portfolioLabel: 'Portfolio',
       currentRole: 'Rol actual',
       aboutEyebrow: 'Sobre mí',
@@ -177,6 +220,28 @@ const translations: Record<Locale, TranslationDictionary> = {
       heroEyebrow: 'Professional portfolio system',
       exploreWork: 'Explore work',
       startProject: 'Start a project',
+      workEyebrow: 'Selected work',
+      workTitle: 'Designed for attention, built for trust.',
+      workDescription: 'A refined mix of portfolio storytelling and product thinking — each project is designed to feel editorial, useful, and distinctly memorable.',
+      trustTitle: 'Used by teams that need clarity, polish, and momentum.',
+      trustDescription: 'FolioSpark was designed for people who want their work to feel premium without a slow, fragile production process. The result is a better story, less friction, and a site that helps clients take action.',
+      trustPoints: [
+        { value: '14', label: 'brand launches' },
+        { value: '1–3w', label: 'typical delivery window' },
+        { value: '4.9/5', label: 'client satisfaction' },
+      ],
+      trustedBy: 'Trusted by',
+      experienceEyebrow: 'Experience',
+      experienceTitle: 'A career shaped by systems and story.',
+      experienceDescription: 'From product design to brand narrative, each chapter is built around clarity, craft, and meaningful outcomes.',
+      resumeTitle: 'A concise view of the work behind the work.',
+      resumeDescription: 'A practical snapshot for recruiters, collaborators, and teams looking for thoughtful design leadership with technical range.',
+      printPdf: 'Print / PDF',
+      contact: 'Contact',
+      experience: 'Experience',
+      experienceDescriptionShort: 'Selected roles and responsibilities.',
+      education: 'Education',
+      capabilities: 'Capabilities',
       portfolioLabel: 'Portfolio',
       currentRole: 'Current role',
       aboutEyebrow: 'About',
