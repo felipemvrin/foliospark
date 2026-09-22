@@ -98,7 +98,14 @@ async function copyTextToClipboard(value: string) {
 }
 
 export function AdminSectionNav() {
-  const [activeSection, setActiveSection] = useState<string>(adminSectionLinks[0][0])
+  const [activeSection, setActiveSection] = useState<string | null>(() => {
+    if (typeof window === 'undefined') {
+      return adminSectionLinks[0][0]
+    }
+
+    const hashSectionId = window.location.hash.replace(/^#/, '')
+    return adminSectionLinks.some(([id]) => id === hashSectionId) ? hashSectionId : adminSectionLinks[0][0]
+  })
   const visibleSectionTopsRef = useRef<Map<string, number>>(new Map())
 
   useEffect(() => {
@@ -121,10 +128,7 @@ export function AdminSectionNav() {
           })),
         )
         const nextActiveSection = getTopmostVisibleSectionId(visibleSectionTopsRef.current)
-
-        if (nextActiveSection) {
-          setActiveSection(nextActiveSection)
-        }
+        setActiveSection(nextActiveSection)
       },
       { rootMargin: '-150px 0px -55% 0px', threshold: [0, 0.2, 0.6] },
     )
@@ -141,7 +145,6 @@ export function AdminSectionNav() {
           <a
             key={id}
             href={`#${id}`}
-            onClick={() => setActiveSection(id)}
             aria-current={activeSection === id ? 'location' : undefined}
             className={`${actionButtonClassName} ${activeSection === id ? 'border-[var(--accent)] bg-[var(--accent-soft)]' : ''}`}
           >

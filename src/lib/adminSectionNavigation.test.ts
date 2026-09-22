@@ -28,4 +28,14 @@ describe('adminSectionNavigation', () => {
 
     expect(getTopmostVisibleSectionId(next)).toBe('section-settings')
   })
+
+  it('returns null when the last visible section exits viewport', () => {
+    const current = new Map([['site-settings', 100]])
+
+    const next = getNextVisibleSectionTops(current, [
+      { id: 'site-settings', isIntersecting: false, top: 100 },
+    ])
+
+    expect(getTopmostVisibleSectionId(next)).toBeNull()
+  })
 })
