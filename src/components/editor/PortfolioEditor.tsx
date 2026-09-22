@@ -5,6 +5,7 @@ import { portfolio as defaultPortfolio } from '../../data/portfolio'
 import { createDefaultSiteSettings } from '../../data/siteSettings'
 import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
+import { getGeneratedFaviconHref } from '../../lib/favicon'
 import { getSafeExternalHref } from '../../lib/links'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
@@ -685,6 +686,17 @@ export function PortfolioEditor() {
                   className={textareaClassName}
                 />
               </FieldLabel>
+            </div>
+          </div>
+          <div className="mt-6 flex items-center gap-4 rounded-[1.4rem] border border-[var(--border)] bg-[var(--background-alt)] p-4">
+            <img
+              src={getGeneratedFaviconHref(data.siteSettings?.logoMark ?? 'F', selectedTheme.colors.accent, selectedTheme.colors.foreground)}
+              alt="Generated favicon preview"
+              className="h-14 w-14 rounded-2xl border border-[var(--border)] bg-[var(--surface)]"
+            />
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-[var(--foreground)]">{data.siteSettings?.logoText ?? 'FolioSpark'}</p>
+              <p className="mt-1 truncate text-xs text-[var(--muted)]">{data.siteSettings?.description || 'Add a site description for search and social previews.'}</p>
             </div>
           </div>
           <div className="mt-6 grid gap-4 border-t border-[var(--border)] pt-5 md:grid-cols-2">

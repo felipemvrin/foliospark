@@ -63,13 +63,14 @@ Status: In progress
 - Add accessible drag and drop only when the basic toggles are stable
 
 ### Phase 38 — Branding, Title, Metadata, and Favicon
-Status: Planned
+Status: In progress
 
-- Edit site title and description
-- Edit logo text and logo mark
-- Generate a customizable SVG favicon from the logo mark and accent token
-- Update document title, canonical metadata, and social metadata
-- Validate favicon URLs and imported branding values
+- Edit site title and description — completed
+- Edit logo text and logo mark — completed
+- Generate a customizable SVG favicon from the logo mark and accent token — completed
+- Update document title, canonical metadata, and social metadata — completed
+- Validate favicon URLs and imported branding values — completed
+- Add a visual branding preview and stronger metadata field guidance
 
 ### Phase 39 — Footer Builder
 Status: Planned
@@ -122,12 +123,11 @@ Status: Planned
 - Keep the client-side experience transparent and safe for public preview shares
 
 ## Priority order for next steps
-1. Complete phase 37 with stronger essential-section validation
-2. Build phase 38 branding, metadata, and generated favicon controls
-3. Build phase 39 footer administration and legal links
-4. Build phase 40 administration UI system
-5. Resume metadata and document export
-6. Advanced analytics and publishing dashboard
+1. Complete phase 38 with branding preview and metadata guidance
+2. Build phase 39 footer administration and legal links
+3. Build phase 40 administration UI system
+4. Resume metadata and document export
+5. Advanced analytics and publishing dashboard
 
 ## Administration decisions
 

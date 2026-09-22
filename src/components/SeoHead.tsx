@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 
 import { getSafeExternalHref } from '../lib/links'
+import { getGeneratedFaviconHref } from '../lib/favicon'
+import { themePresets } from '../data/themes'
 import { isPublicPreview } from '../lib/publicPreview'
 import { getSeoMetadata } from '../lib/seo'
 import { usePortfolioStore } from '../store/portfolioStore'
@@ -86,7 +88,9 @@ export function SeoHead() {
     setMeta('name', 'twitter:title', title)
     setMeta('name', 'twitter:description', description)
     setMeta('name', 'twitter:image', image)
-    setFavicon(getSafeExternalHref(siteSettings?.faviconUrl?.trim() ?? '') ?? undefined)
+    const customFavicon = getSafeExternalHref(siteSettings?.faviconUrl?.trim() ?? '')
+    const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0]
+    setFavicon(customFavicon ?? getGeneratedFaviconHref(siteSettings?.logoMark ?? 'F', theme.colors.accent, theme.colors.foreground))
   }, [profile, siteSettings, themeId])
 
   return null
