@@ -165,6 +165,8 @@ export function PortfolioEditor() {
   const [shareMessage, setShareMessage] = useState<{ href: string; id: number; text: string } | null>(null)
   const [publishMessage, setPublishMessage] = useState('')
   const [isPublishing, setIsPublishing] = useState(false)
+  const [saveState, setSaveState] = useState<'saved' | 'saving'>('saved')
+  const hasObservedDataRef = useRef(false)
   const [projectDraftKeys, setProjectDraftKeys] = useState(() => data.projects.map(() => createProjectDraftKey()))
   const [projectCaseStudyMetricDrafts, setProjectCaseStudyMetricDrafts] = useState<Record<string, string>>({})
   const theme = useThemeStore((state) => state.preset)
@@ -176,7 +178,20 @@ export function PortfolioEditor() {
   const publishedHref = useMemo(() => getPublishedPortfolioHref(data.profile.slug || data.profile.name), [data.profile.name, data.profile.slug])
   const publishingReadiness = useMemo(() => getPublishingReadiness(data), [data])
 
+  useEffect(() => {
+    if (!hasObservedDataRef.current) {
+      hasObservedDataRef.current = true
+      return
+    }
+
+    setSaveState('saving')
+    const timeout = window.setTimeout(() => setSaveState('saved'), 250)
+
+    return () => window.clearTimeout(timeout)
+  }, [data])
+
   const updateProfile = (field: keyof Profile, value: string) => {
+    setSaveState('saving')
     setData((current) => ({
       ...current,
       profile: {
@@ -187,6 +202,7 @@ export function PortfolioEditor() {
   }
 
   const updateSiteSettings = (updates: Partial<SiteSettings>) => {
+    setSaveState('saving')
     setData((current) => ({
       ...current,
       siteSettings: {
@@ -198,6 +214,7 @@ export function PortfolioEditor() {
   }
 
   const updateFooterSettings = (updates: Partial<NonNullable<Portfolio['siteSettings']>['footer']>) => {
+    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
 
@@ -246,6 +263,7 @@ export function PortfolioEditor() {
   }
 
   const updateNavigationSettings = (updates: Partial<NonNullable<Portfolio['siteSettings']>['navigation']>) => {
+    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
 
@@ -260,6 +278,7 @@ export function PortfolioEditor() {
   }
 
   const updateNavigationItem = (index: number, updates: Partial<NonNullable<Portfolio['siteSettings']>['navigation']['items'][number]>) => {
+    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
 
@@ -279,6 +298,7 @@ export function PortfolioEditor() {
   }
 
   const updateSectionVisibility = (id: NonNullable<Portfolio['siteSettings']>['sections'][number]['id'], visible: boolean) => {
+    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
 
@@ -295,6 +315,7 @@ export function PortfolioEditor() {
   }
 
   const moveSection = (index: number, direction: -1 | 1) => {
+    setSaveState('saving')
     setData((current) => {
       const settings = current.siteSettings ?? createDefaultSiteSettings()
       const nextIndex = index + direction
@@ -318,6 +339,7 @@ export function PortfolioEditor() {
   }
 
   const updateAbout = (value: string) => {
+    setSaveState('saving')
     setData((current) => ({
       ...current,
       about: value.split(/\n\s*\n/).filter(Boolean),
@@ -325,6 +347,7 @@ export function PortfolioEditor() {
   }
 
   const updateMetric = (index: number, updates: Partial<PortfolioMetric>) => {
+    setSaveState('saving')
     setData((current) => ({
       ...current,
       metrics: current.metrics.map((entry, itemIndex) =>
@@ -334,6 +357,7 @@ export function PortfolioEditor() {
   }
 
   const updateExperience = (index: number, updates: Partial<Experience>) => {
+    setSaveState('saving')
     setData((current) => ({
       ...current,
       experience: current.experience.map((entry, itemIndex) =>
@@ -648,15 +672,20 @@ export function PortfolioEditor() {
           <p className="text-[0.62rem] uppercase tracking-[0.28em] text-[var(--muted)]">Editor</p>
           <h2 className="mt-3 font-display text-4xl text-[var(--foreground)] sm:text-5xl">Portfolio administration</h2>
         </div>
-        <div
+        <div className="flex items-center gap-3">
+          <span role="status" className="text-xs text-[var(--muted)]">
+            {saveState === 'saving' ? 'Saving locally…' : 'Saved locally'}
+          </span>
+          <div
           className="inline-flex w-fit rounded-full border px-3 py-2 text-[0.62rem] uppercase tracking-[0.24em]"
           style={{
             background: selectedTheme.colors.accentSoft,
             borderColor: selectedTheme.colors.border,
             color: selectedTheme.colors.foreground,
           }}
-        >
-          {selectedTheme.name}
+          >
+            {selectedTheme.name}
+          </div>
         </div>
       </div>
 
