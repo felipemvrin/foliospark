@@ -88,6 +88,7 @@ Status: In progress
 - Keep public preview and published views readonly — completed
 - Distinguish `public`, `preview`, `published`, and `admin` analytics modes — completed
 - Add internal administration navigation for Site, Sections, Navigation, Profile, Content, Appearance, and Publishing — completed
+- Highlight the active administration panel during scrolling — completed
 - Add server-side authentication and authorization for `/admin` when a backend exists
 - Split the editor into Site, Navigation, Sections, Content, Appearance, and Publishing panels
 - Add collapsible groups and mobile-friendly editor navigation
@@ -129,7 +130,7 @@ Status: Planned
 
 ## Priority order for next steps
 1. Complete phase 39 with footer link ordering and layout presets
-2. Complete phase 40 with the administration panel system and production authentication boundary
+2. Complete phase 40 with collapsible panels, saved-state feedback, and production authentication boundary
 3. Resume metadata and document export
 4. Advanced analytics and publishing dashboard
 

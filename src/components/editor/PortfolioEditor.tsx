@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AlertTriangle, ArrowDown, ArrowUp, CheckCircle2, Clipboard, Download, Trash2, Upload } from 'lucide-react'
 
 import { portfolio as defaultPortfolio } from '../../data/portfolio'
@@ -7,6 +7,7 @@ import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
 import { getSiteFaviconHref } from '../../lib/favicon'
 import { getSafeExternalHref, getSafeFooterHref } from '../../lib/links'
+import { getNextVisibleSectionTops, getTopmostVisibleSectionId } from '../../lib/adminSectionNavigation'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
@@ -97,11 +98,58 @@ async function copyTextToClipboard(value: string) {
 }
 
 export function AdminSectionNav() {
+  const [activeSection, setActiveSection] = useState<string | null>(() => {
+    if (typeof window === 'undefined') {
+      return adminSectionLinks[0][0]
+    }
+
+    const hashSectionId = window.location.hash.replace(/^#/, '')
+    return adminSectionLinks.some(([id]) => id === hashSectionId) ? hashSectionId : adminSectionLinks[0][0]
+  })
+  const visibleSectionTopsRef = useRef<Map<string, number>>(new Map())
+
+  useEffect(() => {
+    const sections = adminSectionLinks
+      .map(([id]) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section))
+
+    if (sections.length === 0 || !('IntersectionObserver' in window)) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        visibleSectionTopsRef.current = getNextVisibleSectionTops(
+          visibleSectionTopsRef.current,
+          entries.map((entry) => ({
+            id: entry.target.id,
+            isIntersecting: entry.isIntersecting,
+            top: entry.boundingClientRect.top,
+          })),
+        )
+        const nextActiveSection = getTopmostVisibleSectionId(visibleSectionTopsRef.current)
+        setActiveSection(nextActiveSection)
+      },
+      { rootMargin: '-150px 0px -55% 0px', threshold: [0, 0.2, 0.6] },
+    )
+
+    sections.forEach((section) => observer.observe(section))
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <nav className="sticky top-20 z-30 mb-8 overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--background)]/95 p-2 backdrop-blur-xl" aria-label="Administration sections">
       <div className="flex min-w-max gap-2">
         {adminSectionLinks.map(([id, label]) => (
-          <a key={id} href={`#${id}`} className={actionButtonClassName}>{label}</a>
+          <a
+            key={id}
+            href={`#${id}`}
+            aria-current={activeSection === id ? 'location' : undefined}
+            className={`${actionButtonClassName} ${activeSection === id ? 'border-[var(--accent)] bg-[var(--accent-soft)]' : ''}`}
+          >
+            {label}
+          </a>
         ))}
       </div>
     </nav>
