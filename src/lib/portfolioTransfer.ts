@@ -1,6 +1,6 @@
 import type { Portfolio, SiteSettings } from '../types/portfolio'
 import { createDefaultSiteSettings } from '../data/siteSettings'
-import { getSafeExternalHref } from './links'
+import { getSafeExternalHref, getSafeFooterHref } from './links'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -47,6 +47,10 @@ function isSafeNavigationTargetField(value: Record<string, unknown>, key: string
   return typeof value[key] === 'string' && isSafeNavigationTarget(value[key])
 }
 
+function isSafeFooterTargetField(value: Record<string, unknown>, key: string) {
+  return typeof value[key] === 'string' && Boolean(getSafeFooterHref(value[key]))
+}
+
 function isSiteSettings(value: unknown): value is SiteSettings {
   return (
     isRecord(value) &&
@@ -83,7 +87,7 @@ function isSiteSettings(value: unknown): value is SiteSettings {
         isRecord(link) &&
         hasStringField(link, 'id') &&
         hasStringField(link, 'label') &&
-        isSafeNavigationTargetField(link, 'target') &&
+        isSafeFooterTargetField(link, 'target') &&
         typeof link.visible === 'boolean',
     ) &&
     Array.isArray(value.sections) &&

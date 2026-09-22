@@ -6,7 +6,7 @@ import { createDefaultSiteSettings } from '../../data/siteSettings'
 import { themePresets } from '../../data/themes'
 import { formatCaseStudyMetrics, parseCaseStudyMetrics } from '../../lib/caseStudy'
 import { getSiteFaviconHref } from '../../lib/favicon'
-import { getSafeExternalHref } from '../../lib/links'
+import { getSafeExternalHref, getSafeFooterHref } from '../../lib/links'
 import { getPublishingReadiness, type PublishingCheckStatus } from '../../lib/publishing'
 import { getPublicPreviewHref } from '../../lib/publicPreview'
 import { getPublishedPortfolioHref, getPublishingApiUrl, publishPortfolio } from '../../lib/publishingApi'
@@ -27,6 +27,10 @@ const actionButtonClassName =
 
 function createProjectDraftKey() {
   return `project-${crypto.randomUUID()}`
+}
+
+function createFooterLinkId() {
+  return `footer-link-${crypto.randomUUID()}`
 }
 
 function FieldLabel({ label, children }: { label: string; children: React.ReactNode }) {
@@ -161,7 +165,7 @@ export function PortfolioEditor() {
     updateFooterSettings({
       links: [
         ...settings.footer.links,
-        { id: `footer-link-${settings.footer.links.length + 1}`, label: 'New link', target: '#contact', visible: true },
+        { id: createFooterLinkId(), label: 'New link', target: '#contact', visible: true },
       ],
     })
   }
@@ -784,7 +788,7 @@ export function PortfolioEditor() {
             <div className="mt-4 space-y-4">
               {(data.siteSettings?.footer.links ?? []).map((link, index) => {
                 const target = link.target.trim()
-                const hasInvalidTarget = target.length === 0 || (!target.startsWith('#') && !getSafeExternalHref(target))
+                const hasInvalidTarget = !getSafeFooterHref(target)
 
                 return (
                   <div key={link.id} className={nestedPanelCompactClassName}>
@@ -805,7 +809,7 @@ export function PortfolioEditor() {
                         </button>
                       </div>
                     </div>
-                    {hasInvalidTarget ? <p className="mt-3 text-xs text-rose-700">Use an internal anchor or a valid HTTP/HTTPS URL.</p> : null}
+                    {hasInvalidTarget ? <p className="mt-3 text-xs text-rose-700">Use an internal anchor, a site-relative path, or a valid HTTP/HTTPS URL.</p> : null}
                   </div>
                 )
               })}

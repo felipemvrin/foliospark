@@ -28,7 +28,7 @@ import { getOrderedSections } from './lib/siteSections'
 import { usePortfolioStore } from './store/portfolioStore'
 import { useThemeStore } from './store/themeStore'
 import type { SiteSectionId } from './types/portfolio'
-import { getSafeExternalHref } from './lib/links'
+import { getSafeExternalHref, getSafeFooterHref } from './lib/links'
 
 function PublishedPortfolioLoader({ children }: { children: React.ReactNode }) {
   const setData = usePortfolioStore((state) => state.setData)
@@ -107,7 +107,7 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
     .filter((link) => link.visible)
     .map((link) => ({
       ...link,
-      href: link.target.trim().startsWith('#') ? link.target.trim() : getSafeExternalHref(link.target),
+      href: getSafeFooterHref(link.target),
     }))
     .filter((link): link is typeof link & { href: string } => Boolean(link.href))
   const sections = getOrderedSections(siteSettings?.sections)
@@ -181,8 +181,8 @@ function PortfolioPage({ isPublicView }: { isPublicView: boolean }) {
                 <a
                   key={link.id}
                   href={link.href}
-                  target={link.href.startsWith('#') ? undefined : '_blank'}
-                  rel={link.href.startsWith('#') ? undefined : 'noreferrer'}
+                  target={link.href.startsWith('http://') || link.href.startsWith('https://') ? '_blank' : undefined}
+                  rel={link.href.startsWith('http://') || link.href.startsWith('https://') ? 'noreferrer' : undefined}
                   className="transition hover:text-[var(--foreground)]"
                 >
                   {link.label}

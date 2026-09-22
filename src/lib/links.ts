@@ -85,6 +85,28 @@ export function getSafeExternalHref(value: string) {
   }
 }
 
+export function getSafeFooterHref(value: string) {
+  const trimmedValue = value.trim()
+
+  if (!trimmedValue) {
+    return null
+  }
+
+  if (trimmedValue.startsWith('#')) {
+    return trimmedValue
+  }
+
+  if (trimmedValue.startsWith('//')) {
+    return null
+  }
+
+  if (trimmedValue.startsWith('/')) {
+    return trimmedValue
+  }
+
+  return getSafeExternalHref(trimmedValue)
+}
+
 export function getPreferredSafeExternalHref(...values: Array<string | undefined>) {
   for (const value of values) {
     if (!value) {

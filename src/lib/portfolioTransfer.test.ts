@@ -264,6 +264,21 @@ describe('isPortfolio', () => {
     ).not.toBeNull()
   })
 
+  it('rejects protocol-relative custom footer links', () => {
+    expect(
+      parsePortfolio({
+        ...basePortfolio,
+        siteSettings: {
+          ...baseSiteSettings,
+          footer: {
+            ...baseSiteSettings.footer,
+            links: [{ id: 'privacy', label: 'Privacy', target: '//evil.example.com', visible: true }],
+          },
+        },
+      }),
+    ).toBeNull()
+  })
+
   it('backfills missing site settings sections for legacy portfolios', () => {
     expect(
       parsePortfolio({
